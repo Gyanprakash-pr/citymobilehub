@@ -9,15 +9,16 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pathlib import Path
 import os
 from django.core.wsgi import get_wsgi_application
-load_dotenv()
+# load_dotenv()
 
+SECRET_KEY='django-insecure-d)9i-5_mjbh-qm0!uwo%d-e!v-mjwgprw50v$ag$a!l1h)%o23'
 
 # SECRET_KEY `.env` file se
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,10 +42,10 @@ ALLOWED_HOSTS = [
     'productonlinehai.com',
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-1b48.up.railway.app',
-    'https://productonlinehai.com',
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://web-production-1b48.up.railway.app',
+#     'https://productonlinehai.com',
+# ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -92,29 +93,29 @@ WSGI_APPLICATION = 'OnlineBazar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',  # Database name
-        'USER': 'postgres',  # Database user
-        'PASSWORD': 'tsqvUZPSrCmbMRBnefstzlFnejFUoxqI',  # Database password
-        'HOST': 'hopper.proxy.rlwy.net',  # Use the public proxy URL provided by Railway
-        'PORT': '46287',  # Public port from Railway
-        'OPTIONS': {
-            'sslmode': 'require',  # SSL encryption for secure connection
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',  # Database name
+#         'USER': 'postgres',  # Database user
+#         'PASSWORD': 'tsqvUZPSrCmbMRBnefstzlFnejFUoxqI',  # Database password
+#         'HOST': 'hopper.proxy.rlwy.net',  # Use the public proxy URL provided by Railway
+#         'PORT': '46287',  # Public port from Railway
+#         'OPTIONS': {
+#             'sslmode': 'require',  # SSL encryption for secure connection
+#         }
+#     }
+# }
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'web-production-1b48.up.railway.app','productonlinehai.com']
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 POSTGRES_LOCALLY = False
 if 'RAILWAY_STATIC_URL' in os.environ:
     ALLOWED_HOSTS.append(os.environ['RAILWAY_STATIC_URL'].replace('https://', ''))
