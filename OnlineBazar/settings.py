@@ -18,12 +18,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-default-secret-key')  # Replac
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'onlinebazar.onrender.com',
-    '*'
-]
+# Update allowed hosts
+ALLOWED_HOSTS = ['onlinebazar.onrender.com', 'localhost']
+
+# Static files config
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://onlinebazar.onrender.com',
@@ -122,8 +122,7 @@ USE_TZ = True
 # =====================
 # STATIC / MEDIA FILES
 # =====================
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'mainApp', 'static'),

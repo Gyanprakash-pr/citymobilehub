@@ -8,8 +8,8 @@ services:
     startCommand: gunicorn OnlineBazar.wsgi:application
     envVars:
       - key: DATABASE_URL
-        value: postgres://youruser:yourpassword@yourhost:yourport/yourdbname  # ✅ Replace this with actual DB URL
+        value: postgres://youruser:yourpassword@yourhost:yourport/yourdbname
       - key: SECRET_KEY
-        value: your-very-secret-django-key     # ✅ Use a secure random string
+        value: your-very-secret-django-key
       - key: DEBUG
         value: "False"
