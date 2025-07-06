@@ -10,6 +10,8 @@ services:
       - key: DATABASE_URL
         value: postgres://youruser:yourpassword@yourhost:yourport/yourdbname
       - key: SECRET_KEY
-        value: your-very-secret-django-key
+        value: your-secret-key-here
       - key: DEBUG
         value: "False"
+      - key: PYTHONPATH
+        value: /opt/render/project/src
