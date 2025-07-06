@@ -1,64 +1,311 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block title %}
-<title>Online Bazar | Payment</title>
+<title>Online Bazar | Secure Payment</title>
 {% endblock %}
 
 {% block body %}
-<div class="container p-4 mt-5">
+<div class="payment-container animate__animated animate__fadeIn">
+  <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 p-4"
-                style="background: linear-gradient(135deg, #E3F2FD, #BBDEFB); border-radius: 15px;">
-                <h3 class="text-center text-primary mb-4">Proceed to Payment</h3>
-                <button id="rzp-button1" class="btn btn-dark w-100">Pay Now</button>
+      <div class="col-lg-6 col-md-8">
+        <!-- Payment Card -->
+        <div class="payment-card shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn">
+          <!-- Payment Header -->
+          <div class="payment-header text-center py-4 position-relative">
+            <div class="payment-icon animate__animated animate__bounceIn">
+              <i class="fas fa-lock"></i>
             </div>
+            <h2 class="text-white mb-1">Secure Payment</h2>
+            <p class="text-white-50 mb-0">Complete your purchase</p>
+            <div class="watermark">₹</div>
+          </div>
+          
+          <!-- Payment Body -->
+          <div class="payment-body p-4 p-md-5">
+            <!-- Order Summary -->
+            <div class="order-summary mb-4 animate__animated animate__fadeInLeft">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Order Summary</h5>
+                <span class="badge bg-primary">#{{order_id|slice:"-8:"|upper}}</span>
+              </div>
+              <div class="amount-display animate__animated animate__pulse animate__infinite animate__slower">
+                <span>Total Amount:</span>
+                <span class="amount">₹{{final_amount}}</span>
+              </div>
+            </div>
+            
+            <!-- Payment Button -->
+            <div class="text-center mt-4 animate__animated animate__fadeInUp">
+              <button id="rzp-button1" class="btn btn-pay-now w-100 py-3">
+                <span class="btn-text">Pay Now</span>
+                <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+              </button>
+              <p class="text-muted small mt-3">
+                <i class="fas fa-shield-alt me-1"></i> Secure 256-bit SSL encrypted payment
+              </p>
+            </div>
+          </div>
         </div>
+        
+        <!-- Payment Methods -->
+        <div class="payment-methods mt-4 animate__animated animate__fadeInUp">
+          <div class="d-flex justify-content-center flex-wrap gap-3">
+            <div class="method-logo">
+              <i class="fab fa-cc-visa"></i>
+            </div>
+            <div class="method-logo">
+              <i class="fab fa-cc-mastercard"></i>
+            </div>
+            <div class="method-logo">
+              <i class="fas fa-mobile-screen"></i>
+            </div>
+            <div class="method-logo">
+              <i class="fas fa-university"></i>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- Razorpay Integration -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-  var options = {
-    "key": "{{api_key}}", // Enter the Key ID generated from the Dashboard
-    "name": "Online Bazar",
-    "description": "Test Transaction",
-    "order_id": "{{order_id}}", // Order ID from backend
-    "handler": function (response) {
-      window.open("/paymentSuccess/" + response.razorpay_payment_id + "/" + response.razorpay_order_id + "/" + response.razorpay_signature + "/")
-    },
-    "prefill": {
-      "name": "{{User.name}}",
-      "email": "{{User.email}}",
-      "contact": "{{User.phone}}"
-    },
-    "notes": {
-      "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-      "color": "#1565C0"
+  document.addEventListener('DOMContentLoaded', function() {
+    // Configure Razorpay
+    var options = {
+      "key": "{{api_key}}",
+      "name": "Online Bazar",
+      "description": "Order Payment",
+      "order_id": "{{order_id}}",
+      "handler": function (response) {
+        // Button loading state
+        const btn = document.getElementById('rzp-button1');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing...';
+        btn.disabled = true;
+        
+        // Redirect on success
+        window.location.href = "/paymentSuccess/" + 
+          response.razorpay_payment_id + "/" + 
+          response.razorpay_order_id + "/" + 
+          response.razorpay_signature + "/";
+      },
+      "prefill": {
+        "name": "{{User.name}}",
+        "email": "{{User.email}}",
+        "contact": "{{User.phone}}"
+      },
+      "notes": {
+        "order_id": "{{order_id}}"
+      },
+      "theme": {
+        "color": "#4361ee",
+        "hide_topbar": true
+      }
+    };
+
+    var rzp1 = new Razorpay(options);
+    
+    rzp1.on('payment.failed', function (response) {
+      Swal.fire({
+        title: 'Payment Failed',
+        text: 'Your payment could not be processed. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        confirmButtonColor: '#4361ee'
+      }).then(() => {
+        window.location.href = "/checkout/";
+      });
+    });
+
+    document.getElementById('rzp-button1').onclick = function (e) {
+      // Button animation
+      this.classList.add('animate__animated', 'animate__pulse');
+      setTimeout(() => {
+        this.classList.remove('animate__animated', 'animate__pulse');
+      }, 1000);
+      
+      rzp1.open();
+      e.preventDefault();
     }
-  };
-
-  var rzp1 = new Razorpay(options);
-  rzp1.on('payment.failed', function (response) {
-    window.open("/checkout/")
   });
-
-  document.getElementById('rzp-button1').onclick = function (e) {
-    rzp1.open();
-    e.preventDefault();
-  }
 </script>
 
+<!-- Styles -->
 <style>
-  body {
-    background: linear-gradient(135deg, #F5F7FA, #E3F2FD, #D6EAF8);
-    font-family: 'Poppins', sans-serif;
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+  :root {
+    --primary: #4361ee;
+    --primary-light: #eef2ff;
+    --secondary: #3f37c9;
+    --dark: #212529;
+    --light: #f8f9fa;
   }
 
-  .card {
-    backdrop-filter: blur(8px);
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  }
+
+  .payment-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Payment Card */
+  .payment-card {
+    background-color: white;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .payment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .payment-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .payment-header::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+
+  .watermark {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 5rem;
+    opacity: 0.1;
+    font-weight: bold;
+    color: white;
+  }
+
+  .payment-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  /* Order Summary */
+  .order-summary {
+    background-color: var(--light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary);
+  }
+
+  .amount-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+
+  .amount {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 1.5rem;
+  }
+
+  /* Pay Now Button */
+  .btn-pay-now {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: white;
+  }
+
+  .btn-pay-now:hover {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    color: white;
+  }
+
+  .btn-pay-now:hover .btn-icon {
+    transform: translateX(5px);
+  }
+
+  .btn-icon {
+    transition: all 0.3s;
+  }
+
+  /* Payment Methods */
+  .method-logo {
+    width: 50px;
+    height: 30px;
+    background-color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+  }
+
+  .method-logo:hover {
+    transform: translateY(-3px);
+    color: var(--secondary);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .payment-container {
+      padding-top: 2rem;
+    }
+    
+    .watermark {
+      font-size: 3rem;
+      bottom: 10px;
+      right: 15px;
+    }
+    
+    .amount-display {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
   }
 </style>
+
+<!-- Include SweetAlert for beautiful alerts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

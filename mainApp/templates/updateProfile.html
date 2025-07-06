@@ -3,102 +3,433 @@
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | UpdateProfile Page</title>
+<title>Online Bazar | Update Profile</title>
 {% endblock %}
 
 {% block body %}
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10 shadow-lg p-4 rounded-3"
-            style="background: linear-gradient(135deg, #E3F2FD, #BBDEFB);">
-
-            <h3 class="text-center text-dark mb-4">Update User Profile</h3>
-
-            <div class="row">
-                <div class="col-md-5 text-center mb-3">
-                    {% if User.pic %}
-                    <img src="{{User.pic.url}}" class="img-fluid rounded-3 shadow-sm" style="max-height: 300px;">
-                    {% else %}
-                    <img src="{% static 'images/noimage.png' %}" class="img-fluid rounded-3 shadow-sm"
-                        style="max-height: 300px;">
-                    {% endif %}
+<div class="profile-update-container">
+  <div class="container py-5">
+    <div class="row justify-content-center animate__animated animate__fadeIn">
+      <div class="col-lg-10">
+        <div class="profile-card shadow-lg rounded-4 overflow-hidden">
+          <!-- Card Header -->
+          <div class="card-header-gradient text-center py-4">
+            <h2 class="text-white mb-0"><i class="fas fa-user-edit me-2"></i>Update Your Profile</h2>
+          </div>
+          
+          <!-- Card Body -->
+          <div class="card-body p-4 p-md-5">
+            <div class="row g-4">
+              <!-- Profile Picture Column -->
+              <div class="col-md-5 text-center">
+                <div class="profile-pic-container mb-4">
+                  {% if User.pic %}
+                  <img src="{{User.pic.url}}" class="profile-pic img-fluid rounded-4 shadow" id="profileImagePreview">
+                  {% else %}
+                  <img src="{% static 'images/noimage.png' %}" class="profile-pic img-fluid rounded-4 shadow" id="profileImagePreview">
+                  {% endif %}
+                  <div class="profile-pic-overlay">
+                    <label for="picUpload" class="btn btn-light btn-sm">
+                      <i class="fas fa-camera me-1"></i> Change Photo
+                    </label>
+                    <input type="file" id="picUpload" name="pic" class="d-none" accept="image/*">
+                  </div>
                 </div>
-
-                <div class="col-md-7">
-                    {% for i in messages %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ i }}
+                
+                <div class="profile-stats bg-light p-3 rounded-3 shadow-sm">
+                  <h5 class="text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Profile Info</h5>
+                  <p class="mb-1"><strong>Username:</strong> {{User.username}}</p>
+                  <p class="mb-0"><strong>Member Since:</strong> {{User.date}}</p>
+                </div>
+              </div>
+              
+              <!-- Form Column -->
+              <div class="col-md-7">
+                <!-- Messages/Alerts -->
+                {% for message in messages %}
+                <div class="alert alert-dismissible fade show animate__animated animate__shakeX" role="alert" style="background-color: #f8d7da; color: #721c24;">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <div>{{ message }}</div>
+                  </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                
+                <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                  {% csrf_token %}
+                  
+                  <!-- Personal Info Section -->
+                  <div class="form-section mb-4">
+                    <h5 class="section-title mb-3"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                    <div class="row g-3">
+                      <div class="col-md-12">
+                        <div class="form-floating">
+                          <input type="text" class="form-control" id="name" name="name" value="{{User.name}}" required>
+                          <label for="name">Full Name</label>
+                          <div class="invalid-feedback">Please enter your name</div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-floating">
+                          <input type="tel" class="form-control" id="phone" name="phone" value="{{User.phone}}" required>
+                          <label for="phone">Phone Number</label>
+                          <div class="invalid-feedback">Please enter a valid phone number</div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-floating">
+                          <input type="email" class="form-control" id="email" name="email" value="{{User.email}}" required>
+                          <label for="email">Email Address</label>
+                          <div class="invalid-feedback">Please enter a valid email</div>
+                        </div>
+                      </div>
                     </div>
-                    {% endfor %}
-
-                    <form action="" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" class="form-control" name="name" value="{{User.name}}" required>
+                  </div>
+                  
+                  <!-- Address Section -->
+                  <div class="form-section mb-4">
+                    <h5 class="section-title mb-3"><i class="fas fa-home me-2"></i>Address Information</h5>
+                    <div class="row g-3">
+                      <div class="col-md-12">
+                        <div class="form-floating">
+                          <input type="text" class="form-control" id="addressline1" name="addressline1" value="{{User.addressline1}}">
+                          <label for="addressline1">House Number & Street</label>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" name="phone" value="{{User.phone}}" required>
+                      </div>
+                      
+                      <div class="col-md-4">
+                        <div class="form-floating">
+                          <input type="text" class="form-control" id="pin" name="pin" value="{{User.pin}}">
+                          <label for="pin">PIN Code</label>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" value="{{User.email}}" required>
+                      </div>
+                      
+                      <div class="col-md-4">
+                        <div class="form-floating">
+                          <input type="text" class="form-control" id="city" name="city" value="{{User.city}}">
+                          <label for="city">City</label>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">House Number</label>
-                            <input type="text" class="form-control" name="addressline1" value="{{User.addressline1}}">
+                      </div>
+                      
+                      <div class="col-md-4">
+                        <div class="form-floating">
+                          <input type="text" class="form-control" id="state" name="state" value="{{User.state}}">
+                          <label for="state">State</label>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Pin Code</label>
-                            <input type="text" class="form-control" name="pin" value="{{User.pin}}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">City</label>
-                            <input type="text" class="form-control" name="city" value="{{User.city}}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">State</label>
-                            <input type="text" class="form-control" name="state" value="{{User.state}}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Profile Pic</label>
-                            <input type="file" class="form-control" name="pic">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
-                    </form>
-                </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Profile Picture Upload -->
+                  <div class="form-section mb-4">
+                    <h5 class="section-title mb-3"><i class="fas fa-camera me-2"></i>Profile Picture</h5>
+                    <div class="custom-file-upload">
+                      <label for="pic" class="form-label">Upload New Photo</label>
+                      <input type="file" class="form-control" id="pic" name="pic" accept="image/*">
+                      <small class="text-muted">Max size: 2MB (JPEG, PNG)</small>
+                    </div>
+                  </div>
+                  
+                  <!-- Submit Button -->
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 submit-btn">
+                      <span class="submit-text">Update Profile</span>
+                      <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- Styles -->
 <style>
-    body {
-        background: linear-gradient(135deg, #F5F7FA, #E3F2FD, #D6EAF8);
-        font-family: 'Poppins', sans-serif;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
-    .form-label {
-        font-weight: 500;
-    }
+  :root {
+    --primary: #4361ee;
+    --primary-light: #eef2ff;
+    --secondary: #3f37c9;
+    --dark: #212529;
+    --light: #f8f9fa;
+    --gray: #6c757d;
+    --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+  }
 
-    .btn-primary {
-        background-color: #1565C0;
-        border: none;
-    }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    min-height: 100vh;
+  }
 
-    .btn-primary:hover {
-        background-color: #0D47A1;
+  .profile-update-container {
+    padding: 2rem 0;
+  }
+
+  /* Profile Card */
+  .profile-card {
+    border: none;
+    background-color: white;
+    transition: all 0.3s ease;
+  }
+
+  .profile-card:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .card-header-gradient {
+    background: var(--gradient);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-header-gradient::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+
+  /* Profile Picture */
+  .profile-pic-container {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+  }
+
+  .profile-pic {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .profile-pic:hover {
+    transform: scale(1.03);
+  }
+
+  .profile-pic-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .profile-pic-container:hover .profile-pic-overlay {
+    opacity: 1;
+  }
+
+  /* Profile Stats */
+  .profile-stats {
+    border-left: 3px solid var(--primary);
+  }
+
+  /* Form Sections */
+  .form-section {
+    background-color: var(--light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .section-title {
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--gradient);
+    border-radius: 3px;
+  }
+
+  /* Form Elements */
+  .form-floating>label {
+    color: var(--gray);
+    padding: 1rem 0.75rem;
+  }
+
+  .form-control {
+    border: 1px solid #e0e0e0;
+    padding: 1rem 0.75rem;
+    border-radius: 10px;
+    transition: all 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+  }
+
+  .custom-file-upload {
+    border: 2px dashed #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .custom-file-upload:hover {
+    border-color: var(--primary);
+    background-color: rgba(67, 97, 238, 0.05);
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: var(--gradient);
+    border: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+  }
+
+  /* Form Validation */
+  .was-validated .form-control:valid,
+  .form-control.is-valid {
+    border-color: #28a745;
+    background-image: none;
+  }
+
+  .was-validated .form-control:invalid,
+  .form-control.is-invalid {
+    border-color: #dc3545;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .profile-pic {
+      width: 200px;
+      height: 200px;
     }
+  }
+
+  @media (max-width: 768px) {
+    .profile-pic-container {
+      margin-bottom: 2rem;
+    }
+    
+    .profile-pic-overlay {
+      opacity: 1;
+    }
+    
+    .form-section {
+      padding: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
 </style>
+
+<!-- Scripts -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Profile image preview
+    const picUpload = document.getElementById('picUpload');
+    const profileImagePreview = document.getElementById('profileImagePreview');
+    
+    if (picUpload && profileImagePreview) {
+      picUpload.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            profileImagePreview.src = e.target.result;
+            profileImagePreview.classList.add('animate__animated', 'animate__pulse');
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+              profileImagePreview.classList.remove('animate__animated', 'animate__pulse');
+            }, 1000);
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+    
+    // Form submission animation
+    const form = document.querySelector('form');
+    const submitBtn = document.querySelector('.submit-btn');
+    const submitText = document.querySelector('.submit-text');
+    
+    if(form) {
+      form.addEventListener('submit', function(e) {
+        if (form.checkValidity()) {
+          submitBtn.disabled = true;
+          submitText.classList.add('d-none');
+          submitBtn.querySelector('.spinner-border').classList.remove('d-none');
+        }
+      });
+    }
+    
+    // Form validation
+    (function() {
+      'use strict'
+      
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+      
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+    
+    // Add animation to form sections
+    const formSections = document.querySelectorAll('.form-section');
+    formSections.forEach((section, index) => {
+      section.style.animationDelay = `${index * 0.1}s`;
+      section.classList.add('animate__animated', 'animate__fadeInUp');
+    });
+  });
+</script>
 {% endblock %}

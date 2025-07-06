@@ -3,125 +3,857 @@
 {% load static %}
 {% load product %}
 {% block title %}
-<title>Online Bazar | Buyer Profile Page</title>
+<title>Online Bazar | Buyer Profile</title>
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid mt-3">
-  <div class="row justify-content-center">
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 text-center mb-4">
+<div class="profile-container">
+  <!-- Profile Header Section -->
+  <div class="profile-header animate__animated animate__fadeIn">
+    <div class="profile-avatar">
       {% if User.pic %}
-      <img src="{{User.pic.url}}" class="img-fluid rounded shadow" style="max-width: 300px;">
+      <img src="{{User.pic.url}}" class="profile-img" alt="Profile Image">
       {% else %}
-      <img src="{% static 'images/noimage.png'%}" class="img-fluid rounded shadow" style="max-width: 300px;">
+      <img src="{% static 'images/noimage.png'%}" class="profile-img" alt="Default Image">
       {% endif %}
+      <div class="profile-edit-btn">
+        <a href="/updateProfile/" class="btn btn-primary btn-float">
+          <i class="fas fa-pencil-alt"></i>
+        </a>
+      </div>
     </div>
+    <h1 class="profile-name">{{User.name}}</h1>
+    <p class="profile-username">@{{User.username}}</p>
+  </div>
 
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-      <div class="card shadow-lg p-4 mb-4" style="background: linear-gradient(to right, #E3F2FD, #BBDEFB); border-radius: 20px;">
-        <h3 class="text-center text-dark fw-bold mb-4" style="font-family: cursive;">Buyer Profile Page</h3>
-        <table class="table table-hover text-black">
-          <tr><th>Name</th><td>{{User.name}}</td></tr>
-          <tr><th>User Name</th><td>{{User.username}}</td></tr>
-          <tr><th>Email Id</th><td>{{User.email}}</td></tr>
-          <tr><th>Phone Number</th><td>{{User.phone}}</td></tr>
-          <tr><th>House Number</th><td>{{User.addressline1}}</td></tr>
-          <tr><th>PIN</th><td>{{User.pin}}</td></tr>
-          <tr><th>City</th><td>{{User.city}}</td></tr>
-          <tr><th>State</th><td>{{User.state}}</td></tr>
-          <tr>
-            <th colspan="2">
-              <a href="/updateProfile/" class="btn btn-outline-dark btn-success w-100 fw-bold">Update Profile</a>
-            </th>
-          </tr>
-        </table>
+  <!-- Profile Details Section -->
+  <div class="profile-details animate__animated animate__fadeInUp">
+    <div class="card profile-card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="detail-item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <span class="detail-label">Email</span>
+                <span class="detail-value">{{User.email}}</span>
+              </div>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-phone"></i>
+              <div>
+                <span class="detail-label">Phone</span>
+                <span class="detail-value">{{User.phone}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="detail-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <span class="detail-label">Address</span>
+                <span class="detail-value">{{User.addressline1}}, {{User.city}}, {{User.state}} - {{User.pin}}</span>
+              </div>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-user-circle"></i>
+              <div>
+                <span class="detail-label">Member Since</span>
+                <span class="detail-value">{{User.date}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<h4 class="text-center p-2 fw-bold text-dark" style="background: #BBDEFB;">Wishlist Section</h4>
-<div class="table-responsive">
-  <table class="table table-hover table-striped table-light">
-    <tr>
-      <th></th><th>Name</th><th>Color</th><th>Size</th><th>Base Price</th>
-      <th>Discount</th><th>Final Price</th><th>Stock</th><th></th><th></th>
-    </tr>
-    {% for i in Wishlist %}
-    <tr>
-      <td><img src="{% if i.product.pic1 %}{{i.product.pic1.url}}{% else %}{% static 'picture/noimg.png' %}{% endif %}" height="100px" width="100px"></td>
-      <td>{{i.product.name}}</td>
-      <td>{{i.product.color}}</td>
-      <td>{{i.product.size}}</td>
-      <td>&#8377;{{i.product.baseprice}}</td>
-      <td>{{i.product.discount}}%</td>
-      <td>&#8377;{{i.product.finalprice}}</td>
-      <td>{{i.product.stock}}</td>
-      <td><a href="/single-product-page/{{i.product.id}}/" class="btn text-primary"><i class="material-icons">shopping_cart</i></a></td>
-      <td><button class="btn text-primary" onclick="fun('{{i.id}}')"><i class="material-icons">delete_forever</i></button></td>
-    </tr>
-    {% endfor %}
-  </table>
-</div>
-
-<h4 class="text-center p-2 fw-bold text-dark" style="background: #BBDEFB;">Order History Section</h4>
-{% for i in Orders %}
-<div class="row p-3 mb-4" style="border-bottom: 5px solid #ccc;">
-  <div class="col-md-4">
-    <div class="card shadow-sm p-3" style="background-color: #E3F2FD;">
-      <table class="table table-light table-striped table-hover">
-        <tr><th>Order Id</th><td>{{i.id}}</td></tr>
-        <tr><th>Mode</th><td>{{i.mode}}</td></tr>
-        <tr><th>Order Status</th><td>{{request|orderStatus:i.orderstatus}}</td></tr>
-        <tr>
-          <th>Payment Status</th>
-          <td>
-            {{request|paymentStatus:i.paymentstatus}}
-            {% if request|paymentStatusCon:i.paymentstatus %}
-              <a href="/paynow/{{i.id}}" class="btn bg-primary text-light btn-sm">Pay Now</a>
-            {% endif %}
-          </td>
-        </tr>
-        <tr><th>Total</th><td>&#8377;{{i.total}}</td></tr>
-        <tr><th>Shipping</th><td>&#8377;{{i.shipping}}</td></tr>
-        <tr><th>Final</th><td>&#8377;{{i.final}}</td></tr>
-        <tr><th>Date</th><td>{{i.date}}</td></tr>
-      </table>
+  <!-- Wishlist Section -->
+  <section class="wishlist-section animate__animated animate__fadeIn">
+    <div class="section-header">
+      <h2><i class="fas fa-heart"></i> Your Wishlist</h2>
     </div>
-  </div>
-
-  <div class="col-md-8">
-    <div class="card shadow-sm p-3">
-      <table class="table table-light table-striped table-hover">
-        <tr><th></th><th>Name</th><th>Size</th><th>Color</th><th>Price</th><th>Qty</th><th>Total</th></tr>
-        {% for i in request|orderItem:i.id %}
-        <tr>
-          <td><img src="{{i.pic}}" height="100px" width="100px" class="rounded"></td>
-          <td>{{i.name}}</td>
-          <td>{{i.size}}</td>
-          <td>{{i.color}}</td>
-          <td>&#8377;{{i.price}}</td>
-          <td>{{i.qty}}</td>
-          <td>&#8377;{{i.total}}</td>
-        </tr>
-        {% endfor %}
-      </table>
+    
+    {% if Wishlist %}
+    <div class="wishlist-grid">
+      {% for i in Wishlist %}
+      <div class="wishlist-item">
+        <div class="wishlist-img-container">
+          <img src="{% if i.product.pic1 %}{{i.product.pic1.url}}{% else %}{% static 'picture/noimg.png' %}{% endif %}" class="wishlist-img" alt="Product Image">
+          <div class="wishlist-badge">{{i.product.discount}}% OFF</div>
+        </div>
+        <div class="wishlist-details">
+          <h5 class="wishlist-title">{{i.product.name}}</h5>
+          <div class="wishlist-meta">
+            <span class="color-dot" style="background-color: {{i.product.color|lower}}"></span>
+            <span>{{i.product.color}} | {{i.product.size}}</span>
+          </div>
+          <div class="wishlist-pricing">
+            <span class="original-price">&#8377;{{i.product.baseprice}}</span>
+            <span class="final-price">&#8377;{{i.product.finalprice}}</span>
+          </div>
+          <div class="wishlist-actions">
+            <a href="/single-product-page/{{i.product.id}}/" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </a>
+            <button class="btn btn-sm btn-outline-danger" onclick="removeFromWishlist('{{i.id}}')">
+              <i class="fas fa-trash"></i> Remove
+            </button>
+          </div>
+          <div class="stock-status {% if i.product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+            {% if i.product.stock > 0 %}In Stock ({{i.product.stock}}){% else %}Out of Stock{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
-  </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-heart-broken"></i>
+      <h4>Your wishlist is empty</h4>
+      <p>Start adding items you love!</p>
+      <a href="/shop/All/All/All/" class="btn btn-primary">Browse Products</a>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Order History Section -->
+  <section class="order-section animate__animated animate__fadeIn">
+    <div class="section-header">
+      <h2><i class="fas fa-history"></i> Order History</h2>
+    </div>
+    
+    {% if Orders %}
+    <div class="order-accordion">
+      {% for i in Orders %}
+      <div class="order-card">
+        <div class="order-header" onclick="toggleOrderDetails('order-{{i.id}}')">
+          <div class="order-id">Order #{{i.id}}</div>
+          <div class="order-date">{{i.date}}</div>
+          <div class="order-status {{i.orderstatus|lower}}">
+            {{request|orderStatus:i.orderstatus}}
+          </div>
+          <div class="order-total">&#8377;{{i.final}}</div>
+          <div class="order-toggle">
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+        
+        <div class="order-details" id="order-{{i.id}}">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="order-info">
+                <div class="info-item">
+                  <span>Payment Method:</span>
+                  <strong>{{i.mode}}</strong>
+                </div>
+                <div class="info-item">
+                  <span>Payment Status:</span>
+                  <strong class="payment-status {{i.paymentstatus|lower}}">
+                    {{request|paymentStatus:i.paymentstatus}}
+                    {% if request|paymentStatusCon:i.paymentstatus %}
+                    <a href="/paynow/{{i.id}}" class="btn btn-sm pay-now-btn">Pay Now</a>
+                    {% endif %}
+                  </strong>
+                </div>
+                <div class="info-item">
+                  <span>Subtotal:</span>
+                  <strong>&#8377;{{i.total}}</strong>
+                </div>
+                <div class="info-item">
+                  <span>Shipping:</span>
+                  <strong>&#8377;{{i.shipping}}</strong>
+                </div>
+                <div class="info-item">
+                  <span>Total Amount:</span>
+                  <strong class="total-amount">&#8377;{{i.final}}</strong>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-7">
+              <div class="order-products">
+                <h5>Products Ordered</h5>
+                {% for item in request|orderItem:i.id %}
+                <div class="product-item">
+                  <img src="{{item.pic}}" class="product-img" alt="Product Image">
+                  <div class="product-details">
+                    <h6>{{item.name}}</h6>
+                    <div class="product-meta">
+                      <span>{{item.color}} | {{item.size}}</span>
+                    </div>
+                    <div class="product-pricing">
+                      <span>&#8377;{{item.price}} x {{item.qty}}</span>
+                      <strong>&#8377;{{item.total}}</strong>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-shopping-bag"></i>
+      <h4>No orders yet</h4>
+      <p>Your order history will appear here</p>
+      <a href="/shop/All/All/All/" class="btn btn-primary">Start Shopping</a>
+    </div>
+    {% endif %}
+  </section>
 </div>
-{% endfor %}
 
-<script>
-  function fun(num) {
-    if (confirm("Are You Sure!!! Do You want delete this Item"))
-      window.open(`/delete-wishlist/${num}/`)
-  }
-</script>
-
+<!-- Styles -->
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+  :root {
+    --primary: #4361ee;
+    --primary-light: #eef2ff;
+    --secondary: #3f37c9;
+    --success: #4cc9f0;
+    --danger: #f72585;
+    --warning: #f8961e;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+  }
+
   body {
-    background: linear-gradient(to right, #F5F7FA, #E3F2FD);
     font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark);
+  }
+
+  .profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  /* Profile Header */
+  .profile-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .profile-edit-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .btn-float {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(67, 97, 238, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .btn-float:hover {
+    transform: translateY(-3px) rotate(10deg);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+  }
+
+  .profile-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+  }
+
+  .profile-username {
+    font-size: 1.1rem;
+    color: var(--gray);
+    margin-bottom: 0;
+  }
+
+  /* Profile Details */
+  .profile-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background: white;
+    margin-bottom: 3rem;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--light);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .detail-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .detail-item i {
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .detail-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 0.2rem;
+  }
+
+  .detail-value {
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  /* Section Headers */
+  .section-header {
+    margin: 3rem 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-light);
+    position: relative;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+  }
+
+  .section-header h2 i {
+    margin-right: 0.8rem;
+    color: var(--primary);
+  }
+
+  .section-header:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+  }
+
+  /* Wishlist Section */
+  .wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .wishlist-item {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .wishlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .wishlist-img-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .wishlist-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .wishlist-item:hover .wishlist-img {
+    transform: scale(1.05);
+  }
+
+  .wishlist-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--danger);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .wishlist-details {
+    padding: 1.2rem;
+  }
+
+  .wishlist-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wishlist-meta {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+  }
+
+  .color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    border: 1px solid #ddd;
+  }
+
+  .wishlist-pricing {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .original-price {
+    text-decoration: line-through;
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+
+  .final-price {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+
+  .wishlist-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stock-status {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.2rem 0;
+  }
+
+  .in-stock {
+    color: #28a745;
+  }
+
+  .out-of-stock {
+    color: var(--danger);
+  }
+
+  /* Order History Section */
+  .order-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .order-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .order-header {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    cursor: pointer;
+    background-color: var(--light);
+    transition: all 0.3s ease;
+  }
+
+  .order-header:hover {
+    background-color: var(--primary-light);
+  }
+
+  .order-id {
+    flex: 1;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .order-date {
+    flex: 1;
+    color: var(--gray);
+    font-size: 0.9rem;
+  }
+
+  .order-status {
+    flex: 1;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .order-status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .order-status.delivered {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .order-status.shipped {
+    background-color: #cce5ff;
+    color: #004085;
+  }
+
+  .order-status.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .order-total {
+    flex: 1;
+    text-align: right;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .order-toggle {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .order-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    padding: 0 1.2rem;
+  }
+
+  .order-details.active {
+    max-height: 1000px;
+    padding: 1.2rem;
+  }
+
+  .order-info {
+    background-color: var(--light);
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+  }
+
+  .info-item span {
+    color: var(--gray);
+  }
+
+  .info-item strong {
+    color: var(--dark);
+  }
+
+  .payment-status.pending {
+    color: var(--warning);
+  }
+
+  .payment-status.completed {
+    color: #28a745;
+  }
+
+  .pay-now-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+  }
+
+  .pay-now-btn:hover {
+    background-color: var(--secondary);
+    color: white;
+  }
+
+  .total-amount {
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+
+  .order-products {
+    height: 100%;
+  }
+
+  .product-item {
+    display: flex;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .product-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .product-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1rem;
+  }
+
+  .product-details {
+    flex: 1;
+  }
+
+  .product-details h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .product-meta {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 0.5rem;
+  }
+
+  .product-pricing {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+
+  .product-pricing strong {
+    color: var(--primary);
+  }
+
+  /* Empty States */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .empty-state i {
+    font-size: 3rem;
+    color: var(--primary-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-state h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+  }
+
+  .empty-state p {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .wishlist-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .order-header {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .order-id, .order-date, .order-status, .order-total {
+      flex: 100%;
+      text-align: left;
+    }
+    
+    .order-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+    }
+    
+    .detail-item {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+    
+    .detail-item i {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .order-details .row > div {
+      width: 100%;
+    }
+    
+    .order-details .col-md-5 {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .wishlist-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .wishlist-actions {
+      flex-direction: column;
+    }
+    
+    .product-item {
+      flex-direction: column;
+    }
+    
+    .product-img {
+      width: 100%;
+      height: auto;
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
   }
 </style>
+
+<!-- Scripts -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle order details
+    function toggleOrderDetails(orderId) {
+      const orderDetails = document.getElementById(orderId);
+      const toggleIcon = event.currentTarget.querySelector('.order-toggle i');
+      
+      orderDetails.classList.toggle('active');
+      toggleIcon.classList.toggle('fa-chevron-down');
+      toggleIcon.classList.toggle('fa-chevron-up');
+    }
+    
+    // Set up event listeners for all order headers
+    const orderHeaders = document.querySelectorAll('.order-header');
+    orderHeaders.forEach(header => {
+      header.addEventListener('click', function() {
+        const orderId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+        toggleOrderDetails(orderId);
+      });
+    });
+    
+    // Remove from wishlist function with SweetAlert
+    window.removeFromWishlist = function(id) {
+      Swal.fire({
+        title: 'Remove from wishlist?',
+        text: "Are you sure you want to remove this item from your wishlist?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#f72585',
+        cancelButtonColor: '#4361ee',
+        confirmButtonText: 'Yes, remove it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open(`/delete-wishlist/${id}/`, '_self');
+        }
+      });
+    }
+    
+    // Add animation to elements when they come into view
+    const animateOnScroll = function() {
+      const elements = document.querySelectorAll('.animate__animated');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        
+        if (elementPosition < windowHeight - 100) {
+          const animation = element.getAttribute('data-animation');
+          element.classList.add(animation);
+        }
+      });
+    };
+    
+    // Run once on load
+    animateOnScroll();
+    
+    // Run on scroll
+    window.addEventListener('scroll', animateOnScroll);
+  });
+</script>
+
+<!-- Include SweetAlert2 for beautiful alerts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

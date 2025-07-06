@@ -1,320 +1,636 @@
 {% extends 'index.html' %}
-
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | Add Product Page</title>
+<title>Online Bazar | Add New Product</title>
 {% endblock %}
 
-
 {% block body %}
-<h4 style="font-family: cursive;"class="text-white bg-info text-center p-2 mt-2 ">Add Product Section</h4>
-<div style="font-family: cursive;"class="container w-50 form-control bg-info text-light">
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3">
-            <div class="row">
-                <div class="col-12">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Enter Product Name">
+<div class="add-product-container animate__animated animate__fadeIn">
+  <div class="container py-4">
+    <!-- Header Section -->
+    <div class="add-header text-center mb-5 animate__animated animate__fadeInDown">
+      <h2 class="add-title"><i class="fas fa-plus-circle me-2"></i>Add New Product</h2>
+      <p class="add-subtitle">Fill in the details below to list your product</p>
+    </div>
+
+    <!-- Main Form -->
+    <div class="add-product-card card shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn">
+      <div class="card-body p-4 p-md-5">
+        <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+          {% csrf_token %}
+          
+          <!-- Basic Information Section -->
+          <div class="form-section mb-4 animate__animated animate__fadeInLeft">
+            <h5 class="section-title"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Product Name" required>
+                  <label for="name">Product Name</label>
+                  <div class="invalid-feedback">Please enter product name</div>
                 </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <select name="maincategory" id="maincategory" class="form-select" required>
+                    <option value="" selected disabled>Select Category</option>
+                    {% for i in Maincategory %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                  </select>
+                  <label for="maincategory">Main Category</label>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <select name="subcategory" id="subcategory" class="form-select" required>
+                    <option value="" selected disabled>Select Subcategory</option>
+                    {% for i in Subcategory %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                  </select>
+                  <label for="subcategory">Sub Category</label>
+                </div>
+              </div>
+              
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <select name="brand" id="brand" class="form-select" required>
+                    <option value="" selected disabled>Select Brand</option>
+                    {% for i in Brand %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                  </select>
+                  <label for="brand">Brand</label>
+                </div>
+              </div>
             </div>
-            <div class="row mb-2">
-                <div class="col-lg-3 col-md-6 col-12">
-                    <label class="form-label">Main-Category</label>
-                    <select name="maincategory" class="form-control bg-light">
-                        {% for i in Maincategory %}
-                        <option value="{{i}}">{{i}}</option>
-                        {% endfor %}
-
-                    </select>
-
+          </div>
+          
+          <!-- Pricing Section -->
+          <div class="form-section mb-4 animate__animated animate__fadeInRight">
+            <h5 class="section-title"><i class="fas fa-tag me-2"></i>Pricing & Stock</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="baseprice" name="baseprice" placeholder="Base Price" required>
+                  <label for="baseprice">Base Price (₹)</label>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <label class="form-label">Sub-Category</label>
-                    <select name="subcategory" class="form-control bg-light">
-                        {% for i in Subcategory %}
-                        <option value="{{i}}">{{i}}</option>
-                        {% endfor %}
-
-                    </select>
-
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="discount" name="discount" placeholder="Discount" min="0" max="100" value="0">
+                  <label for="discount">Discount (%)</label>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <label class="form-label">Brand</label>
-                    <select name="brand" class="form-control bg-light">
-                        {% for i in Brand %}
-                        <option value="{{i}}">{{i}}</option>
-                        {% endfor %}
-
-                    </select>
-
+              </div>
+              
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <select name="stock" id="stock" class="form-select">
+                    <option value="In-Stock" selected>In Stock</option>
+                    <option value="Out-Of-Stock">Out of Stock</option>
+                  </select>
+                  <label for="stock">Stock Status</label>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <label class="form-label">Stock</label>
-                    <select name="stock" class="form-control bg-light">
-                        <option value="In-Stock">In-Stock</option>
-                        <option value="Out-Of-Stoc">Out-Of-Stock</option>
-
-
-                    </select>
-
-                </div>
+              </div>
             </div>
-
-            <div class="row" mb-2>
-                <div class="col-sm-6 col-12">
-                    <label class="form-label">Base Price</label>
-                    <input type="number" class="form-control" name="baseprice" placeholder="Enter Product's Base Price">
-
-
-                </div>
-                <div class="col-sm-6 col-12">
-                    <label class="form-label">Discount</label>
-                    <input type="number" class="form-control" name="discount" value="0" min="0"
-                        placeholder="Enter Discount">
-                </div>
-
+          </div>
+          
+          <!-- Color Selection -->
+          <div class="form-section mb-4 animate__animated animate__fadeInLeft">
+            <h5 class="section-title"><i class="fas fa-palette me-2"></i>Available Colors</h5>
+            <div class="color-options">
+              <div class="color-option">
+                <input type="checkbox" id="color-Red" name="Red" value="Red">
+                <label for="color-Red" style="background-color: red;"></label>
+                <span>Red</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Green" name="Green" value="Green">
+                <label for="color-Green" style="background-color: green;"></label>
+                <span>Green</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Yellow" name="Yellow" value="Yellow">
+                <label for="color-Yellow" style="background-color: yellow;"></label>
+                <span>Yellow</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Pink" name="Pink" value="Pink">
+                <label for="color-Pink" style="background-color: pink;"></label>
+                <span>Pink</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-White" name="White" value="White">
+                <label for="color-White" style="background-color: white; border: 1px solid #ddd;"></label>
+                <span>White</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Black" name="Black" value="Black">
+                <label for="color-Black" style="background-color: black;"></label>
+                <span>Black</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Blue" name="Blue" value="Blue">
+                <label for="color-Blue" style="background-color: blue;"></label>
+                <span>Blue</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Brown" name="Brown" value="Brown">
+                <label for="color-Brown" style="background-color: brown;"></label>
+                <span>Brown</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-SkyBlue" name="SkyBlue" value="SkyBlue">
+                <label for="color-SkyBlue" style="background-color: skyblue;"></label>
+                <span>SkyBlue</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Orange" name="Orange" value="Orange">
+                <label for="color-Orange" style="background-color: orange;"></label>
+                <span>Orange</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Navy" name="Navy" value="Navy">
+                <label for="color-Navy" style="background-color: navy;"></label>
+                <span>Navy</span>
+              </div>
+              <div class="color-option">
+                <input type="checkbox" id="color-Gray" name="Gray" value="Gray">
+                <label for="color-Gray" style="background-color: gray;"></label>
+                <span>Gray</span>
+              </div>
             </div>
-            <div class="row" mb-2>
-                <label class="form-label text-light">Color</label>
-                <div class="row">
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Red" name="Red">
-                            <label class="form-check-label" for="Red">
-                                Red
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Green" name="Green">
-                            <label class="form-check-label" for="Green">
-                                Green
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Yellow" name="Yellow">
-                            <label class="form-check-label" for="Yellow">
-                                Yellow
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Pink" name="Pink">
-                            <label class="form-check-label" for="Pink">
-                                Pink
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="White" name="White">
-                            <label class="form-check-label" for="White">
-                                White
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Black" name="Black">
-                            <label class="form-check-label" for="Black">
-                                Black
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Blue" name="Blue">
-                            <label class="form-check-label" for="Blue">
-                                Blue
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Brown" name="Brown">
-                            <label class="form-check-label" for="Brown">
-                                Brown
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="SkyBlue" name="SkyBlue">
-                            <label class="form-check-label" for="SkyBlue">
-                                SkyBlue
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Orange" name="Orange">
-                            <label class="form-check-label" for="Orange">
-                                Orange
-                            </label>
-                        </div>
-
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Navy" name="Navy">
-                            <label class="form-check-label" for="Navy">
-                                Navy
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Gray" name="Gray">
-                            <label class="form-check-label" for="Gray">
-                                Gray
-                            </label>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          
+          <!-- Size Selection -->
+          <div class="form-section mb-4 animate__animated animate__fadeInRight">
+            <h5 class="section-title"><i class="fas fa-ruler-combined me-2"></i>Available Sizes</h5>
+            <div class="size-options">
+              <div class="size-option">
+                <input type="checkbox" id="size-M" name="M" value="M">
+                <label for="size-M">M</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-L" name="L" value="L">
+                <label for="size-L">L</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-SM" name="SM" value="SM">
+                <label for="size-SM">SM</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-XL" name="XL" value="XL">
+                <label for="size-XL">XL</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-XXL" name="XXL" value="XXL">
+                <label for="size-XXL">XXL</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-6" name="6" value="6">
+                <label for="size-6">6</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-7" name="7" value="7">
+                <label for="size-7">7</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-8" name="8" value="8">
+                <label for="size-8">8</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-9" name="9" value="9">
+                <label for="size-9">9</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-10" name="10" value="10">
+                <label for="size-10">10</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-11" name="11" value="11">
+                <label for="size-11">11</label>
+              </div>
+              <div class="size-option">
+                <input type="checkbox" id="size-12" name="12" value="12">
+                <label for="size-12">12</label>
+              </div>
             </div>
-            <div class="row md-3">
-                <label class="form-label text-light">Size</label>
-                <div class="row">
-
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="M" name="M">
-                            <label class="form-check-label" for="M">
-                                M
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="L" name="L">
-                            <label class="form-check-label" for="L">
-                                L
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="SM" name="SM">
-                            <label class="form-check-label" for="SM">
-                                SM
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="XL" name="XL">
-                            <label class="form-check-label" for="XL">
-                                XL
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="XXL" name="XXL">
-                            <label class="form-check-label" for="XXL">
-                                XXL
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="6" name="6">
-                            <label class="form-check-label" for="6">
-                                6
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="7" name="7">
-                            <label class="form-check-label" for="7">
-                                7
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="8" name="8">
-                            <label class="form-check-label" for="8">
-                                8
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="9" name="9">
-                            <label class="form-check-label" for="9">
-                                9
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="10" name="10">
-                            <label class="form-check-label" for="10">
-                                10
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="11" name="11">
-                            <label class="form-check-label" for="11">
-                                11
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-md-3 col-sm-4 col-6">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="12" name="12">
-                            <label class="form-check-label" for="12">
-                                12
-                            </label>
-                        </div>
-                    </div>
-
-
-                </div>
+          </div>
+          
+          <!-- Description -->
+          <div class="form-section mb-4 animate__animated animate__fadeInUp">
+            <h5 class="section-title"><i class="fas fa-align-left me-2"></i>Product Description</h5>
+            <div class="form-floating">
+              <textarea class="form-control" id="description" name="description" style="height: 120px">This is Sample of Product</textarea>
+              <label for="description">Detailed description...</label>
             </div>
-
-
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="6">This is Sample of Product</textarea>
+          </div>
+          
+          <!-- Image Upload -->
+          <div class="form-section mb-4 animate__animated animate__fadeInUp">
+            <h5 class="section-title"><i class="fas fa-images me-2"></i>Product Images</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="image-upload-box">
+                  <label for="pic1">Main Image (Required)</label>
+                  <input type="file" id="pic1" name="pic1" class="form-control" required>
+                  <div class="image-preview" id="preview1"></div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="image-upload-box">
+                  <label for="pic2">Secondary Image</label>
+                  <input type="file" id="pic2" name="pic2" class="form-control">
+                  <div class="image-preview" id="preview2"></div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="image-upload-box">
+                  <label for="pic3">Additional Image</label>
+                  <input type="file" id="pic3" name="pic3" class="form-control">
+                  <div class="image-preview" id="preview3"></div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="image-upload-box">
+                  <label for="pic4">Additional Image</label>
+                  <input type="file" id="pic4" name="pic4" class="form-control">
+                  <div class="image-preview" id="preview4"></div>
+                </div>
+              </div>
             </div>
-            <div class="row mb-2">
-                <div class="col-sm-6 col-12">
-                    <label class="form-label">Pic1</label>
-                    <input type="file" class="form-control" name="pic1">
-
-
-                </div>
-                <div class="col-sm-6 col-12">
-                    <label class="form-label">Pic2</label>
-                    <input type="file" class="form-control" name="pic2">
-                </div>
-                <div class="col-sm-6 col-12">
-                    <label class="form-label">Pic3</label>
-                    <input type="file" class="form-control" name="pic3">
-
-
-                </div>
-                <div class="col-sm-6 col-12">
-                    <label class="form-label">Pic4</label>
-                    <input type="file" class="form-control" name="pic4">
-                </div>
-            </div>
-
-        </div>
-        <button type="submit" class="btn bg-success text-light w-100 ">Submit</button>
-        <br>
-
-    </form>
+          </div>
+          
+          <!-- Submit Button -->
+          <div class="text-center mt-4 animate__animated animate__fadeInUp">
+            <button type="submit" class="btn btn-primary btn-add-product">
+              <span class="btn-text">Add Product</span>
+              <span class="btn-icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Styles -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+  :root {
+    --primary: #4361ee;
+    --primary-light: #eef2ff;
+    --secondary: #3f37c9;
+    --success: #2ecc71;
+    --dark: #212529;
+    --light: #f8f9fa;
+    --gray: #6c757d;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+  }
+
+  .add-product-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Header */
+  .add-header {
+    position: relative;
+    padding-bottom: 1rem;
+  }
+
+  .add-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 3px;
+  }
+
+  .add-title {
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .add-subtitle {
+    color: var(--gray);
+    font-size: 1.1rem;
+  }
+
+  /* Card */
+  .add-product-card {
+    border: none;
+    background-color: white;
+    transition: all 0.3s ease;
+  }
+
+  .add-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form Sections */
+  .form-section {
+    background-color: var(--light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Form Elements */
+  .form-floating>label {
+    color: var(--gray);
+    padding: 1rem 0.75rem;
+  }
+
+  .form-control, .form-select {
+    border: 1px solid #e0e0e0;
+    padding: 1rem 0.75rem;
+    border-radius: 10px;
+    transition: all 0.3s;
+  }
+
+  .form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+  }
+
+  /* Color Options */
+  .color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .color-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .color-option input[type="checkbox"] {
+    display: none;
+  }
+
+  .color-option label {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+  }
+
+  .color-option input[type="checkbox"]:checked + label {
+    border-color: var(--primary);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Size Options */
+  .size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .size-option {
+    position: relative;
+  }
+
+  .size-option input[type="checkbox"] {
+    display: none;
+  }
+
+  .size-option label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .size-option input[type="checkbox"]:checked + label {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  /* Image Upload */
+  .image-upload-box {
+    border: 2px dashed #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    height: 100%;
+  }
+
+  .image-upload-box:hover {
+    border-color: var(--primary);
+    background-color: rgba(67, 97, 238, 0.05);
+  }
+
+  .image-upload-box label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .image-preview {
+    margin-top: 1rem;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    display: none;
+  }
+
+  /* Submit Button */
+  .btn-add-product {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0.8rem 2rem;
+  }
+
+  .btn-add-product:hover {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+  }
+
+  .btn-add-product:hover .btn-icon {
+    transform: rotate(90deg);
+  }
+
+  .btn-icon {
+    transition: all 0.3s;
+  }
+
+  /* Form Validation */
+  .was-validated .form-control:valid,
+  .form-control.is-valid {
+    border-color: #28a745;
+    background-image: none;
+  }
+
+  .was-validated .form-control:invalid,
+  .form-control.is-invalid {
+    border-color: #dc3545;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .color-options, .size-options {
+      gap: 0.8rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .add-product-container {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    
+    .form-section {
+      padding: 1rem;
+    }
+    
+    .color-option {
+      flex: 0 0 calc(33.333% - 0.8rem);
+    }
+  }
+
+  @media (max-width: 576px) {
+    .add-title {
+      font-size: 1.5rem;
+    }
+    
+    .color-option {
+      flex: 0 0 calc(50% - 0.8rem);
+    }
+    
+    .btn-add-product {
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Scripts -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    (function() {
+      'use strict'
+      
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+      
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+    
+    // Add animation to form sections
+    const formSections = document.querySelectorAll('.form-section');
+    formSections.forEach((section, index) => {
+      section.style.animationDelay = `${index * 0.1}s`;
+    });
+    
+    // Button hover effect
+    const addBtn = document.querySelector('.btn-add-product');
+    if (addBtn) {
+      addBtn.addEventListener('mouseenter', function() {
+        this.classList.add('animate__animated', 'animate__pulse');
+      });
+      addBtn.addEventListener('mouseleave', function() {
+        this.classList.remove('animate__animated', 'animate__pulse');
+      });
+    }
+    
+    // Image preview functionality
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        const previewId = this.id.replace('pic', 'preview');
+        const preview = document.getElementById(previewId);
+        
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            // Remove any existing images
+            while (preview.firstChild) {
+              preview.removeChild(preview.firstChild);
+            }
+            
+            // Create and append new image
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.classList.add('animate__animated', 'animate__fadeIn');
+            preview.appendChild(img);
+          }
+          
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

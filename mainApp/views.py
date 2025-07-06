@@ -311,108 +311,88 @@ def deleteproduct(request,num):
 
     
 @login_required(login_url='/login/')
-def Editproduct(request,num):
+def Editproduct(request, num):
     try:
-        p = Product.objects.get(id=num)
+        product = Product.objects.get(id=num)
         seller = Seller.objects.get(username=request.user)
-   
-        if(p.seller==seller):
-            maincategory = Maincategory.objects.exclude(name=p.maincategory)
-            subcategory = Subcategory.objects.exclude(name=p.subcategory)
-            brand = Brand.objects.exclude(name=p.brand)
-            if(request.method=="POST"):
-                p.name = request.POST.get('name')
-                p.maincategory = Maincategory.objects.get(name=request.POST.get('maincategory'))
-
-                p.subcategory = Subcategory.objects.get(name=request.POST.get('subcategory'))
-                p.brand = Brand.objects.get(name=request.POST.get('brand'))
-                p.baseprice = int(request.POST.get('baseprice'))
-                p.discount = int(request.POST.get('discount'))
-                p.finalprice = p.baseprice-p.baseprice*p.discount/100
-                color=""
-                if(request.POST.get("Red")):
-                    color=color+"Red,"
-                if(request.POST.get("Green")):
-                    color=color+"Green,"
-                if(request.POST.get("Yellow")):
-                    color=color+"Yellow,"
-                if(request.POST.get("Pink")):
-                    color=color+"Pink,"
-                if(request.POST.get("White")):
-                    color=color+"White,"
-                if(request.POST.get("Black")):
-                    color=color+"Black,"
-                if(request.POST.get("Blue")):
-                    color=color+"Blue,"
-                if(request.POST.get("Brown")):
-                    color=color+"Brown,"
-                if(request.POST.get("SkyBlue")):
-                    color=color+"SkyBlue,"
-                if(request.POST.get("Orange")):
-                    color=color+"Orange,"
-                if(request.POST.get("Navy")):
-                    color=color+"Navy,"
-                if(request.POST.get("Gray")):
-                    color=color+"Gray,"
-
-                size=""
-                if(request.POST.get("M")):
-                    size=size+"M,"
-                if(request.POST.get("L")):
-                    size=size+"L,"
-                if(request.POST.get("SM")):
-                    size=size+"SM,"
-                if(request.POST.get("XL")):
-                    size=size+"XL,"
-                if(request.POST.get("XXL")):
-                    size=size+"XXL,"
-                if(request.POST.get("6")):
-                    size=size+"6,"
-                if(request.POST.get("7")):
-                    size=size+"7,"
-                if(request.POST.get("8")):
-                    size=size+"8,"
-                if(request.POST.get("9")):
-                    size=size+"9,"
-                if(request.POST.get("10")):
-                    size=size+"10,"
-                if(request.POST.get("11")):
-                    size=size+"11,"
-                if(request.POST.get("12")):
-                    size=size+"12,"
-                p.color=color
-                p.size=size
-
         
-                p.description = request.POST.get('description')
-                p.stock = request.POST.get('stock')
-                if(request.FILES.get('pic1')):
-                    if(p.pic1):        
-                        os.remove("media/"+str(p.pic1))
-            
+        if product.seller != seller:
+            return HttpResponseRedirect("/profile/")
 
-                    p.pic1 = request.FILES.get('pic1')
-                if(request.FILES.get('pic2')):
-                    if(p.pic2):        
-                        os.remove("media/"+str(p.pic2))
-                    p.pic2 = request.FILES.get('pic2')
-                if(request.FILES.get('pic3')):
-                    if(p.pic3):        
-                        os.remove("media/"+str(p.pic3))
-                    p.pic3 = request.FILES.get('pic3')
-                if(request.FILES.get('pic4')):
-                    if(p.pic4):        
-                        os.remove("media/"+str(p.pic4))
-                    p.pic4 = request.FILES.get('pic4')
-            
-                p.save()
-                return HttpResponseRedirect("/profile/")                    
+        # Get all available options excluding current selections
+        maincategories = Maincategory.objects.exclude(name=product.maincategory)
+        subcategories = Subcategory.objects.exclude(name=product.subcategory)
+        brands = Brand.objects.exclude(name=product.brand)
 
-            return render(request,"editproduct.html",{"Product":p,"Maincategory":maincategory,"Subcategory":subcategory,"Brand":brand})
-        return HttpResponseRedirect("/profile/")                    
-    except:
+        if request.method == "POST":
+            # Process form data
+            product.name = request.POST.get('name')
+            
+            try:
+                product.maincategory = Maincategory.objects.get(name=request.POST.get('maincategory'))
+                product.subcategory = Subcategory.objects.get(name=request.POST.get('subcategory'))
+                product.brand = Brand.objects.get(name=request.POST.get('brand'))
+            except (Maincategory.DoesNotExist, Subcategory.DoesNotExist, Brand.DoesNotExist):
+                return HttpResponseRedirect("/profile/")
+
+            # Process pricing
+            try:
+                product.baseprice = int(request.POST.get('baseprice', 0))
+                product.discount = int(request.POST.get('discount', 0))
+                product.finalprice = product.baseprice - (product.baseprice * product.discount / 100)
+            except (ValueError, TypeError):
+                return HttpResponseRedirect("/profile/")
+
+            # Process colors
+            available_colors = ['Red', 'Green', 'Yellow', 'Pink', 'White', 'Black', 
+                              'Blue', 'Brown', 'SkyBlue', 'Orange', 'Navy', 'Gray']
+            selected_colors = [color for color in available_colors if request.POST.get(color)]
+            product.color = ",".join(selected_colors) + "," if selected_colors else ""
+
+            # Process sizes
+            available_sizes = ['M', 'L', 'SM', 'XL', 'XXL', '6', '7', '8', '9', '10', '11', '12']
+            selected_sizes = [size for size in available_sizes if request.POST.get(size)]
+            product.size = ",".join(selected_sizes) + "," if selected_sizes else ""
+
+            # Process description and stock
+            product.description = request.POST.get('description', '')
+            product.stock = request.POST.get('stock', 'In-Stock')
+
+            # Process images
+            for i in range(1, 5):
+                pic_field = f'pic{i}'
+                pic_file = request.FILES.get(pic_field)
+                if pic_file:
+                    # Delete old image if exists
+                    old_pic = getattr(product, pic_field)
+                    if old_pic:
+                        try:
+                            os.remove("media/" + str(old_pic))
+                        except OSError:
+                            pass
+                    # Save new image
+                    setattr(product, pic_field, pic_file)
+
+            product.save()
+            return HttpResponseRedirect("/profile/")
+
+        # Define color and size options for template
+        colors = ['Red', 'Green', 'Yellow', 'Pink', 'White', 'Black', 
+                 'Blue', 'Brown', 'SkyBlue', 'Orange', 'Navy', 'Gray']
+        sizes = ['M', 'L', 'SM', 'XL', 'XXL', '6', '7', '8', '9', '10', '11', '12']
+
+        context = {
+            "Product": product,
+            "Maincategory": maincategories,
+            "Subcategory": subcategories,
+            "Brand": brands,
+            "colors": colors,
+            "sizes": sizes,
+        }
+        return render(request, "editproduct.html", context)
+
+    except (Product.DoesNotExist, Seller.DoesNotExist):
         return HttpResponseRedirect("/profile/")
-
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/login/")

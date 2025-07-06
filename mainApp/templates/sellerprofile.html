@@ -1,102 +1,521 @@
 {% extends 'index.html' %}
-
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | Seller Profile Page</title>
+<title>Online Bazar | Seller Dashboard</title>
 {% endblock %}
 
 {% block body %}
-<div class="container my-5">
-  <div class="row align-items-center">
-    <div class="col-lg-6 col-md-6 col-sm-12 mb-4 text-center">
-      {% if User.pic %}
-      <img src="{{User.pic.url}}" class="img-fluid rounded shadow-lg" style="max-height: 350px;">
-      {% else %}
-      <img src="{% static 'images/noimage.png' %}" class="img-fluid rounded shadow-lg" style="max-height: 350px;">
-      {% endif %}
+<div class="seller-dashboard animate__animated animate__fadeIn">
+  <!-- Profile Section -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="profile-card shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn">
+          <div class="row g-0">
+            <!-- Profile Image -->
+            <div class="col-lg-5 col-md-6">
+              <div class="profile-image-container p-4 text-center">
+                <div class="profile-image-wrapper">
+                  {% if User.pic %}
+                  <img src="{{User.pic.url}}" class="profile-img img-fluid rounded-circle shadow">
+                  {% else %}
+                  <img src="{% static 'images/noimage.png' %}" class="profile-img img-fluid rounded-circle shadow">
+                  {% endif %}
+                  <div class="edit-overlay">
+                    <a href="/updateProfile/" class="btn btn-sm btn-light">
+                      <i class="fas fa-camera me-1"></i> Update
+                    </a>
+                  </div>
+                </div>
+                <h3 class="mt-4 mb-0">{{User.name}}</h3>
+                <p class="text-muted mb-0">@{{User.username}}</p>
+                <div class="seller-badge mt-2">
+                  <span class="badge bg-primary">Verified Seller</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Profile Details -->
+            <div class="col-lg-7 col-md-6">
+              <div class="profile-details p-4">
+                <h4 class="section-title mb-4">
+                  <i class="fas fa-user-circle me-2"></i> Seller Information
+                </h4>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="detail-item mb-3">
+                      <i class="fas fa-envelope"></i>
+                      <div>
+                        <small class="text-muted">Email</small>
+                        <p class="mb-0">{{User.email}}</p>
+                      </div>
+                    </div>
+                    <div class="detail-item mb-3">
+                      <i class="fas fa-phone"></i>
+                      <div>
+                        <small class="text-muted">Phone</small>
+                        <p class="mb-0">{{User.phone}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="detail-item mb-3">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <div>
+                        <small class="text-muted">Address</small>
+                        <p class="mb-0">{{User.addressline1}}, {{User.city}}, {{User.state}} - {{User.pin}}</p>
+                      </div>
+                    </div>
+                    <div class="detail-item mb-3">
+                      <i class="fas fa-calendar-alt"></i>
+                      <div>
+                        <small class="text-muted">Member Since</small>
+                        <p class="mb-0">{{User.date}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center mt-4">
+                  <a href="/updateProfile/" class="btn btn-primary btn-update">
+                    <i class="fas fa-edit me-2"></i> Edit Profile
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-12">
-      <h3 class="text-center p-3 mb-3 rounded bg-white text-dark shadow-sm" style="font-family: cursive;">👤 Seller Profile</h3>
-      <table class="table table-bordered table-hover table-striped text-dark" style="font-family: cursive; background-color: #f8f9fa; border-radius: 10px;">
-        <tr><th>Name</th><td>{{User.name}}</td></tr>
-        <tr><th>Username</th><td>{{User.username}}</td></tr>
-        <tr><th>Email</th><td>{{User.email}}</td></tr>
-        <tr><th>Phone</th><td>{{User.phone}}</td></tr>
-        <tr><th>House No.</th><td>{{User.addressline1}}</td></tr>
-        <tr><th>PIN</th><td>{{User.pin}}</td></tr>
-        <tr><th>City</th><td>{{User.city}}</td></tr>
-        <tr><th>State</th><td>{{User.state}}</td></tr>
-        <tr>
-          <td colspan="2">
-            <a href="/updateProfile/" class="btn btn-outline-success w-100 shadow-sm">Update Profile</a>
-          </td>
-        </tr>
-      </table>
+  <!-- Products Section -->
+  <div class="container pb-5">
+    <div class="products-header text-center mb-5 animate__animated animate__fadeInUp">
+      <h2 class="section-title">
+        <i class="fas fa-box-open me-2"></i> My Products
+        <a href="/add-product/" class="btn btn-success btn-sm ms-3 btn-add-product">
+          <i class="fas fa-plus me-1"></i> Add New
+        </a>
+      </h2>
+      <div class="divider mx-auto"></div>
     </div>
+    
+    {% if products %}
+    <div class="products-grid animate__animated animate__fadeIn">
+      {% for product in products %}
+      <div class="product-card shadow-sm rounded-3 overflow-hidden animate__animated animate__fadeInUp" 
+           style="animation-delay: {{ forloop.counter0|divisibleby:2|yesno:'0.1s,0.2s' }}">
+        <div class="product-image">
+          {% if product.pic1 %}
+          <img src="{{product.pic1.url}}" class="img-fluid">
+          {% else %}
+          <img src="{% static 'picture/noimg.png' %}" class="img-fluid">
+          {% endif %}
+          <div class="product-badge {% if product.stock == 'In-Stock' %}in-stock{% else %}out-of-stock{% endif %}">
+            {{product.stock}}
+          </div>
+        </div>
+        <div class="product-details p-3">
+          <h5 class="product-title">{{product.name}}</h5>
+          <div class="product-meta mb-2">
+            <span class="color-dot" style="background-color: {{product.color|lower|default:'gray'}}"></span>
+            <span>{{product.color|default:"-"}} | {{product.size|default:"-"}}</span>
+          </div>
+          <div class="product-pricing">
+            <span class="original-price">₹{{product.baseprice}}</span>
+            <span class="discount">{{product.discount}}% OFF</span>
+            <span class="final-price">₹{{product.finalprice}}</span>
+          </div>
+          <div class="product-actions mt-3">
+            <a href="/edit-product/{{product.id}}/" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-edit me-1"></i> Edit
+            </a>
+            <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{product.id}}')">
+              <i class="fas fa-trash-alt me-1"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state text-center py-5 animate__animated animate__fadeIn">
+      <div class="empty-icon mb-3">
+        <i class="fas fa-box-open fa-4x text-muted"></i>
+      </div>
+      <h4 class="mb-2">No Products Found</h4>
+      <p class="text-muted mb-4">You haven't added any products yet</p>
+      <a href="/add-product/" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i> Add Your First Product
+      </a>
+    </div>
+    {% endif %}
   </div>
 </div>
 
-<h4 class="text-center text-white py-3 rounded shadow" style="background: linear-gradient(to right, #2193b0, #6dd5ed); font-weight: bold;">
-  🛍️ Product Section 
-  <a href="/add-product/" class="text-white ms-2"><i class="fa fa-plus"></i></a>
-</h4>
-
-<div class="container mb-5">
-  <div class="table-responsive">
-    <table class="table table-hover table-striped bg-white rounded shadow-sm">
-      <thead class="table-primary">
-        <tr>
-          <th></th>
-          <th>Name</th>
-          <th>Color</th>
-          <th>Size</th>
-          <th>Base Price</th>
-          <th>Discount</th>
-          <th>Final Price</th>
-          <th>Stock</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for i in products %}
-        <tr>
-          <td>
-            {% if i.pic1 %}
-            <img src="{{i.pic1.url}}" height="100px" width="100px">
-            {% else %}
-            <img src="{% static 'picture/noimg.png' %}" height="100px" width="100px">
-            {% endif %}
-          </td>
-          <td>{{i.name}}</td>
-          <td>{{i.color}}</td>
-          <td>{{i.size}}</td>
-          <td>&#8377;{{i.baseprice}}</td>
-          <td>{{i.discount}}%</td>
-          <td>&#8377;{{i.finalprice}}</td>
-          <td>{{i.stock}}</td>
-          <td><a href="/edit-product/{{i.id}}/" class="btn text-primary"><i class="material-icons">edit</i></a></td>
-          <td><button class="btn text-danger" onclick="fun('{{i.id}}')"><i class="material-icons">delete_forever</i></button></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-
+<!-- Styles -->
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+  :root {
+    --primary: #4361ee;
+    --primary-light: #eef2ff;
+    --secondary: #3f37c9;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --dark: #212529;
+    --light: #f8f9fa;
+    --gray: #6c757d;
+  }
+
   body {
-    background: linear-gradient(to bottom right, #f0f4ff, #dbefff);
     font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    color: var(--dark);
+  }
+
+  /* Profile Card */
+  .profile-card {
+    background-color: white;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .profile-image-container {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .profile-image-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid white;
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .edit-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .profile-image-wrapper:hover .edit-overlay {
+    opacity: 1;
+  }
+
+  .profile-image-wrapper:hover .profile-img {
+    transform: scale(1.05);
+  }
+
+  .seller-badge .badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 500;
+  }
+
+  /* Profile Details */
+  .profile-details {
+    background-color: white;
+    height: 100%;
+  }
+
+  .section-title {
+    color: var(--primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .detail-item i {
+    width: 36px;
+    height: 36px;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .btn-update {
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+  }
+
+  /* Products Section */
+  .products-header {
+    position: relative;
+  }
+
+  .divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 3px;
+    margin-top: 1rem;
+  }
+
+  .btn-add-product {
+    border-radius: 50px;
+    padding: 0.25rem 1rem;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+
+  .btn-add-product:hover {
+    transform: scale(1.05);
+  }
+
+  /* Products Grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background-color: white;
+    border: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .product-image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-card:hover .product-image img {
+    transform: scale(1.05);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+  }
+
+  .product-badge.in-stock {
+    background-color: var(--success);
+  }
+
+  .product-badge.out-of-stock {
+    background-color: var(--danger);
+  }
+
+  .product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .product-meta {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--gray);
+  }
+
+  .color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    border: 1px solid #ddd;
+  }
+
+  .product-pricing {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .original-price {
+    text-decoration: line-through;
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+
+  .discount {
+    background-color: var(--warning);
+    color: var(--dark);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  .final-price {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  /* Empty State */
+  .empty-state {
+    background-color: white;
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .empty-icon {
+    color: var(--primary-light);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .profile-image-wrapper {
+      width: 150px;
+      height: 150px;
+    }
+    
+    .products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-card .row > div {
+      width: 100%;
+    }
+    
+    .profile-image-container {
+      padding-bottom: 2rem;
+    }
+    
+    .profile-details {
+      padding-top: 0 !important;
+    }
+    
+    .detail-item {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .product-actions {
+      flex-direction: column;
+    }
+    
+    .btn-update {
+      width: 100%;
+    }
   }
 </style>
 
+<!-- Scripts -->
 <script>
-  function fun(num) {
-    if (confirm("Are You Sure!!! Do You want delete this Item"))
-      window.location.href = `/delete-product/${num}/`;
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add animation to product cards as they appear
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
+    
+    // Button hover effects
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', function() {
+        this.classList.add('animate__animated', 'animate__pulse');
+      });
+      button.addEventListener('mouseleave', function() {
+        this.classList.remove('animate__animated', 'animate__pulse');
+      });
+    });
+  });
+  
+  function confirmDelete(productId) {
+    Swal.fire({
+      title: 'Delete Product?',
+      text: "Are you sure you want to delete this product? This action cannot be undone.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `/delete-product/${productId}/`;
+      }
+    });
   }
 </script>
+
+<!-- Include SweetAlert for beautiful alerts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}

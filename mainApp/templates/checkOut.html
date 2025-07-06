@@ -1,134 +1,479 @@
 {% extends 'index.html' %}
-
-
-
 {% load static %}
 {% load cart %}
 {% block title %}
-<title>Online Bazar | Cart Page</title>
+<title>Online Bazar | Shopping Cart</title>
 {% endblock %}
 
 {% block body %}
-<div class="row mt-1">
-    <div class="col-md-6 col-sm-12 col-12">
-        <h3 style="color:rgba(0, 0, 0, 0.918); font-family: cursive; text-transform: capitalize;"
-            class="p-3 mb-2 bg-white text-black text-center ">Billing Details </h3>
-        <table class="table table-white text-black table-striped table-hover">
-            <tr>
-                <th>Name</th>
-                <td>{{User.name}}</td>
-            </tr>
-            <tr>
-                <th>User Name</th>
-                <td>{{User.username}}</td>
-            </tr>
-            <tr>
-                <th>Email Id</th>
-                <td>{{User.email}}</td>
-            </tr>
-            <tr>
-                <th>Phone Number</th>
-                <td>{{User.phone}}</td>
-            </tr>
-            <tr>
-                <th>House Number</th>
-                <td>{{User.addressline1}}</td>
-            </tr>
-
-            <tr>
-                <th>PIN</th>
-                <td>{{User.pin}}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{User.city}}</td>
-            </tr>
-            <tr>
-                <th>State</th>
-                <td>{{User.state}}</td>
-            </tr>
-            <tr>
-                <th colspan="2"><a style="color:white; font-family: cursive; text-transform: capitalize;"
-                        href="/updateProfile/" class="btn-success btn  w-100 ">Update Profile</a></th>
-
-            </tr>
-
-        </table>
-    </div>
-    <div class="col-md-6 col-sm-12 col-12">
-        <h4 class="bg-white text-black text-center p-2 mt-4">Cart Section </h4>
-        <div class="table-responsive">
-            <table class="table table-hover table-striped table-light">
-                <tr>
-
-                    <th></th>
-                    <th>Name</th>
-                    <th>Color</th>
-                    <th>Size</th>
-
-                    <th>Price</th>
-
-                    <th>QTY</th>
-
-                    <th>Total</th>
-
-
-                </tr>
-                {% for i in Cart %}
-                <tr>
-                    {% if request|cartProductImage:i %}
-                    <td><img src="{{request|cartProductImage:i}}" height="100px" width="100px"></td>
-                    {% else %}
-                    <td><img src="{% static 'picture/noimg.png' %}" height="100px" width="100px"></td>
-                    {% endif %}
-                    <td>{{request|cartProductName:i}}</td>
-                    <td>{{request|cartColor:i}}</td>
-                    <td>{{request|cartSize:i}}</td>
-
-
-                    <td>&#8377;{{request|cartProductPrice:i}}</td>
-
-
-                    <td>{{request|cartQty:i}}</td>
-
-                    <td>&#8377;{{request|cartTotal:i}}</td>
-
-
-                </tr>
-                {% endfor %}
-            </table>
+<div class="cart-container animate__animated animate__fadeIn">
+  <div class="container-fluid py-4">
+    <div class="row g-4">
+      <!-- Billing Details Column -->
+      <div class="col-lg-6">
+        <div class="card billing-card shadow-lg animate__animated animate__fadeInLeft">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="fas fa-user-circle me-2"></i>Billing Details</h3>
+          </div>
+          <div class="card-body">
+            <div class="user-profile">
+              <div class="profile-details">
+                <div class="detail-item">
+                  <i class="fas fa-user"></i>
+                  <div>
+                    <span class="label">Name</span>
+                    <span class="value">{{User.name}}</span>
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-at"></i>
+                  <div>
+                    <span class="label">Username</span>
+                    <span class="value">{{User.username}}</span>
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-envelope"></i>
+                  <div>
+                    <span class="label">Email</span>
+                    <span class="value">{{User.email}}</span>
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-phone"></i>
+                  <div>
+                    <span class="label">Phone</span>
+                    <span class="value">{{User.phone}}</span>
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-home"></i>
+                  <div>
+                    <span class="label">Address</span>
+                    <span class="value">{{User.addressline1}}, {{User.city}}, {{User.state}} - {{User.pin}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center mt-4">
+                <a href="/updateProfile/" class="btn btn-outline-primary btn-update-profile">
+                  <i class="fas fa-edit me-2"></i>Update Profile
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <table class="table table-light table-striped table-hover">
-            <tr>
-                <th>Total</th>
-                <td>&#8377;{{Total}}</td>
-            </tr>
-            <tr>
-                <th>Shipping</th>
-                <td>&#8377;{{Shipping}}</td>
-            </tr>
-            <tr>
-                <th>Final</th>
-                <td>&#8377;{{Final}}</td>
-            </tr>
-            <form action="" method="post">
-                {% csrf_token %}
-                <tr>
-                    <th>Mode of Payment</th>
-                    <td>
-                        <select name="mode" class="form-control">
-                            <option value="COD">COD</option>
-                            <option value="Net Banking">Net Banking/Cart UPI/Wallet</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th colspan="2"><button type="submit" class="btn btn-success text-light w-100">Place Order</button>
-                    </th>
-                </tr>
+      </div>
+
+      <!-- Cart Section Column -->
+      <div class="col-lg-6">
+        <div class="card cart-card shadow-lg animate__animated animate__fadeInRight">
+          <div class="card-header bg-success text-white">
+            <h3 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Your Shopping Cart</h3>
+          </div>
+          <div class="card-body">
+            {% if Cart %}
+            <div class="cart-items">
+              {% for i in Cart %}
+              <div class="cart-item animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|divisibleby:2|yesno:'0.1s,0.2s' }}">
+                <div class="product-image">
+                  {% if request|cartProductImage:i %}
+                  <img src="{{request|cartProductImage:i}}" class="img-fluid" alt="Product Image">
+                  {% else %}
+                  <img src="{% static 'picture/noimg.png' %}" class="img-fluid" alt="No Image">
+                  {% endif %}
+                </div>
+                <div class="product-details">
+                  <h5 class="product-name">{{request|cartProductName:i}}</h5>
+                  <div class="product-attributes">
+                    <span class="attribute"><i class="fas fa-palette me-1"></i> {{request|cartColor:i}}</span>
+                    <span class="attribute"><i class="fas fa-ruler me-1"></i> {{request|cartSize:i}}</span>
+                  </div>
+                  <div class="product-pricing">
+                    <span class="price">₹{{request|cartProductPrice:i}}</span>
+                    <span class="quantity">Qty: {{request|cartQty:i}}</span>
+                    <span class="total">₹{{request|cartTotal:i}}</span>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="cart-summary animate__animated animate__fadeInUp">
+              <div class="summary-item">
+                <span>Subtotal:</span>
+                <span>₹{{Total}}</span>
+              </div>
+              <div class="summary-item">
+                <span>Shipping:</span>
+                <span>₹{{Shipping}}</span>
+              </div>
+              <div class="summary-item grand-total">
+                <span>Total:</span>
+                <span>₹{{Final}}</span>
+              </div>
+            </div>
+
+            <form action="" method="post" class="payment-form animate__animated animate__fadeInUp">
+              {% csrf_token %}
+              <div class="form-group mb-3">
+                <label for="payment-mode" class="form-label"><i class="fas fa-credit-card me-2"></i>Payment Method</label>
+                <select name="mode" id="payment-mode" class="form-select">
+                  <option value="COD">Cash on Delivery (COD)</option>
+                  <option value="Net Banking">Net Banking/Card/UPI/Wallet</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-success btn-place-order w-100">
+                <span class="btn-text">Place Order</span>
+                <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+              </button>
             </form>
-        </table>
+            {% else %}
+            <div class="empty-cart text-center py-5 animate__animated animate__fadeIn">
+              <i class="fas fa-shopping-cart fa-4x mb-3 text-muted"></i>
+              <h4>Your cart is empty</h4>
+              <p class="text-muted">Looks like you haven't added any items yet</p>
+              <a href="/shop/All/All/All/" class="btn btn-primary mt-3">
+                <i class="fas fa-store me-2"></i>Continue Shopping
+              </a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- Styles -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+  :root {
+    --primary: #4361ee;
+    --primary-light: #eef2ff;
+    --secondary: #3f37c9;
+    --success: #2ecc71;
+    --dark: #212529;
+    --light: #f8f9fa;
+    --gray: #6c757d;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+  }
+
+  .cart-container {
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Cards */
+  .billing-card, .cart-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .billing-card:hover, .cart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    padding: 1.2rem;
+    border-bottom: none;
+  }
+
+  /* Billing Details */
+  .profile-details {
+    padding: 1rem 0;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .detail-item i {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 0.2rem;
+  }
+
+  .value {
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  .btn-update-profile {
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .btn-update-profile:hover {
+    background-color: var(--primary);
+    color: white;
+  }
+
+  /* Cart Items */
+  .cart-items {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+
+  .cart-item {
+    display: flex;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .product-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+    border: 1px solid #eee;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .cart-item:hover .product-image img {
+    transform: scale(1.05);
+  }
+
+  .product-details {
+    flex: 1;
+  }
+
+  .product-name {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+  }
+
+  .product-attributes {
+    margin-bottom: 0.8rem;
+  }
+
+  .attribute {
+    display: inline-block;
+    font-size: 0.8rem;
+    background-color: var(--light);
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    margin-right: 0.5rem;
+    color: var(--gray);
+  }
+
+  .product-pricing {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .price, .total {
+    font-weight: 600;
+  }
+
+  .total {
+    color: var(--primary);
+  }
+
+  /* Cart Summary */
+  .cart-summary {
+    background-color: var(--light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .summary-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .grand-total {
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Payment Form */
+  .payment-form {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-place-order {
+    border-radius: 50px;
+    padding: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-place-order:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+  }
+
+  .btn-place-order:hover .btn-icon {
+    transform: translateX(5px);
+  }
+
+  .btn-icon {
+    transition: all 0.3s;
+  }
+
+  /* Empty Cart */
+  .empty-cart {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .product-image {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .cart-container {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    
+    .cart-item {
+      flex-direction: column;
+    }
+    
+    .product-image {
+      margin-right: 0;
+      margin-bottom: 1rem;
+      width: 100%;
+      height: 150px;
+    }
+    
+    .product-pricing {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .detail-item {
+      flex-direction: column;
+    }
+    
+    .detail-item i {
+      margin-right: 0;
+      margin-bottom: 0.8rem;
+    }
+    
+    .card-header h3 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+<!-- Scripts -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add animation to cart items as they appear
+    const cartItems = document.querySelectorAll('.cart-item');
+    cartItems.forEach((item, index) => {
+      item.style.animationDelay = `${index * 0.1}s`;
+    });
+    
+    // Button hover effect
+    const placeOrderBtn = document.querySelector('.btn-place-order');
+    if (placeOrderBtn) {
+      placeOrderBtn.addEventListener('mouseenter', function() {
+        this.classList.add('animate__animated', 'animate__pulse');
+      });
+      placeOrderBtn.addEventListener('mouseleave', function() {
+        this.classList.remove('animate__animated', 'animate__pulse');
+      });
+    }
+    
+    // Form submission loading state
+    const paymentForm = document.querySelector('.payment-form');
+    if (paymentForm) {
+      paymentForm.addEventListener('submit', function() {
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.querySelector('.btn-text').textContent = 'Processing...';
+        btn.querySelector('.btn-icon').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      });
+    }
+  });
+</script>
 {% endblock %}
