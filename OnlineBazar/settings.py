@@ -38,14 +38,13 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'web-production-1b48.up.railway.app',
-    'productonlinehai.com',
+    'https://onlinebazar.onrender.com',
+
 ]
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'https://web-production-1b48.up.railway.app',
-#     'https://productonlinehai.com',
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://onlinebazar.onrender.com',
+]
 # Application definition
 
 INSTALLED_APPS = [
