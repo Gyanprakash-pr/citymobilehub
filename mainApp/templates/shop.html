@@ -34,11 +34,12 @@
       <aside class="col-lg-3 col-md-4 shop-sidebar">
         <div class="sidebar-inner">
           <!-- Mobile Filters Toggle -->
-          <button class="btn btn-filter-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#shopFilters">
+          <button class="btn btn-filter-toggle d-lg-none" type="button" data-bs-toggle="collapse"
+            data-bs-target="#shopFilters">
             <i class="fas fa-sliders-h me-2"></i> Filters
             <span class="filter-badge">3</span>
           </button>
-          
+
           <!-- Filters Collapse -->
           <div class="shop-filters collapse d-lg-block" id="shopFilters">
             <!-- Categories Filter -->
@@ -51,7 +52,8 @@
               </div>
               <div class="filter-card-body collapse show" id="categoryFilter">
                 <div class="filter-search-box">
-                  <input type="text" class="form-control filter-search" placeholder="Search categories..." id="categorySearch">
+                  <input type="text" class="form-control filter-search" placeholder="Search categories..."
+                    id="categorySearch">
                   <i class="fas fa-search search-icon"></i>
                 </div>
                 <div class="filter-options-list">
@@ -93,7 +95,8 @@
                   {% for i in Brand %}
                   <a href="/shop/{{mc}}/{{sc}}/{{i.name}}/" class="filter-option">
                     <span class="filter-option-icon">
-                      <img src="{% static 'brands/'|add:i.name|add:'.png' %}" alt="{{i.name}}" class="brand-logo" onerror="this.style.display='none'">
+                      <img src="{% static 'brands/'|add:i.name|add:'.png' %}" alt="{{i.name}}" class="brand-logo"
+                        onerror="this.style.display='none'">
                     </span>
                     <span class="filter-option-text">{{i.name}}</span>
                     <span class="filter-option-count">({{i.count}})</span>
@@ -160,23 +163,26 @@
         </div>
 
         <div class="products-grid">
-          <div class="row">
+          <div class="row gx-2 gy-3"> <!-- Added gx-2 and gy-3 for consistent spacing -->
             {% for i in Product %}
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 product-col">
-              <div class="product-card">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-4 col-4 product-col"> <!-- Changed col-sm-6 to col-sm-4 -->
+              <div class="product-card h-100 d-flex flex-column"> <!-- Added flex classes -->
                 <div class="product-badges">
                   {% if i.discount %}
-                  <span class="product-badge discount-badge">-{{i.discount}}% OFF</span>
+                  <span class="product-badge discount-badge">-{{i.discount}}%</span>
                   {% endif %}
                   <span class="product-badge new-badge">New</span>
                 </div>
-                
-                <div class="product-image-container">
-                  <a href="/single-product-page/{{i.id}}/" class="product-image-link">
+
+                <div class="product-image-container flex-grow-1"> <!-- Added flex-grow -->
+                  <a href="/single-product-page/{{i.id}}/" class="product-image-link h-100 d-block">
+                    <!-- Added height classes -->
                     {% if i.pic1 %}
-                    <img src="{{i.pic1.url}}" class="product-image" alt="{{i.name}}">
+                    <img src="{{i.pic1.url}}" class="product-image img-fluid h-100 w-100 object-fit-cover"
+                      alt="{{i.name}}"> <!-- Added img-fluid and object fit -->
                     {% else %}
-                    <img src="{% static 'picture/noimg.png' %}" class="product-image" alt="No image">
+                    <img src="{% static 'picture/noimg.png' %}"
+                      class="product-image img-fluid h-100 w-100 object-fit-cover" alt="No image">
                     {% endif %}
                   </a>
                   <div class="product-actions">
@@ -188,10 +194,11 @@
                     </button>
                   </div>
                 </div>
-                
+
                 <div class="product-info">
-                  <div class="product-category">{{mc|default:"All Categories"}}</div>
-                  <h3 class="product-title">
+                  <div class="product-category text-truncate">{{mc|default:"All Categories"}}</div>
+                  <!-- Added text truncate -->
+                  <h3 class="product-title text-truncate">
                     <a href="/single-product-page/{{i.id}}/">{{i.name}}</a>
                   </h3>
                   <div class="product-rating">
@@ -210,8 +217,9 @@
                     <span class="original-price">₹{{i.baseprice}}</span>
                     {% endif %}
                   </div>
-                  <button class="btn-add-to-cart" onclick="window.location.href='/single-product-page/{{i.id}}/'">
-                    <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                  <button class="btn-add-to-cart mt-auto"
+                    onclick="window.location.href='/single-product-page/{{i.id}}/'"> <!-- Added mt-auto -->
+                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
                   </button>
                 </div>
               </div>
@@ -219,7 +227,6 @@
             {% endfor %}
           </div>
         </div>
-
         <!-- Pagination -->
         <nav class="products-pagination">
           <ul class="pagination">
@@ -248,7 +255,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // Initialize price range slider
     const priceSlider = document.getElementById('priceRangeSlider');
     if (priceSlider) {
@@ -262,10 +269,10 @@
         step: 100,
         tooltips: [true, true],
         format: {
-          to: function(value) {
+          to: function (value) {
             return '₹' + Math.round(value);
           },
-          from: function(value) {
+          from: function (value) {
             return value.replace('₹', '');
           }
         }
@@ -274,7 +281,7 @@
       const minPriceInput = document.getElementById('minPrice');
       const maxPriceInput = document.getElementById('maxPrice');
 
-      priceSlider.noUiSlider.on('update', function(values, handle) {
+      priceSlider.noUiSlider.on('update', function (values, handle) {
         const value = values[handle];
         if (handle) {
           maxPriceInput.value = Math.round(value);
@@ -283,11 +290,11 @@
         }
       });
 
-      minPriceInput.addEventListener('change', function() {
+      minPriceInput.addEventListener('change', function () {
         priceSlider.noUiSlider.set([this.value, null]);
       });
 
-      maxPriceInput.addEventListener('change', function() {
+      maxPriceInput.addEventListener('change', function () {
         priceSlider.noUiSlider.set([null, this.value]);
       });
     }
@@ -295,10 +302,10 @@
     // Filter search functionality
     const categorySearch = document.getElementById('categorySearch');
     if (categorySearch) {
-      categorySearch.addEventListener('input', function() {
+      categorySearch.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();
         const categories = document.querySelectorAll('#categoryFilter .filter-option');
-        
+
         categories.forEach(category => {
           const text = category.textContent.toLowerCase();
           if (text.includes(searchTerm)) {
@@ -312,10 +319,10 @@
 
     const brandSearch = document.getElementById('brandSearch');
     if (brandSearch) {
-      brandSearch.addEventListener('input', function() {
+      brandSearch.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();
         const brands = document.querySelectorAll('#brandFilter .filter-option');
-        
+
         brands.forEach(brand => {
           const text = brand.textContent.toLowerCase();
           if (text.includes(searchTerm)) {
@@ -330,7 +337,7 @@
     // Apply filters button
     const applyFiltersBtn = document.querySelector('.btn-apply-filters');
     if (applyFiltersBtn) {
-      applyFiltersBtn.addEventListener('click', function() {
+      applyFiltersBtn.addEventListener('click', function () {
         // Add your filter application logic here
         this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Applying...';
         setTimeout(() => {
@@ -343,7 +350,7 @@
     // Reset filters button
     const resetFiltersBtn = document.querySelector('.btn-reset-filters');
     if (resetFiltersBtn) {
-      resetFiltersBtn.addEventListener('click', function() {
+      resetFiltersBtn.addEventListener('click', function () {
         window.location.href = '/shop/All/All/All/';
       });
     }
@@ -351,7 +358,7 @@
     // Sort select change
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
-      sortSelect.addEventListener('change', function() {
+      sortSelect.addEventListener('change', function () {
         // Add your sorting logic here
         console.log('Sorting by:', this.value);
       });

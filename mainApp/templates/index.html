@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="{% static 'css/contact.css'%}">
   <link rel="stylesheet" href="{% static 'css/about.css'%}">
   <link rel="stylesheet" href="{% static 'css/shop.css'%}">
+  <link rel="stylesheet" href="{% static 'css/login.css'%}">
+  <link rel="stylesheet" href="{% static 'css/signup.css'%}">
 </head>
 
 <body>
@@ -138,71 +140,85 @@
   </section>
 
   <!-- Categories Section -->
-  <section class="categories-section">
+ <section class="categories-section">
     <div class="container">
-      <h2 class="text-center section-title animate__animated animate__fadeIn">Shop by Category</h2>
-      <p class="text-center section-subtitle">Browse our wide range of product categories</p>
+      <div class="section-header text-center">
+        <h2 class="section-title animate__animated animate__fadeIn">Shop by Category</h2>
+        <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1">Browse our wide range of product categories</p>
+      </div>
       
-      <div class="row g-4">
-        <div class="col-lg-3 col-md-6 animate__animated animate__fadeInUp">
-          <a href="/shop/Electronics/All/All/" class="category-card">
-            <div class="category-icon">
+      <div class="row g-3"> <!-- Reduced gutter spacing -->
+        <!-- Electronics -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp">
+          <a href="/shop/All/All/All/" class="category-card">
+            <div class="category-icon bg-gradient-blue">
               <i class="fas fa-laptop"></i>
             </div>
-            <h3>Electronics</h3>
-            <p>Latest gadgets and devices</p>
-            <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            <div class="category-content">
+              <h3>Electronics</h3>
+              <p>Latest gadgets and devices</p>
+              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </div>
           </a>
         </div>
         
-        <div class="col-lg-3 col-md-6 animate__animated animate__fadeInUp animate-delay-1">
-          <a href="/shop/Fashion/All/All/" class="category-card">
-            <div class="category-icon">
+        <!-- Fashion -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp animate__delay-1">
+          <a href="/shop/All/All/All/" class="category-card">
+            <div class="category-icon bg-gradient-pink">
               <i class="fas fa-tshirt"></i>
             </div>
-            <h3>Fashion</h3>
-            <p>Trendy clothes & accessories</p>
-            <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            <div class="category-content">
+              <h3>Fashion</h3>
+              <p>Trendy clothes & accessories</p>
+              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </div>
           </a>
         </div>
         
-        <div class="col-lg-3 col-md-6 animate__animated animate__fadeInUp animate-delay-2">
-          <a href="/shop/Home/All/All/" class="category-card">
-            <div class="category-icon">
+        <!-- Home & Kitchen -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp animate__delay-2">
+          <a href="/shop/All/All/All/" class="category-card">
+            <div class="category-icon bg-gradient-orange">
               <i class="fas fa-home"></i>
             </div>
-            <h3>Home & Kitchen</h3>
-            <p>Everything for your home</p>
-            <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            <div class="category-content">
+              <h3>Home & Kitchen</h3>
+              <p>Everything for your home</p>
+              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </div>
           </a>
         </div>
         
-        <div class="col-lg-3 col-md-6 animate__animated animate__fadeInUp animate-delay-3">
-          <a href="/shop/Beauty/All/All/" class="category-card">
-            <div class="category-icon">
+        <!-- Beauty -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp animate__delay-3">
+          <a href="/shop/All/All/All/" class="category-card">
+            <div class="category-icon bg-gradient-purple">
               <i class="fas fa-spa"></i>
             </div>
-            <h3>Beauty</h3>
-            <p>Skincare & cosmetics</p>
-            <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            <div class="category-content">
+              <h3>Beauty</h3>
+              <p>Skincare & cosmetics</p>
+              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+            </div>
           </a>
         </div>
       </div>
     </div>
-  </section>
+</section>
 
   <!-- Featured Products -->
-  <section class="products-section">
+<section class="products-section">
     <div class="container">
       <div class="section-header animate__animated animate__fadeIn">
         <h2 class="section-title">Featured Products</h2>
         <a href="/shop/All/All/All/" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
       </div>
       
-      <div class="row g-4">
+      <div class="row g-2">  <!-- Reduced gutter spacing -->
         {% for i in Product %}
-        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
-          <div class="product-card animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|divisibleby:4|yesno:'0,0.1,0.2,0.3' }}s">
+        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-4">
+          <div class="product-card animate__animated animate__fadeInUp">
             <div class="product-img-container">
               {% if i.pic1 %}
               <img src="{{ i.pic1.url }}" class="product-img" alt="{{ i.name }}">
@@ -222,17 +238,20 @@
             <div class="product-body">
               <h5 class="product-title">{{ i.name }}</h5>
               <div class="product-rating">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
                 <span class="rating-count">(24)</span>
               </div>
               <div class="price-container">
                 <span class="final-price">₹{{ i.finalprice }}</span>
+                {% if i.discount > 0 %}
                 <span class="base-price">₹{{ i.baseprice }}</span>
-                <span class="discount">{{ i.discount }}% OFF</span>
+                {% endif %}
               </div>
               <a href="/single-product-page/{{ i.id }}" class="btn btn-add-to-cart">
                 <i class="fas fa-shopping-cart"></i> Add to Cart
@@ -243,106 +262,144 @@
         {% endfor %}
       </div>
     </div>
-  </section>
+</section>
+
 
   <!-- Banner Section -->
-  <section class="banner-section">
-    <div class="container">
-      <div class="banner-content animate__animated animate__fadeIn">
-        <h2>Summer Sale</h2>
-        <h3>Up to 50% Off</h3>
-        <p>On selected items. Limited time offer!</p>
-        <a href="/shop/All/All/All/" class="btn btn-outline">Shop Now</a>
+ <section class="banner-section">
+  <div class="container">
+    <div class="banner-content animate__animated animate__fadeIn">
+      <div class="banner-text">
+        <h2 class="animate__animated animate__fadeInDown animate__delay-1s">Summer Sale</h2>
+        <h3 class="animate__animated animate__fadeInUp animate__delay-1-5s">Up to <span class="discount-badge">50%</span> Off</h3>
+        <p class="animate__animated animate__fadeIn animate__delay-2s">On selected items. Limited time offer!</p>
+        <div class="countdown animate__animated animate__fadeIn animate__delay-2-5s">
+          <span id="days">00</span>d 
+          <span id="hours">00</span>h 
+          <span id="minutes">00</span>m 
+          <span id="seconds">00</span>s
+        </div>
+        <a href="/shop/All/All/All/" class="btn btn-shop animate__animated animate__pulse animate__infinite animate__slower">
+          <span>Shop Now</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="banner-image animate__animated animate__fadeInRight animate__delay-3s">
+        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Summer Collection">
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Testimonials Section -->
-  <section class="testimonials-section">
-    <div class="container">
-      <h2 class="text-center section-title animate__animated animate__fadeIn">What Our Customers Say</h2>
-      <p class="text-center section-subtitle">Trusted by thousands of happy customers</p>
+ <!-- Testimonials Section -->
+<section class="testimonials-section">
+  <div class="container">
+    <h2 class="text-center section-title animate__animated animate__fadeIn">What Our Customers Say</h2>
+    <p class="text-center section-subtitle animate__animated animate__fadeIn animate__delay-1s">Trusted by thousands of happy customers</p>
+    
+    <div class="testimonials-carousel">
+      <div class="testimonial-card animate__animated animate__fadeInUp">
+        <div class="testimonial-rating">
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+        </div>
+        <p class="testimonial-text">"Great products and excellent customer service. My order arrived quickly and was exactly as described."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <img src="{% static 'images/pic3.jpg' %}" alt="Rahul Sharma">
+            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+          </div>
+          <div class="author-info">
+            <h4>Rahul Sharma</h4>
+            <p>Verified Buyer</p>
+          </div>
+        </div>
+      </div>
       
-      <div class="row g-4">
-        <div class="col-lg-4 animate__animated animate__fadeInUp">
-          <div class="testimonial-card">
-            <div class="testimonial-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <p class="testimonial-text">"Great products and excellent customer service. My order arrived quickly and was exactly as described."</p>
-            <div class="testimonial-author">
-              <img src="{% static 'images/pic3.jpg' %}" alt="Customer" class="author-avatar">
-              <div class="author-info">
-                <h4>Rahul Sharma</h4>
-                <p>Verified Buyer</p>
-              </div>
-            </div>
+      <div class="testimonial-card animate__animated animate__fadeInUp animate__delay-1s">
+        <div class="testimonial-rating">
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+        </div>
+        <p class="testimonial-text">"I love shopping here! The prices are competitive and the quality is always top-notch."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <img src="{% static 'images/pic2.jpg' %}" alt="Priya Patel">
+            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+          </div>
+          <div class="author-info">
+            <h4>Priya Patel</h4>
+            <p>Verified Buyer</p>
           </div>
         </div>
-        
-        <div class="col-lg-4 animate__animated animate__fadeInUp animate-delay-1">
-          <div class="testimonial-card">
-            <div class="testimonial-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <p class="testimonial-text">"I love shopping here! The prices are competitive and the quality is always top-notch."</p>
-            <div class="testimonial-author">
-              <img src="{% static 'images/pic2.jpg' %}" alt="Customer" class="author-avatar">
-              <div class="author-info">
-                <h4>Priya Patel</h4>
-                <p>Verified Buyer</p>
-              </div>
-            </div>
-          </div>
+      </div>
+      
+      <div class="testimonial-card animate__animated animate__fadeInUp animate__delay-2s">
+        <div class="testimonial-rating">
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star"></i></span>
+          <span class="star"><i class="fas fa-star-half-alt"></i></span>
         </div>
-        
-        <div class="col-lg-4 animate__animated animate__fadeInUp animate-delay-2">
-          <div class="testimonial-card">
-            <div class="testimonial-rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-            </div>
-            <p class="testimonial-text">"The return process was so easy when I needed to exchange an item. Will definitely shop here again!"</p>
-            <div class="testimonial-author">
-              <img src="{% static 'images/pic1.jpg' %}" alt="Customer" class="author-avatar">
-              <div class="author-info">
-                <h4>Amit Singh</h4>
-                <p>Verified Buyer</p>
-              </div>
-            </div>
+        <p class="testimonial-text">"The return process was so easy when I needed to exchange an item. Will definitely shop here again!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <img src="{% static 'images/pic1.jpg' %}" alt="Amit Singh">
+            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+          </div>
+          <div class="author-info">
+            <h4>Amit Singh</h4>
+            <p>Verified Buyer</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Newsletter Section -->
-  <section class="newsletter-section">
-    <div class="container">
-      <div class="newsletter-content animate__animated animate__fadeIn">
-        <h2>Subscribe to Our Newsletter</h2>
-        <p>Get the latest updates on new products and special offers</p>
-        <form class="newsletter-form" method="post" action="/">
-          {% csrf_token %}
-          <div class="input-group">
-            <input type="email" class="form-control" name="email" placeholder="Your email address" required>
-            <button class="btn btn-primary" type="submit">Subscribe</button>
-          </div>
-        </form>
+  </div>
+ <!-- Newsletter Section -->
+<section class="newsletter-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 0;">
+  <div class="container">
+    <div class="newsletter-content text-center text-white animate__animated animate__fadeInUp">
+      <h2 class="mb-3" style="font-size: 2.5rem; font-weight: 700;">Stay Updated</h2>
+      <p class="mb-4" style="font-size: 1.2rem; opacity: 0.9;">Subscribe to our newsletter and never miss updates on new products and exclusive offers!</p>
+      
+      <form class="newsletter-form" method="post" action="/">
+        {% csrf_token %}
+        <div class="input-group mx-auto" style="max-width: 500px;">
+          <input type="email" 
+                 class="form-control form-control-lg" 
+                 name="email" 
+                 placeholder="Your email address" 
+                 required
+                 style="border: none; border-radius: 50px 0 0 50px; padding: 15px 25px;"
+                 onfocus="this.style.boxShadow='0 0 0 0.2rem rgba(255,255,255,0.25)'"
+                 onblur="this.style.boxShadow='none'">
+          <button class="btn btn-light btn-lg px-4" 
+                  type="submit"
+                  style="border-radius: 0 50px 50px 0; font-weight: 600; color: #764ba2; transition: all 0.3s ease;"
+                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)'"
+                  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            Subscribe <i class="fas fa-paper-plane ml-2"></i>
+          </button>
+        </div>
+      </form>
+      
+      <div class="mt-3 animate__animated animate__fadeIn animate__delay-1s">
+        <small style="opacity: 0.7;">We respect your privacy. Unsubscribe at any time.</small>
       </div>
     </div>
-  </section>
+  </div>
+  
+  <!-- Decorative elements -->
+  <div class="position-absolute" style="top: 20px; left: 20px; width: 50px; height: 50px; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
+  <div class="position-absolute" style="bottom: 30px; right: 10%; width: 30px; height: 30px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: pulse 3s ease infinite;"></div>
+</section>
   {% endblock %}
 
   <!-- Footer -->
@@ -375,18 +432,18 @@
             <li><a href="/about/"><i class="fas fa-chevron-right"></i> About Us</a></li>
             <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Shop</a></li>
             <li><a href="/contact/"><i class="fas fa-chevron-right"></i> Contact</a></li>
-            <li><a href="/blog/"><i class="fas fa-chevron-right"></i> Blog</a></li>
+            <li><a href="/about/"><i class="fas fa-chevron-right"></i> Blog</a></li>
           </ul>
         </div>
         
         <div class="col-lg-2 col-md-6 mb-4 animate__animated animate__fadeInUp animate-delay-1">
           <h4>Categories</h4>
           <ul class="footer-links">
-            <li><a href="/shop/Electronics/All/All/"><i class="fas fa-chevron-right"></i> Electronics</a></li>
-            <li><a href="/shop/Fashion/All/All/"><i class="fas fa-chevron-right"></i> Fashion</a></li>
-            <li><a href="/shop/Home/All/All/"><i class="fas fa-chevron-right"></i> Home & Kitchen</a></li>
-            <li><a href="/shop/Beauty/All/All/"><i class="fas fa-chevron-right"></i> Beauty</a></li>
-            <li><a href="/shop/Toys/All/All/"><i class="fas fa-chevron-right"></i> Toys & Games</a></li>
+            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Electronics</a></li>
+            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Fashion</a></li>
+            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Home & Kitchen</a></li>
+            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Beauty</a></li>
+            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Toys & Games</a></li>
           </ul>
         </div>
         
@@ -399,7 +456,7 @@
             </li>
             <li>
               <i class="fas fa-phone-alt"></i>
-              <span>+91 9876543210</span>
+              <span>+91 6205102076</span>
             </li>
             <li>
               <i class="fas fa-envelope"></i>
@@ -424,5 +481,29 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
   <script src="{% static 'js/main.js' %}"></script>
+  <script>
+// Countdown Timer
+function updateCountdown() {
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + 7); // Set to 7 days from now
+  
+  const now = new Date().getTime();
+  const distance = endDate - now;
+  
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+  document.getElementById("days").textContent = days.toString().padStart(2, '0');
+  document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+  document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+  document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+}
+
+// Initialize and update every second
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
 </body>
 </html>

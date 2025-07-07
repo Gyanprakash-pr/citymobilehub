@@ -826,3 +826,165 @@
   border-radius: var(--border-radius-sm);
   font-size: 0.75rem;
 }
+
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .shop-header-content {
+    text-align: center;
+  }
+  
+  .shop-breadcrumb {
+    justify-content: center;
+  }
+  
+  .products-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .products-sort {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .form-select {
+    width: 100%;
+  }
+}
+
+/* Mobile - 3 Products Per Row */
+@media (max-width: 575.98px) {
+  .product-col {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+    padding: 0 5px;
+  }
+  
+  .product-card {
+    margin-bottom: 10px;
+  }
+  
+  .product-image-container {
+    height: 110px;
+  }
+  
+  .product-info {
+    padding: 8px;
+  }
+  
+  .product-title {
+    font-size: 0.7rem;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .product-category {
+    font-size: 0.6rem;
+  }
+  
+  .product-price {
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+  
+  .current-price {
+    font-size: 0.8rem;
+  }
+  
+  .original-price {
+    font-size: 0.6rem;
+  }
+  
+  .btn-add-to-cart {
+    padding: 4px 6px;
+    font-size: 0.6rem;
+  }
+  
+  .product-badges {
+    top: 5px;
+    left: 5px;
+  }
+  
+  .product-badge {
+    font-size: 0.5rem;
+    padding: 2px 4px;
+  }
+  
+  .product-actions {
+    display: none;
+  }
+  
+  .rating-stars {
+    font-size: 0.6rem;
+  }
+  
+  .rating-count {
+    font-size: 0.6rem;
+  }
+}
+
+/* Extra Small Mobile Devices */
+@media (max-width: 375px) {
+  .product-image-container {
+    height: 90px;
+  }
+  
+  .product-title {
+    font-size: 0.65rem;
+  }
+}
+
+/* Filter Sidebar Mobile Improvements */
+@media (max-width: 991.98px) {
+  .shop-sidebar {
+    margin-bottom: 20px;
+  }
+  
+  .shop-filters {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-top: 10px;
+  }
+  
+  .btn-filter-toggle {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+}
+
+/* Product Grid Improvements */
+.products-grid .row {
+  margin: 0 -5px;
+}
+
+.product-col {
+  padding: 0 5px;
+  margin-bottom: 10px;
+}
+
+/* Price Range Slider Mobile Fix */
+.noUi-tooltip {
+  font-size: 0.7rem;
+  padding: 2px 5px;
+}
+
+/* Pagination Mobile */
+.products-pagination .pagination {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.products-pagination .page-item {
+  margin: 2px;
+}
