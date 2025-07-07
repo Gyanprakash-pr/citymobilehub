@@ -2,158 +2,131 @@
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | Contact us Page</title>
+<title>Online Bazar | Contact Us</title>
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10 col-xl-8">
-            <!-- Animated Header -->
-            <div class="text-center mb-5 animate__animated animate__fadeInDown">
-                <h1 class="display-4 fw-bold text-gradient-primary">Get in Touch</h1>
-                <p class="lead text-muted">We're here to help and answer any questions you might have.</p>
-                <div class="divider mx-auto bg-primary"></div>
-            </div>
+<div class="contact-container">
+    <!-- Contact Header -->
+    <div class="contact-header text-center">
+        <h1 class="contact-title">Get in Touch</h1>
+        <p class="contact-subtitle">We're here to help and answer any questions you might have</p>
+        <div class="contact-divider"></div>
+    </div>
 
-            <div class="row g-4 justify-content-center">
-                <!-- Contact Form Card -->
-                <div class="col-lg-6">
-                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden animate__animated animate__fadeInLeft">
-                        <div class="card-body p-4 p-md-5">
-                            <h3 class="text-center mb-4 position-relative">
-                                <span class="section-title">Send us a message</span>
-                            </h3>
-                            
-                            <!-- Messages/Alerts -->
-                            {% for message in messages %}
-                            <div class="alert alert-success alert-dismissible fade show animate__animated animate__bounceIn" role="alert">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-check-circle me-2"></i>
-                                    <div>{{ message }}</div>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                            {% endfor %}
-                            
-                            <form method="post" class="needs-validation" novalidate>
-                                {% csrf_token %}
-                                <div class="mb-4 form-floating">
-                                    <input type="text" class="form-control rounded-3" id="name" name="name" placeholder="John Doe" required>
-                                    <label for="name">Your Name</label>
-                                    <div class="invalid-feedback">
-                                        Please enter your name
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-4 form-floating">
-                                    <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="name@example.com" required>
-                                    <label for="email">Email Address</label>
-                                    <div class="invalid-feedback">
-                                        Please enter a valid email
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-4 form-floating">
-                                    <input type="tel" class="form-control rounded-3" id="phone" name="phone" placeholder="+91 1234567890" required>
-                                    <label for="phone">Phone Number</label>
-                                    <div class="invalid-feedback">
-                                        Please enter your phone number
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-4 form-floating">
-                                    <input type="text" class="form-control rounded-3" id="subject" name="subject" placeholder="Subject" required>
-                                    <label for="subject">Subject</label>
-                                    <div class="invalid-feedback">
-                                        Please enter a subject
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-4 form-floating">
-                                    <textarea class="form-control rounded-3" id="message" name="massege" placeholder="Your message" style="height: 120px" required></textarea>
-                                    <label for="message">Your Message</label>
-                                    <div class="invalid-feedback">
-                                        Please enter your message
-                                    </div>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 submit-btn">
-                                    <span class="submit-text">Send Message</span>
-                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                </button>
-                            </form>
+    <!-- Contact Content -->
+    <div class="contact-content">
+        <!-- Contact Form -->
+        <div class="contact-form-container">
+            <div class="contact-form-card">
+                <h2 class="form-title">Send us a message</h2>
+                
+                <!-- Messages/Alerts -->
+                {% for message in messages %}
+                <div class="contact-alert">
+                    <i class="fas fa-check-circle alert-icon"></i>
+                    <span>{{ message }}</span>
+                    <button class="alert-close">&times;</button>
+                </div>
+                {% endfor %}
+                
+                <form method="post" class="contact-form" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                            <label for="name">Your Name</label>
+                        </div>
+                        <div class="invalid-feedback">Please enter your name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                            <label for="email">Email Address</label>
+                        </div>
+                        <div class="invalid-feedback">Please enter a valid email</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="+91 1234567890" required>
+                            <label for="phone">Phone Number</label>
+                        </div>
+                        <div class="invalid-feedback">Please enter your phone number</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
+                            <label for="subject">Subject</label>
+                        </div>
+                        <div class="invalid-feedback">Please enter a subject</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="message" name="message" placeholder="Your message" required></textarea>
+                            <label for="message">Your Message</label>
+                        </div>
+                        <div class="invalid-feedback">Please enter your message</div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span class="submit-text">Send Message</span>
+                        <span class="spinner"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="contact-info-container">
+            <div class="contact-info-card">
+                <h2 class="info-title">Contact Information</h2>
+                
+                <div class="info-content">
+                    <!-- Contact Item 1 -->
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-details">
+                            <h3>Email</h3>
+                            <a href="mailto:gyanbabu193@gmail.com">gyanbabu193@gmail.com</a>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Contact Info Card -->
-                <div class="col-lg-5">
-                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden h-100 animate__animated animate__fadeInRight">
-                        <div class="card-body p-4 p-md-5 contact-info-card">
-                            <h3 class="text-center mb-4 position-relative">
-                                <span class="section-title">Contact Information</span>
-                            </h3>
-                            
-                            <div class="d-flex flex-column justify-content-center h-100">
-                                <!-- Contact Item 1 -->
-                                <div class="contact-item p-3 rounded-3 mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                                    <div class="d-flex align-items-center">
-                                        <div class="contact-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-envelope fa-lg"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <h6 class="mb-0">Email</h6>
-                                            <a href="mailto:gyanbabu193@gmail.com" class="text-decoration-none">gyanbabu193@gmail.com</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Contact Item 2 -->
-                                <div class="contact-item p-3 rounded-3 mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                                    <div class="d-flex align-items-center">
-                                        <div class="contact-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-phone-alt fa-lg"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <h6 class="mb-0">Phone</h6>
-                                            <a href="tel:+918795649840" class="text-decoration-none">+91 8795649840</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Contact Item 3 -->
-                                <div class="contact-item p-3 rounded-3 mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
-                                    <div class="d-flex align-items-center">
-                                        <div class="contact-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-map-marker-alt fa-lg"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <h6 class="mb-0">Address</h6>
-                                            <p class="mb-0">Sector 22, Noida, UP</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Social Media -->
-                                <div class="mt-4 text-center animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
-                                    <h6 class="mb-3">Follow Us</h6>
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="#" class="social-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </a>
-                                        <a href="#" class="social-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fab fa-twitter"></i>
-                                        </a>
-                                        <a href="#" class="social-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fab fa-instagram"></i>
-                                        </a>
-                                        <a href="#" class="social-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="fab fa-linkedin-in"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                    
+                    <!-- Contact Item 2 -->
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="info-details">
+                            <h3>Phone</h3>
+                            <a href="tel:+918795649840">+91 8795649840</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Item 3 -->
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-details">
+                            <h3>Address</h3>
+                            <p>Sector 22, Noida, UP</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media -->
+                    <div class="social-media">
+                        <h3>Follow Us</h3>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
                 </div>
@@ -162,219 +135,58 @@
     </div>
 </div>
 
-<!-- Styles -->
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-    
-    :root {
-        --primary-color: #4361ee;
-        --primary-light: #eef2ff;
-        --secondary-color: #3f37c9;
-        --dark-color: #1e1e1e;
-        --light-color: #f8f9fa;
-    }
-    
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-        min-height: 100vh;
-    }
-    
-    .text-gradient-primary {
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        display: inline-block;
-    }
-    
-    .divider {
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        margin: 1rem auto;
-        border-radius: 2px;
-    }
-    
-    .card {
-        border: none;
-        transition: all 0.3s ease;
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-    }
-    
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-    }
-    
-    .section-title {
-        position: relative;
-        display: inline-block;
-        padding-bottom: 10px;
-    }
-    
-    .section-title:after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 50px;
-        height: 3px;
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        border-radius: 3px;
-    }
-    
-    .form-control {
-        border: 1px solid #e0e0e0;
-        padding: 1rem;
-        transition: all 0.3s;
-    }
-    
-    .form-control:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
-    }
-    
-    .form-floating>label {
-        padding: 1rem;
-        color: #6c757d;
-    }
-    
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        border: none;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s;
-    }
-    
-    .btn-primary:hover {
-        background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-        transform: translateY(-2px);
-    }
-    
-    .contact-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.2rem;
-    }
-    
-    .contact-item {
-        transition: all 0.3s;
-        background-color: var(--light-color);
-    }
-    
-    .contact-item:hover {
-        background-color: var(--primary-light);
-        transform: translateX(5px);
-    }
-    
-    .social-icon {
-        width: 40px;
-        height: 40px;
-        background-color: var(--primary-light);
-        color: var(--primary-color);
-        transition: all 0.3s;
-    }
-    
-    .social-icon:hover {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        color: white;
-        transform: translateY(-3px);
-    }
-    
-    /* Form validation */
-    .was-validated .form-control:valid,
-    .form-control.is-valid {
-        border-color: #28a745;
-        background-image: none;
-    }
-    
-    .was-validated .form-control:invalid,
-    .form-control.is-invalid {
-        border-color: #dc3545;
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-        .contact-info-card {
-            padding-top: 2rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .display-4 {
-            font-size: 2.5rem;
-        }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-    }
-</style>
-
-<!-- Scripts -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Form submission animation
-        const form = document.querySelector('form');
-        const submitBtn = document.querySelector('.submit-btn');
-        const submitText = document.querySelector('.submit-text');
-        
-        if(form) {
-            form.addEventListener('submit', function(e) {
-                submitBtn.disabled = true;
-                submitText.classList.add('d-none');
-                submitBtn.querySelector('.spinner-border').classList.remove('d-none');
-                
-                // Simulate loading for demo
-                setTimeout(() => {
-                    submitBtn.disabled = false;
-                    submitText.classList.remove('d-none');
-                    submitBtn.querySelector('.spinner-border').classList.add('d-none');
-                }, 2000);
-            });
-        }
-        
-        // Add animation to contact items on scroll
-        const contactItems = document.querySelectorAll('.contact-item');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('animate__fadeInUp');
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        contactItems.forEach(item => {
-            observer.observe(item);
+document.addEventListener('DOMContentLoaded', function() {
+    // Form submission animation
+    const form = document.querySelector('.contact-form');
+    const submitBtn = document.querySelector('.submit-btn');
+    const submitText = document.querySelector('.submit-text');
+    const spinner = document.querySelector('.spinner');
+    
+    if(form) {
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitText.style.opacity = '0';
+            spinner.style.display = 'inline-block';
+            
+            // For demo purposes - remove in production
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitText.style.opacity = '1';
+                spinner.style.display = 'none';
+            }, 2000);
         });
-        
-        // Form validation
-        (function() {
-            'use strict'
-            
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.querySelectorAll('.needs-validation')
-            
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+    }
+    
+    // Close alert button
+    const alertClose = document.querySelector('.alert-close');
+    if(alertClose) {
+        alertClose.addEventListener('click', function() {
+            this.parentElement.style.display = 'none';
+        });
+    }
+    
+    // Animation on scroll
+    const infoItems = document.querySelectorAll('.info-item');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    infoItems.forEach(item => {
+        observer.observe(item);
     });
+});
 </script>
 {% endblock %}
