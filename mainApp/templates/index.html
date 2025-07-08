@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="{% static 'css/shop.css'%}">
   <link rel="stylesheet" href="{% static 'css/login.css'%}">
   <link rel="stylesheet" href="{% static 'css/signup.css'%}">
+  <link rel="stylesheet" href="{% static 'css/cart.css'%}">
 </head>
 
 <body>
@@ -362,6 +363,191 @@
       </div>
     </div>
   </div>
+  <!-- Customer Support Section -->
+<section class="support-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title animate__animated animate__fadeIn">24/7 Customer Support</h2>
+      <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1s">We're here to help you anytime</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Support Card 1 -->
+      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp">
+        <div class="support-card">
+          <div class="support-icon bg-primary">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          <div class="support-body">
+            <h3>Phone Support</h3>
+            <p>Talk directly to our support team for immediate assistance.</p>
+            <a href="tel:+916205102076" class="support-link">
+              +91 6205102076 <i class="fas fa-arrow-right"></i>
+            </a>
+            <div class="support-hours">
+              <i class="far fa-clock"></i> 24/7 Availability
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Support Card 2 -->
+      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp animate__delay-1s">
+        <div class="support-card">
+          <div class="support-icon bg-success">
+            <i class="fas fa-comments"></i>
+          </div>
+          <div class="support-body">
+            <h3>Live Chat</h3>
+            <p>Chat with our support agents in real-time for quick answers.</p>
+            <button class="btn btn-chat" id="liveChatBtn">
+              Start Live Chat <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="support-hours">
+              <i class="far fa-clock"></i> 8AM - 12AM (IST)
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Support Card 3 -->
+      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp animate__delay-2s">
+        <div class="support-card">
+          <div class="support-icon bg-warning">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="support-body">
+            <h3>Email Support</h3>
+            <p>Send us an email and we'll respond within 24 hours.</p>
+            <a href="mailto:support@onlinebazar.com" class="support-link">
+              support@onlinebazar.com <i class="fas fa-arrow-right"></i>
+            </a>
+            <div class="support-hours">
+              <i class="far fa-clock"></i> 24/7 Response
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- FAQ Section -->
+    <div class="faq-section mt-5 pt-4 animate__animated animate__fadeIn">
+      <div class="text-center mb-4">
+        <h3>Frequently Asked Questions</h3>
+        <p class="text-muted">Quick answers to common questions</p>
+      </div>
+      
+      <div class="accordion" id="faqAccordion">
+        <!-- FAQ Item 1 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+              How can I track my order?
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              You can track your order by logging into your account and visiting the "My Orders" section. We'll also send you email updates with tracking information at each stage of delivery.
+            </div>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 2 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+              What is your return policy?
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              We offer a 30-day return policy for most items. Items must be unused, in original packaging with all tags attached. Some items like perishables and personal care products may not be returnable.
+            </div>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 3 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+              How do I apply a discount code?
+            </button>
+          </h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              During checkout, you'll see a field to enter your discount code. Simply type or paste the code and click "Apply". The discount will be automatically calculated and applied to your order total.
+            </div>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 4 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+              What payment methods do you accept?
+            </button>
+          </h2>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              We accept all major credit/debit cards (Visa, MasterCard, American Express), UPI payments, net banking, and popular digital wallets like Paytm, PhonePe, and Google Pay. We also offer Cash on Delivery (COD) for eligible orders.
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-4">
+        <a href="/contact/" class="btn btn-outline-primary">
+          View All FAQs <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Chat Modal -->
+<div class="chatbot-modal" id="chatbotModal">
+  <div class="chatbot-container">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <i class="fas fa-robot"></i>
+        <h3>OnlineBazar Assistant</h3>
+      </div>
+      <button class="chatbot-close" id="closeChat">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="chatbot-body" id="chatMessages">
+      <!-- Bot welcome message -->
+      <div class="message bot-message">
+        <div class="message-content">
+          <div class="message-text">
+            Hi there! 👋 I'm your shopping assistant. How can I help you today?
+          </div>
+          <div class="message-time">Just now</div>
+        </div>
+        <div class="quick-replies">
+          <button class="quick-reply-btn" data-message="Track my order">Track my order</button>
+          <button class="quick-reply-btn" data-message="Return policy">Return policy</button>
+          <button class="quick-reply-btn" data-message="Payment issues">Payment issues</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="chatbot-footer">
+      <div class="typing-indicator" id="typingIndicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="userMessage" placeholder="Type your message..." autocomplete="off">
+        <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
  <!-- Newsletter Section -->
 <section class="newsletter-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 0;">
   <div class="container">
@@ -504,6 +690,143 @@ function updateCountdown() {
 // Initialize and update every second
 updateCountdown();
 setInterval(updateCountdown, 1000);
+</script>
+<!-- Add this to your existing script section -->
+<script>
+// Chatbot functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const chatModal = document.getElementById('chatbotModal');
+  const closeChat = document.getElementById('closeChat');
+  const liveChatBtn = document.getElementById('liveChatBtn');
+  const chatMessages = document.getElementById('chatMessages');
+  const userMessage = document.getElementById('userMessage');
+  const sendMessage = document.getElementById('sendMessage');
+  const typingIndicator = document.getElementById('typingIndicator');
+  
+  // Open chat modal
+  liveChatBtn.addEventListener('click', function() {
+    chatModal.style.display = 'flex';
+    userMessage.focus();
+  });
+  
+  // Close chat modal
+  closeChat.addEventListener('click', function() {
+    chatModal.style.display = 'none';
+  });
+  
+  // Send message on button click
+  sendMessage.addEventListener('click', sendUserMessage);
+  
+  // Send message on Enter key
+  userMessage.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendUserMessage();
+    }
+  });
+  
+  // Quick reply buttons
+  document.querySelectorAll('.quick-reply-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const message = this.getAttribute('data-message');
+      userMessage.value = message;
+      sendUserMessage();
+    });
+  });
+  
+  function sendUserMessage() {
+    const message = userMessage.value.trim();
+    if (message === '') return;
+    
+    // Add user message to chat
+    addMessage(message, 'user');
+    userMessage.value = '';
+    
+    // Show typing indicator
+    typingIndicator.style.display = 'flex';
+    
+    // Simulate bot response after delay
+    setTimeout(() => {
+      typingIndicator.style.display = 'none';
+      const botResponse = generateBotResponse(message);
+      addMessage(botResponse.text, 'bot', botResponse.quickReplies);
+    }, 1000 + Math.random() * 2000);
+  }
+  
+  function addMessage(text, sender, quickReplies = null) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    
+    const messageText = document.createElement('div');
+    messageText.className = 'message-text';
+    messageText.textContent = text;
+    
+    const messageTime = document.createElement('div');
+    messageTime.className = 'message-time';
+    messageTime.textContent = getCurrentTime();
+    
+    messageContent.appendChild(messageText);
+    messageContent.appendChild(messageTime);
+    messageDiv.appendChild(messageContent);
+    
+    if (quickReplies) {
+      const quickRepliesDiv = document.createElement('div');
+      quickRepliesDiv.className = 'quick-replies';
+      
+      quickReplies.forEach(reply => {
+        const button = document.createElement('button');
+        button.className = 'quick-reply-btn';
+        button.setAttribute('data-message', reply);
+        button.textContent = reply;
+        button.addEventListener('click', function() {
+          userMessage.value = reply;
+          sendUserMessage();
+        });
+        quickRepliesDiv.appendChild(button);
+      });
+      
+      messageDiv.appendChild(quickRepliesDiv);
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  function getCurrentTime() {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  
+  function generateBotResponse(userMessage) {
+    const lowerMsg = userMessage.toLowerCase();
+    let response = {};
+    
+    if (lowerMsg.includes('track') || lowerMsg.includes('order')) {
+      response.text = "To track your order, please provide your order ID. You can find it in your order confirmation email or in 'My Orders' section of your account.";
+      response.quickReplies = ["Where can I find order ID?", "My Orders page"];
+    } 
+    else if (lowerMsg.includes('return') || lowerMsg.includes('refund')) {
+      response.text = "We offer a 30-day return policy. Items must be unused with original packaging. Would you like to initiate a return?";
+      response.quickReplies = ["How to initiate return?", "Return policy details"];
+    }
+    else if (lowerMsg.includes('payment') || lowerMsg.includes('cash')) {
+      response.text = "We accept credit/debit cards, UPI, net banking, and wallets like Paytm/PhonePe. For payment issues, please share your order details.";
+      response.quickReplies = ["Payment failed", "Refund status"];
+    }
+    else if (lowerMsg.includes('delivery') || lowerMsg.includes('shipping')) {
+      response.text = "Standard delivery takes 3-5 business days. Express delivery is available for ₹99 (1-2 days). Delivery times may vary by location.";
+      response.quickReplies = ["Check delivery date", "Change delivery address"];
+    }
+    else {
+      response.text = "I'm sorry, I didn't understand that. Could you please rephrase or choose from these options?";
+      response.quickReplies = ["Track my order", "Return policy", "Contact human agent"];
+    }
+    
+    return response;
+  }
+});
 </script>
 </body>
 </html>

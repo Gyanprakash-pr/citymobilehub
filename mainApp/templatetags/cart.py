@@ -64,3 +64,6 @@ def cartProductImage(request, num):
 
 
 
+@register.filter
+def multiply(value, arg):
+    return value * arg

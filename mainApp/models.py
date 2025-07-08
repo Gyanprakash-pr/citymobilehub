@@ -1,4 +1,5 @@
 
+from datetime import timezone
 import email
 # from re import M
 from secrets import choice
@@ -144,15 +145,28 @@ class Contact(models.Model):
         return str(self.id)+" "+self.email+" "+self.subject
 
 
+from django.db import models
+from django.utils import timezone  # Add this import
 
+class Coupon(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    discount = models.PositiveIntegerField(help_text="Percentage discount")
+    valid_from = models.DateTimeField()
+    valid_to = models.DateTimeField()
+    active = models.BooleanField(default=True)
+    min_order_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    description = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.code} ({self.discount}% off)"
 
+    def is_valid(self, order_total):
+        now = timezone.now()  # Using Django's timezone.now()
+        return (self.active and 
+                self.valid_from <= now <= self.valid_to and
+                order_total >= self.min_order_amount)
 
-    
-
-
-
-
-
+    class Meta:
+        ordering = ['-discount']
 
 

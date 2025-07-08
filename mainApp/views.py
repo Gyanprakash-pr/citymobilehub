@@ -459,20 +459,72 @@ def AddtoCart(request):
     return HttpResponseRedirect("/cart/")
 
 
+from django.shortcuts import render, redirect
+from .models import Product, Coupon
+from django.utils import timezone  # Correct import for Django timezone
+
 def cartPage(request):
-    cart = request.session.get("cart",None)
+    cart = request.session.get("cart", None)
     total = 0
     shipping = 0
     final = 0
-    if(cart):
+    discount_amount = 0
+    applied_coupon = None
+    
+    if cart:
         for values in cart.values():
             p = Product.objects.get(id=int(values[0]))
-            total=total+p.finalprice*values[1]
-        if(len(cart.values())>=1 and total<1000):
-            shipping=40
-        final=total+shipping
+            total = total + p.finalprice * values[1]
+        
+        if len(cart.values()) >= 1 and total < 1000:
+            shipping = 40
+        
+        # Check for applied coupon
+        coupon_code = request.session.get('applied_coupon', None)
+        if coupon_code:
+            try:
+                applied_coupon = Coupon.objects.get(code=coupon_code)
+                if applied_coupon.is_valid(total):
+                    discount_amount = (total * applied_coupon.discount) / 100
+                else:
+                    applied_coupon = None
+                    request.session.pop('applied_coupon', None)
+            except Coupon.DoesNotExist:
+                request.session.pop('applied_coupon', None)
+        
+        final = total + shipping - discount_amount
+    
+    # Get all active coupons
+    available_coupons = Coupon.objects.filter(
+        active=True,
+        valid_from__lte=timezone.now(),  # Correct usage of timezone.now()
+        valid_to__gte=timezone.now()     # Correct usage of timezone.now()
+    ).order_by('-discount')  # Fixed typo from 'discount' to 'discount'
+    
+    context = {
+        "Cart": cart,
+        "Total": total,
+        "Shipping": shipping,
+        "Final": final,
+        "available_coupons": available_coupons,
+        "applied_coupon": applied_coupon,
+        "discount_amount": discount_amount,
+    }
+    
+    return render(request, "cart.html", context)
 
-    return render(request,"cart.html",{"Cart":cart,"Total":total,"Shipping":shipping,"Final":final})
+def apply_coupon(request, code):
+    try:
+        coupon = Coupon.objects.get(code=code)
+        request.session['applied_coupon'] = code
+    except Coupon.DoesNotExist:
+        pass
+    return redirect('cartPage')
+
+def remove_coupon(request):
+    if 'applied_coupon' in request.session:
+        del request.session['applied_coupon']
+    return redirect('cartPage')
 
 def updateCart(request,id,num):
     cart = request.session.get("cart",None)

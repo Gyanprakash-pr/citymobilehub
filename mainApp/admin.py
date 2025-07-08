@@ -12,5 +12,7 @@ admin.site.register((
     Checkout,
     CheckoutProducts,
     Newslatter,
-    Contact
+    Contact,
+    Coupon
 ))
+
