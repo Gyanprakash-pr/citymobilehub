@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
@@ -8,6 +8,7 @@ admin.site.site_title="Online Bazar"
 admin.site.site_header="Online Bazar"
 # admin.site.site_url="Online Bazar"
 from mainApp import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.Homepage),
@@ -27,7 +28,7 @@ urlpatterns = [
     path('add-to-cart/',views.AddtoCart),
     # path('cart/',views.cartPage),
 
-     path('cart/', views.cartPage, name='cartPage'),  # Add name='cart'
+    path('cart/', views.cartPage, name='cartPage'),  # Add name='cart'
     path('apply-coupon/<str:code>/', views.apply_coupon, name='apply_coupon'),
     path('remove-coupon/', views.remove_coupon, name='remove_coupon'),
 
@@ -47,6 +48,14 @@ urlpatterns = [
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
+  
+    
+    path('chatbot/start-chat/', views.start_chat, name='start_chat'),
+    path('chatbot/send-message/', views.handle_message, name='handle_message'),
+    
+
+    
+    
 ]
 
 if settings.DEBUG:

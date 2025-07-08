@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import redirect, render,HttpResponseRedirect
 from django.contrib import messages,auth
 from django.contrib.auth.models import User
@@ -8,7 +10,21 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from django.urls import reverse
 import os
+import json
+import uuid
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.db import transaction
+from .models import ChatSession, ChatMessage
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from .models import ChatSession, ChatMessage
+import json
+import uuid
+from datetime import datetime
 import razorpay 
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from .models import Buyer, Checkout  # Import your models here
@@ -744,3 +760,178 @@ def AboutPage(request):
     
 def forgetUsername(request):
     return render(request,"forgetpws.html")
+
+
+
+@csrf_exempt
+@require_POST
+def start_chat(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get('session_id')
+        
+        # Create or get chat session
+        session, created = ChatSession.objects.get_or_create(
+            session_id=session_id,
+            defaults={}
+        )
+        
+        # Create welcome message if new session
+        if created:
+            ChatMessage.objects.create(
+                session=session,
+                message="Hi there! 👋 I'm your shopping assistant. How can I help you today?",
+                is_bot=True
+            )
+        
+        # Get all messages for this session
+        messages = session.messages.order_by('created_at').values(
+            'id', 'message', 'is_bot', 'created_at'
+        )
+        
+        return JsonResponse({
+            'status': 'success',
+            'session_id': session_id,
+            'messages': list(messages),
+            'is_new_session': created
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+
+@csrf_exempt
+@require_POST
+def handle_message(request):
+    try:
+        data = json.loads(request.body)
+        session_id = data.get('session_id')
+        message = data.get('message', '').strip()
+        
+        if not session_id:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Session ID is required'
+            }, status=400)
+            
+        if not message:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Message cannot be empty'
+            }, status=400)
+        
+        # Get session
+        try:
+            session = ChatSession.objects.get(session_id=session_id)
+        except ChatSession.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Invalid session ID'
+            }, status=404)
+        
+        # Save user message
+        ChatMessage.objects.create(
+            session=session,
+            message=message,
+            is_bot=False
+        )
+        
+        # Generate bot response
+        bot_response = generate_bot_response(message, session)
+        
+        # Handle clear chat action
+        if 'actions' in bot_response and 'clear_chat' in bot_response['actions']:
+            # Clear all messages for this session
+            session.messages.all().delete()
+            # Recreate the welcome message
+            ChatMessage.objects.create(
+                session=session,
+                message=bot_response['text'],
+                is_bot=True
+            )
+        else:
+            # Save normal bot response
+            ChatMessage.objects.create(
+                session=session,
+                message=bot_response['text'],
+                is_bot=True
+            )
+        
+        return JsonResponse({
+            'status': 'success',
+            'response': bot_response
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+def generate_bot_response(user_message, session=None):
+    user_message = user_message.lower()
+    
+    # Enhanced responses with more options
+    responses = {
+        'track': {
+            'text': 'You can track your order in "My Orders" section. Would you like me to show your recent orders?',
+            'quick_replies': ['Show my orders', 'Track by order ID', 'Contact support'],
+            'actions': ['show_orders']
+        },
+        'return': {
+            'text': 'We offer 30-day easy returns. Please keep the product in original condition with tags attached.',
+            'quick_replies': ['Initiate return', 'Check return status', 'Download return label'],
+            'actions': ['start_return']
+        },
+        'payment': {
+            'text': 'For payment issues, you can check payment methods or contact our support team at payments@onlinebazar.com',
+            'quick_replies': ['Payment options', 'Failed payment help', 'Refund status'],
+            'actions': ['payment_help']
+        },
+        'clear': {
+            'text': 'Chat history has been cleared. How can I help you now?',
+            'quick_replies': ['Track order', 'Return product', 'Payment issue'],
+            'actions': ['clear_chat']
+        },
+        'hi': {
+            'text': 'Hello! 👋 Welcome to OnlineBazar support. I can help with orders, returns, payments and more!',
+            'quick_replies': ['Track my order', 'Return policy', 'Payment issues'],
+            'actions': ['welcome']
+        },
+        'thank': {
+            'text': 'You\'re welcome! 😊 Is there anything else I can help you with today?',
+            'quick_replies': ['No, thank you', 'Yes, need more help', 'Rate this chat'],
+            'actions': ['thank_you']
+        }
+    }
+    
+    # Check for specific commands first
+    if 'clear' in user_message or 'reset' in user_message:
+        if session:
+            session.messages.all().delete()
+        return responses['clear']
+    
+    if any(greet in user_message for greet in ['hi', 'hello', 'hey']):
+        return responses['hi']
+    
+    if any(thank in user_message for thank in ['thank', 'thanks', 'appreciate']):
+        return responses['thank']
+    
+    # Check for other keywords
+    for keyword, response in responses.items():
+        if keyword in user_message:
+            return response
+    
+    # Default response with more options
+    return {
+        'text': 'I can help you with:',
+        'quick_replies': [
+            'Track my order',
+            'Start a return',
+            'Payment issues',
+            'Clear chat history',
+            'Talk to human agent'
+        ],
+        'actions': ['show_options']
+    }

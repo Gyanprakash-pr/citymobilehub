@@ -170,3 +170,23 @@ class Coupon(models.Model):
         ordering = ['-discount']
 
 
+
+class ChatSession(models.Model):
+    session_id = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Chat Session: {self.session_id}"
+
+class ChatMessage(models.Model):
+    session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name='messages')
+    message = models.TextField()
+    is_bot = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{'Bot' if self.is_bot else 'User'}: {self.message[:50]}"
+
+    class Meta:
+        ordering = ['created_at']

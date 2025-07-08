@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="{% static 'css/login.css'%}">
   <link rel="stylesheet" href="{% static 'css/signup.css'%}">
   <link rel="stylesheet" href="{% static 'css/cart.css'%}">
+  <link rel="stylesheet" href="{% static 'css/checkout.css'%}">
 </head>
 
 <body>
@@ -691,68 +692,85 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
-<!-- Add this to your existing script section -->
 <script>
-// Chatbot functionality
 document.addEventListener('DOMContentLoaded', function() {
+  // DOM Elements
   const chatModal = document.getElementById('chatbotModal');
   const closeChat = document.getElementById('closeChat');
   const liveChatBtn = document.getElementById('liveChatBtn');
   const chatMessages = document.getElementById('chatMessages');
   const userMessage = document.getElementById('userMessage');
-  const sendMessage = document.getElementById('sendMessage');
+  const sendMessageBtn = document.getElementById('sendMessage');
   const typingIndicator = document.getElementById('typingIndicator');
   
-  // Open chat modal
-  liveChatBtn.addEventListener('click', function() {
-    chatModal.style.display = 'flex';
-    userMessage.focus();
+  // Event Listeners
+  liveChatBtn?.addEventListener('click', openChat);
+  closeChat?.addEventListener('click', closeChatModal);
+  sendMessageBtn?.addEventListener('click', sendUserMessage);
+  userMessage?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendUserMessage();
   });
   
-  // Close chat modal
-  closeChat.addEventListener('click', function() {
-    chatModal.style.display = 'none';
-  });
-  
-  // Send message on button click
-  sendMessage.addEventListener('click', sendUserMessage);
-  
-  // Send message on Enter key
-  userMessage.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      sendUserMessage();
-    }
-  });
-  
-  // Quick reply buttons
+  // Initialize quick reply buttons
   document.querySelectorAll('.quick-reply-btn').forEach(button => {
     button.addEventListener('click', function() {
-      const message = this.getAttribute('data-message');
-      userMessage.value = message;
+      userMessage.value = this.getAttribute('data-message');
       sendUserMessage();
     });
   });
   
-  function sendUserMessage() {
-    const message = userMessage.value.trim();
-    if (message === '') return;
+  // Functions
+  function openChat() {
+    if (chatModal) {
+      chatModal.style.display = 'flex';
+      userMessage?.focus();
+      initializeChatSession();
+    }
+  }
+  
+  function closeChatModal() {
+    if (chatModal) chatModal.style.display = 'none';
+  }
+  
+  async function sendUserMessage() {
+    const message = userMessage?.value.trim();
+    if (!message || !userMessage) return;
     
-    // Add user message to chat
     addMessage(message, 'user');
     userMessage.value = '';
+    if (typingIndicator) typingIndicator.style.display = 'flex';
     
-    // Show typing indicator
-    typingIndicator.style.display = 'flex';
-    
-    // Simulate bot response after delay
-    setTimeout(() => {
-      typingIndicator.style.display = 'none';
-      const botResponse = generateBotResponse(message);
-      addMessage(botResponse.text, 'bot', botResponse.quickReplies);
-    }, 1000 + Math.random() * 2000);
+    try {
+      const response = await fetch('/chatbot/send-message/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({
+          session_id: getSessionId(),
+          message: message
+        })
+      });
+      
+      const data = await response.json();
+      if (typingIndicator) typingIndicator.style.display = 'none';
+      
+      if (data.status === 'success') {
+        addMessage(data.response.text, 'bot', data.response.quick_replies);
+      } else {
+        throw new Error(data.message || 'Unknown error');
+      }
+    } catch (error) {
+      if (typingIndicator) typingIndicator.style.display = 'none';
+      addMessage("Sorry, I'm having trouble connecting. Please try again later.", 'bot');
+      console.error('Chat error:', error);
+    }
   }
   
   function addMessage(text, sender, quickReplies = null) {
+    if (!chatMessages) return;
+    
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}-message`;
     
@@ -765,13 +783,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const messageTime = document.createElement('div');
     messageTime.className = 'message-time';
-    messageTime.textContent = getCurrentTime();
+    messageTime.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     
     messageContent.appendChild(messageText);
     messageContent.appendChild(messageTime);
     messageDiv.appendChild(messageContent);
     
-    if (quickReplies) {
+    if (quickReplies && quickReplies.length > 0) {
       const quickRepliesDiv = document.createElement('div');
       quickRepliesDiv.className = 'quick-replies';
       
@@ -781,8 +799,10 @@ document.addEventListener('DOMContentLoaded', function() {
         button.setAttribute('data-message', reply);
         button.textContent = reply;
         button.addEventListener('click', function() {
-          userMessage.value = reply;
-          sendUserMessage();
+          if (userMessage) {
+            userMessage.value = reply;
+            sendUserMessage();
+          }
         });
         quickRepliesDiv.appendChild(button);
       });
@@ -794,39 +814,54 @@ document.addEventListener('DOMContentLoaded', function() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
   
-  function getCurrentTime() {
-    const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  async function initializeChatSession() {
+    const sessionId = getSessionId();
+    
+    try {
+      const response = await fetch('/chatbot/start-chat/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ session_id: sessionId })
+      });
+      
+      const data = await response.json();
+      
+      if (data.status === 'success' && data.messages && data.messages.length > 0 && chatMessages) {
+        chatMessages.innerHTML = '';
+        data.messages.forEach(msg => {
+          addMessage(
+            msg.message, 
+            msg.is_bot ? 'bot' : 'user',
+            msg.is_bot ? ["Track my order", "Return policy", "Payment issues"] : null
+          );
+        });
+      }
+    } catch (error) {
+      console.error('Error initializing chat:', error);
+    }
   }
   
-  function generateBotResponse(userMessage) {
-    const lowerMsg = userMessage.toLowerCase();
-    let response = {};
-    
-    if (lowerMsg.includes('track') || lowerMsg.includes('order')) {
-      response.text = "To track your order, please provide your order ID. You can find it in your order confirmation email or in 'My Orders' section of your account.";
-      response.quickReplies = ["Where can I find order ID?", "My Orders page"];
-    } 
-    else if (lowerMsg.includes('return') || lowerMsg.includes('refund')) {
-      response.text = "We offer a 30-day return policy. Items must be unused with original packaging. Would you like to initiate a return?";
-      response.quickReplies = ["How to initiate return?", "Return policy details"];
+  function getSessionId() {
+    let sessionId = localStorage.getItem('chat_session_id');
+    if (!sessionId) {
+      sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('chat_session_id', sessionId);
     }
-    else if (lowerMsg.includes('payment') || lowerMsg.includes('cash')) {
-      response.text = "We accept credit/debit cards, UPI, net banking, and wallets like Paytm/PhonePe. For payment issues, please share your order details.";
-      response.quickReplies = ["Payment failed", "Refund status"];
-    }
-    else if (lowerMsg.includes('delivery') || lowerMsg.includes('shipping')) {
-      response.text = "Standard delivery takes 3-5 business days. Express delivery is available for ₹99 (1-2 days). Delivery times may vary by location.";
-      response.quickReplies = ["Check delivery date", "Change delivery address"];
-    }
-    else {
-      response.text = "I'm sorry, I didn't understand that. Could you please rephrase or choose from these options?";
-      response.quickReplies = ["Track my order", "Return policy", "Contact human agent"];
-    }
-    
-    return response;
+    return sessionId;
+  }
+  
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return '';
   }
 });
+
+
 </script>
 </body>
 </html>
