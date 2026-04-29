@@ -1,0 +1,313 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}<title>OnlineBazar | Order #{{ order.id }}</title>{% endblock %}
+
+{% block body %}
+<div style="background:#f1f3f6; min-height:100vh; padding:30px 0;">
+<div class="container" style="max-width:860px;">
+
+  <!-- Back -->
+  <a href="/orders/" class="btn btn-light btn-sm mb-4 shadow-sm fw-medium">
+    <i class="fas fa-arrow-left me-2"></i>Back to My Orders
+  </a>
+
+  <!-- Order Header Card -->
+  <div class="card shadow-sm mb-4" style="border:none;border-radius:12px;">
+    <div class="card-body px-4 py-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+        <div>
+          <div class="text-secondary small" style="text-transform:uppercase;letter-spacing:.5px;font-size:12px;">Order ID</div>
+          <h4 class="fw-bold text-dark mb-1">#{{ order.id }}</h4>
+          <div class="text-secondary small"><i class="fas fa-calendar-alt me-1"></i>{{ order.date|date:"d M Y, h:i A" }}</div>
+        </div>
+        <div class="text-end">
+          {% if cancelled %}
+          <span class="badge bg-danger px-4 py-2 rounded-pill" style="font-size:14px;"><i class="fas fa-times-circle me-1"></i>Cancelled</span>
+          {% elif order.orderstatus == 4 %}
+          <span class="badge bg-success px-4 py-2 rounded-pill" style="font-size:14px;"><i class="fas fa-check-circle me-1"></i>Delivered</span>
+          {% elif order.orderstatus == 3 %}
+          <span class="badge bg-warning text-dark px-4 py-2 rounded-pill" style="font-size:14px;"><i class="fas fa-truck me-1"></i>Out for Delivery</span>
+          {% elif order.orderstatus == 2 %}
+          <span class="badge bg-info px-4 py-2 rounded-pill" style="font-size:14px;"><i class="fas fa-box me-1"></i>Packed</span>
+          {% else %}
+          <span class="badge bg-secondary px-4 py-2 rounded-pill" style="font-size:14px;"><i class="fas fa-clock me-1"></i>Processing</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seller Action: Update Status -->
+  {% if user_type == 'seller' %}
+  <div class="card shadow-sm mb-4 border-0" style="border-radius:12px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);">
+    <div class="card-body p-4 text-white">
+      <h6 class="fw-bold text-uppercase mb-3" style="font-size:12px; letter-spacing:1px; opacity:0.8;">Seller Controls</h6>
+      <div class="row align-items-end g-3">
+        <div class="col-md-8">
+          <label class="form-label fw-bold mb-2">Update Order Progress</label>
+          <form action="/update-order-status/{{order.id}}/" method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            <select name="status" class="form-select border-0 rounded-3 shadow-none" style="height:48px;">
+              <option value="1" {% if order.orderstatus == 1 %}selected{% endif %}>Order Placed (Not Packed)</option>
+              <option value="2" {% if order.orderstatus == 2 %}selected{% endif %}>Order Packed</option>
+              <option value="3" {% if order.orderstatus == 3 %}selected{% endif %}>Out for Delivery</option>
+              <option value="4" {% if order.orderstatus == 4 %}selected{% endif %}>Delivered</option>
+              <option value="0" {% if order.orderstatus == 0 %}selected{% endif %}>Cancelled</option>
+            </select>
+            <button type="submit" class="btn btn-white fw-bold px-4 rounded-3" style="background:white; color:var(--primary-color); height:48px; border:none;">
+              Update Status
+            </button>
+          </form>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <div class="small opacity-75">Customer Address:</div>
+          <div class="fw-bold">{{User.addressline1}}, {{User.city}}</div>
+          <div class="small opacity-75">{{User.phone}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Tracking Timeline Card -->
+  <div class="card shadow-sm mb-4" style="border:none;border-radius:12px;">
+    <div class="card-body px-4 py-4">
+      <h6 class="fw-bold text-secondary text-uppercase mb-4" style="font-size:13px;letter-spacing:.5px;">
+        <i class="fas fa-map-marker-alt me-2 text-primary"></i>Shipment Tracking
+      </h6>
+
+      {% if cancelled %}
+      <!-- Cancelled State -->
+      <div class="text-center py-4">
+        <div style="width:72px;height:72px;background:#ffebee;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <i class="fas fa-ban" style="font-size:2rem;color:#e53935;"></i>
+        </div>
+        <h5 class="fw-bold text-danger mb-1">Order Cancelled</h5>
+        <p class="text-secondary">This order has been cancelled. Any payment will be refunded within 5-7 business days.</p>
+      </div>
+
+      {% else %}
+      <!-- Stepper Timeline -->
+      <div class="tracking-stepper">
+        {% for step in tracking_steps %}
+        <div class="tracking-step {% if step.done %}done{% endif %} {% if step.active %}active{% endif %}">
+          <!-- Circle Icon -->
+          <div class="step-icon-wrapper">
+            <div class="step-icon">
+              <i class="{{ step.icon }}"></i>
+            </div>
+          </div>
+          <!-- Connector line (not on last step) -->
+          {% if not forloop.last %}
+          <div class="step-line {% if step.done %}done{% endif %}"></div>
+          {% endif %}
+          <!-- Label -->
+          <div class="step-label">
+            <div class="step-name">{{ step.label }}</div>
+            {% if step.active %}
+            <div class="step-sub text-primary fw-medium" style="font-size:12px;">Current Status</div>
+            {% elif step.done %}
+            <div class="step-sub text-success" style="font-size:12px;"><i class="fas fa-check me-1"></i>Completed</div>
+            {% else %}
+            <div class="step-sub text-muted" style="font-size:12px;">Pending</div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Products in this Order -->
+  <div class="card shadow-sm mb-4" style="border:none;border-radius:12px;">
+    <div class="card-header bg-white py-3 px-4 border-0">
+      <h6 class="fw-bold text-secondary text-uppercase mb-0" style="font-size:13px;letter-spacing:.5px;">
+        <i class="fas fa-shopping-bag me-2 text-primary"></i>Items Ordered
+      </h6>
+    </div>
+    <div class="card-body p-0">
+      {% for product in products %}
+      <div class="d-flex align-items-center p-4 border-bottom {% if forloop.last %}border-0{% endif %}">
+        <div style="width:80px;height:80px;flex-shrink:0;background:#f5f5f5;border-radius:8px;overflow:hidden;margin-right:18px;">
+          <img src="{{ product.pic }}" style="width:100%;height:100%;object-fit:contain;"
+               onerror="this.src='/static/picture/noimg.png'" alt="{{ product.name }}">
+        </div>
+        <div class="flex-grow-1">
+          <div class="fw-semibold text-dark mb-1">{{ product.name }}</div>
+          <div class="text-secondary small">
+            Color: <span class="text-dark fw-medium">{{ product.color }}</span> &nbsp;|&nbsp;
+            Qty: <span class="text-dark fw-medium">{{ product.qty }}</span>
+          </div>
+        </div>
+        <div class="text-end">
+          <div class="fw-bold text-dark" style="font-size:17px;">&#x20b9;{{ product.total }}</div>
+          <div class="text-secondary small">&#x20b9;{{ product.price }} each</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Payment + Amount Summary -->
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100" style="border:none;border-radius:12px;">
+        <div class="card-body p-4">
+          <h6 class="fw-bold text-secondary text-uppercase mb-3" style="font-size:13px;letter-spacing:.5px;">
+            <i class="fas fa-credit-card me-2 text-primary"></i>Payment Info
+          </h6>
+          <div class="d-flex align-items-center gap-3">
+            {% if order.mode == "COD" %}
+            <div style="width:42px;height:42px;background:#e8f5e9;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-money-bill-wave text-success"></i>
+            </div>
+            <div>
+              <div class="fw-semibold text-dark">Cash on Delivery</div>
+              <div class="small text-secondary">Pay when delivered</div>
+            </div>
+            {% else %}
+            <div style="width:42px;height:42px;background:#e3f2fd;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-credit-card" style="color:#1565c0;"></i>
+            </div>
+            <div>
+              <div class="fw-semibold text-dark">Online Payment</div>
+              <div class="small text-secondary">
+                {% if order.paymentstatus == 2 %}
+                <span class="text-success"><i class="fas fa-check me-1"></i>Payment Done</span>
+                {% else %}
+                <span class="text-warning"><i class="fas fa-clock me-1"></i>Payment Pending</span>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100" style="border:none;border-radius:12px;">
+        <div class="card-body p-4">
+          <h6 class="fw-bold text-secondary text-uppercase mb-3" style="font-size:13px;letter-spacing:.5px;">
+            <i class="fas fa-receipt me-2 text-primary"></i>Price Summary
+          </h6>
+          <div class="d-flex justify-content-between text-secondary mb-2"><span>Subtotal</span><span>&#x20b9;{{ order.total }}</span></div>
+          <div class="d-flex justify-content-between text-secondary mb-3">
+            <span>Delivery</span>
+            <span>{% if order.shipping == 0 %}<span class="text-success">Free</span>{% else %}&#x20b9;{{ order.shipping }}{% endif %}</span>
+          </div>
+          <div class="d-flex justify-content-between border-top pt-3">
+            <span class="fw-bold text-dark">Grand Total</span>
+            <span class="fw-bold text-dark" style="font-size:18px;color:#2874f0!important;">&#x20b9;{{ order.final }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Tracking Stepper CSS -->
+<style>
+  .tracking-stepper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px 0 20px;
+    overflow-x: auto;
+  }
+
+  .tracking-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    min-width: 80px;
+  }
+
+  .step-icon-wrapper {
+    z-index: 2;
+    position: relative;
+  }
+
+  .step-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid #e0e0e0;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #bdbdbd;
+    transition: all 0.4s ease;
+  }
+
+  .tracking-step.done .step-icon {
+    border-color: #2874f0;
+    background: #2874f0;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(40,116,240,.3);
+  }
+
+  .tracking-step.active .step-icon {
+    border-color: #fb641b;
+    background: #fb641b;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(251,100,27,.35);
+    animation: pulse-orange 1.6s infinite;
+  }
+
+  @keyframes pulse-orange {
+    0% { box-shadow: 0 0 0 0 rgba(251,100,27,.4); }
+    70% { box-shadow: 0 0 0 12px rgba(251,100,27,0); }
+    100% { box-shadow: 0 0 0 0 rgba(251,100,27,0); }
+  }
+
+  .step-line {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #e0e0e0;
+    z-index: 1;
+  }
+
+  .step-line.done {
+    background: linear-gradient(to right, #2874f0, #2874f0);
+  }
+
+  .step-label {
+    margin-top: 12px;
+    text-align: center;
+    padding: 0 4px;
+  }
+
+  .step-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .tracking-step.done .step-name { color: #2874f0; }
+  .tracking-step.active .step-name { color: #fb641b; }
+
+  .step-sub {
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 576px) {
+    .tracking-stepper { gap: 0; }
+    .step-icon { width: 44px; height: 44px; font-size: 16px; }
+    .step-name { font-size: 11px; }
+  }
+</style>
+{% endblock %}

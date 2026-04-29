@@ -559,3 +559,9 @@ body {
         margin: 15px 0;
     }
 }
+
+/* Hide native password reveal icon in Edge/Chrome */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}

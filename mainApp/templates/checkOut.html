@@ -2,179 +2,266 @@
 {% load static %}
 {% load cart %}
 {% block title %}
-<title>Online Bazar | Shopping Cart</title>
+<title>Online Bazar | Checkout</title>
 {% endblock %}
 
 {% block body %}
 <div class="cart-container animate__animated animate__fadeIn">
   <div class="container-fluid py-4">
     <div class="row g-4">
-      <!-- Billing Details Column -->
-      <div class="col-lg-6">
-        <div class="card billing-card shadow-lg animate__animated animate__fadeInLeft">
-          <div class="card-header bg-primary text-white">
-            <h3 class="mb-0"><i class="fas fa-user-circle me-2"></i>Billing Details</h3>
+      <!-- Left Column -->
+      <div class="col-lg-8">
+
+        <!-- Step 1: Login -->
+        <div class="checkout-step-card card shadow-sm mb-3">
+          <div class="card-header bg-white border-bottom-0 py-3 d-flex align-items-center">
+            <div class="step-number">1</div>
+            <h5 class="mb-0 fw-bold ms-3 text-secondary">LOGIN / USER DETAILS</h5>
+            <i class="fas fa-check text-success ms-auto fs-5"></i>
           </div>
-          <div class="card-body">
-            <div class="user-profile">
-              <div class="profile-details">
-                <div class="detail-item">
-                  <i class="fas fa-user"></i>
-                  <div>
-                    <span class="label">Name</span>
-                    <span class="value">{{User.name}}</span>
-                  </div>
-                </div>
-                <div class="detail-item">
-                  <i class="fas fa-at"></i>
-                  <div>
-                    <span class="label">Username</span>
-                    <span class="value">{{User.username}}</span>
-                  </div>
-                </div>
-                <div class="detail-item">
-                  <i class="fas fa-envelope"></i>
-                  <div>
-                    <span class="label">Email</span>
-                    <span class="value">{{User.email}}</span>
-                  </div>
-                </div>
-                <div class="detail-item">
-                  <i class="fas fa-phone"></i>
-                  <div>
-                    <span class="label">Phone</span>
-                    <span class="value">{{User.phone}}</span>
-                  </div>
-                </div>
-                <div class="detail-item">
-                  <i class="fas fa-home"></i>
-                  <div>
-                    <span class="label">Address</span>
-                    <span class="value">{{User.addressline1}}, {{User.city}}, {{User.state}} - {{User.pin}}</span>
-                  </div>
-                </div>
+          <div class="card-body pt-0 ps-5 ms-3 pb-4">
+            <div class="d-flex align-items-center mb-1">
+              <span class="fw-bold text-dark me-3">{{User.name}}</span>
+              <span class="text-secondary fw-medium">{{User.phone}}</span>
+            </div>
+            <div class="text-secondary small">{{User.email}}</div>
+          </div>
+        </div>
+
+        <!-- Step 2: Delivery Address -->
+        <div class="checkout-step-card card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white py-3 d-flex align-items-center">
+            <div class="step-number bg-white text-primary">2</div>
+            <h5 class="mb-0 fw-bold ms-3">DELIVERY ADDRESS</h5>
+          </div>
+          <div class="card-body p-4 bg-light">
+            <div class="address-box bg-white p-3 border rounded shadow-sm">
+              <div class="d-flex align-items-center mb-2">
+                <span class="fw-bold text-dark me-3">{{User.name}}</span>
+                <span class="badge bg-secondary-subtle text-secondary small">HOME</span>
+                <span class="fw-bold ms-auto">{{User.phone}}</span>
               </div>
-              <div class="text-center mt-4">
-                <a href="/updateProfile/" class="btn btn-outline-primary btn-update-profile">
-                  <i class="fas fa-edit me-2"></i>Update Profile
-                </a>
-              </div>
+              <p class="text-secondary mb-3">{{User.addressline1}}, {{User.city}}, {{User.state}} - <span class="fw-bold text-dark">{{User.pin}}</span></p>
+              <a href="/updateProfile/" class="btn btn-outline-primary btn-sm px-4 fw-bold">CHANGE</a>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Cart Section Column -->
-      <div class="col-lg-6">
-        <div class="card cart-card shadow-lg animate__animated animate__fadeInRight">
-          <div class="card-header bg-success text-white">
-            <h3 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Your Shopping Cart</h3>
+        <!-- Step 3: Order Summary -->
+        <div class="checkout-step-card card shadow-sm mb-3">
+          <div class="card-header bg-white border-bottom-0 py-3 d-flex align-items-center">
+            <div class="step-number">3</div>
+            <h5 class="mb-0 fw-bold ms-3 text-secondary">ORDER SUMMARY</h5>
           </div>
-          <div class="card-body">
+          <div class="card-body p-0 border-top">
             {% if Cart %}
-            <div class="cart-items">
+            <div class="checkout-cart-items">
               {% for i in Cart %}
-              <div class="cart-item animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|divisibleby:2|yesno:'0.1s,0.2s' }}">
-                <div class="product-image">
+              <div class="cart-item d-flex p-4 border-bottom bg-white animate__animated animate__fadeIn">
+                <div class="product-image me-4">
                   {% if request|cartProductImage:i %}
-                  <img src="{{request|cartProductImage:i}}" class="img-fluid" alt="Product Image">
+                  <img src="{{request|cartProductImage:i}}" class="img-fluid rounded" style="width:80px;height:80px;object-fit:contain;" alt="Product">
                   {% else %}
-                  <img src="{% static 'picture/noimg.png' %}" class="img-fluid" alt="No Image">
+                  <img src="{% static 'picture/noimg.png' %}" class="img-fluid rounded" style="width:80px;height:80px;object-fit:contain;" alt="No Image">
                   {% endif %}
                 </div>
-                <div class="product-details">
-                  <h5 class="product-name">{{request|cartProductName:i}}</h5>
-                  <div class="product-attributes">
-                    <span class="attribute"><i class="fas fa-palette me-1"></i> {{request|cartColor:i}}</span>
-                    <span class="attribute"><i class="fas fa-ruler me-1"></i> {{request|cartSize:i}}</span>
+                <div class="product-details flex-grow-1">
+                  <h6 class="fw-medium text-dark mb-1">{{request|cartProductName:i}}</h6>
+                  <div class="text-secondary small mb-2">
+                    Color: <span class="fw-medium text-dark">{{request|cartColor:i}}</span>
                   </div>
-                  <div class="product-pricing">
-                    <span class="price">₹{{request|cartProductPrice:i}}</span>
-                    <span class="quantity">Qty: {{request|cartQty:i}}</span>
-                    <span class="total">₹{{request|cartTotal:i}}</span>
+                  <div class="d-flex align-items-center mt-2">
+                    <span class="text-secondary me-3">&#x20b9;{{request|cartProductPrice:i}} &times; {{request|cartQty:i}}</span>
+                    <span class="fw-bold fs-5 text-dark ms-auto">&#x20b9;{{request|cartTotal:i}}</span>
                   </div>
                 </div>
               </div>
               {% endfor %}
             </div>
-
-            <div class="cart-summary animate__animated animate__fadeInUp">
-              <div class="summary-item">
-                <span>Subtotal:</span>
-                <span>₹{{Total}}</span>
-              </div>
-              <div class="summary-item">
-                <span>Shipping:</span>
-                <span>₹{{Shipping}}</span>
-              </div>
-              <div class="summary-item grand-total">
-                <span>Total:</span>
-                <span>₹{{Final}}</span>
-              </div>
-            </div>
-
-            <form action="" method="post" class="payment-form animate__animated animate__fadeInUp">
-              {% csrf_token %}
-              <div class="form-group mb-3">
-                <label for="payment-mode" class="form-label"><i class="fas fa-credit-card me-2"></i>Payment Method</label>
-                <select name="mode" id="payment-mode" class="form-select">
-                  <option value="COD">Cash on Delivery (COD)</option>
-                  <option value="Net Banking">Net Banking/Card/UPI/Wallet</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-success btn-place-order w-100">
-                <span class="btn-text">Place Order</span>
-                <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
-              </button>
-            </form>
             {% else %}
-            <div class="empty-cart text-center py-5 animate__animated animate__fadeIn">
-              <i class="fas fa-shopping-cart fa-4x mb-3 text-muted"></i>
-              <h4>Your cart is empty</h4>
-              <p class="text-muted">Looks like you haven't added any items yet</p>
-              <a href="/shop/All/All/All/" class="btn btn-primary mt-3">
-                <i class="fas fa-store me-2"></i>Continue Shopping
-              </a>
+            <div class="p-5 text-center">
+              <h5 class="text-muted">Your cart is empty</h5>
             </div>
             {% endif %}
           </div>
         </div>
+
       </div>
+
+      <!-- Right Column: Price + Payment -->
+      <div class="col-lg-4">
+        <div class="card price-details-card shadow-sm mb-3 sticky-top" style="top:20px;">
+          <div class="card-header bg-white py-3 border-bottom">
+            <h6 class="mb-0 fw-bold text-secondary text-uppercase" style="letter-spacing:0.5px;">Price Details</h6>
+          </div>
+          <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between mb-3" style="font-size:16px;">
+              <span class="text-secondary">Price ({{ Cart|length }} items)</span>
+              <span class="text-dark">&#x20b9;{{Total}}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3" style="font-size:16px;">
+              <span class="text-secondary">Delivery Charges</span>
+              {% if Shipping == 0 %}
+              <span class="text-success fw-medium">Free</span>
+              {% else %}
+              <span class="text-dark">&#x20b9;{{Shipping}}</span>
+              {% endif %}
+            </div>
+
+            <div class="d-flex justify-content-between border-top border-bottom py-3 my-3" style="font-size:16px;">
+              <span class="fw-bold fs-5 text-dark">Amount Payable</span>
+              <span class="fw-bold fs-5 text-dark">&#x20b9;{{Final}}</span>
+            </div>
+
+            <!-- Payment Form -->
+            <form action="" method="post" id="checkoutForm">
+              {% csrf_token %}
+              <!-- This hidden input carries the real value to Django -->
+              <input type="hidden" name="mode" id="selectedMode" value="COD">
+
+              <h6 class="fw-bold text-uppercase text-secondary mb-3" style="font-size:13px;letter-spacing:0.5px;">
+                <i class="fas fa-shield-alt me-1"></i> Payment Options
+              </h6>
+
+              <!-- COD Card -->
+              <div class="pay-card active mb-3" id="card-COD" onclick="selectPay('COD')">
+                <div class="pay-radio" id="radio-COD">
+                  <div class="pay-radio-dot"></div>
+                </div>
+                <div class="pay-info">
+                  <div class="fw-semibold text-dark">
+                    <i class="fas fa-money-bill-wave text-success me-2"></i>Cash on Delivery
+                  </div>
+                  <div class="text-secondary" style="font-size:12px;">Pay when your order arrives at your door</div>
+                </div>
+                <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1" style="font-size:11px;">Free</span>
+              </div>
+
+              <!-- Online Card -->
+              <div class="pay-card" id="card-Net Banking" onclick="selectPay('Net Banking')">
+                <div class="pay-radio" id="radio-Net Banking">
+                  <div class="pay-radio-dot"></div>
+                </div>
+                <div class="pay-info">
+                  <div class="fw-semibold text-dark">
+                    <i class="fas fa-credit-card text-primary me-2"></i>UPI / Card / Wallets
+                  </div>
+                  <div class="text-secondary" style="font-size:12px;">Razorpay — 100% Secure &amp; Instant</div>
+                </div>
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1" style="font-size:11px;">Online</span>
+              </div>
+
+              <button type="submit" class="btn btn-checkout w-100 fw-bold py-3 mt-4" id="placeOrderBtn">
+                <i class="fas fa-lock me-2"></i>
+                <span id="btnLabel">PAY &amp; PLACE ORDER</span>
+              </button>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-
-<!-- Scripts -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Add animation to cart items as they appear
-    const cartItems = document.querySelectorAll('.cart-item');
-    cartItems.forEach((item, index) => {
-      item.style.animationDelay = `${index * 0.1}s`;
+  function selectPay(mode) {
+    // Remove active from all
+    document.querySelectorAll('.pay-card').forEach(function(c) {
+      c.classList.remove('active');
     });
-    
-    // Button hover effect
-    const placeOrderBtn = document.querySelector('.btn-place-order');
-    if (placeOrderBtn) {
-      placeOrderBtn.addEventListener('mouseenter', function() {
-        this.classList.add('animate__animated', 'animate__pulse');
-      });
-      placeOrderBtn.addEventListener('mouseleave', function() {
-        this.classList.remove('animate__animated', 'animate__pulse');
-      });
-    }
-    
-    // Form submission loading state
-    const paymentForm = document.querySelector('.payment-form');
-    if (paymentForm) {
-      paymentForm.addEventListener('submit', function() {
-        const btn = this.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.querySelector('.btn-text').textContent = 'Processing...';
-        btn.querySelector('.btn-icon').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      });
-    }
+    // Activate chosen
+    var chosen = document.getElementById('card-' + mode);
+    if (chosen) chosen.classList.add('active');
+    // Set hidden input
+    document.getElementById('selectedMode').value = mode;
+  }
+
+  document.getElementById('checkoutForm').addEventListener('submit', function() {
+    var btn = document.getElementById('placeOrderBtn');
+    document.getElementById('btnLabel').innerHTML = 'Processing...';
+    btn.insertAdjacentHTML('afterbegin', '<i class="fas fa-spinner fa-spin me-2"></i>');
+    btn.style.opacity = '0.85';
+    btn.style.pointerEvents = 'none';
   });
 </script>
+
+<style>
+  body { background-color: #f1f3f6; }
+
+  .card { border: none; border-radius: 4px; }
+
+  .step-number {
+    width: 24px; height: 24px;
+    background: #f1f3f6; color: #2874f0;
+    border-radius: 2px; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .bg-primary { background-color: #2874f0 !important; }
+
+  .checkout-step-card .card-header h5 { font-size: 16px; letter-spacing: 0.2px; }
+
+  .address-box { border-color: #e0e0e0 !important; transition: box-shadow 0.3s; }
+  .address-box:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08) !important; }
+
+  /* Payment Cards */
+  .pay-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .pay-card:hover { border-color: #a0c0f0; background: #f7f9ff; }
+  .pay-card.active {
+    border-color: #2874f0;
+    background: #eef5ff;
+    box-shadow: 0 2px 10px rgba(40,116,240,.12);
+  }
+  .pay-radio {
+    width: 20px; height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .pay-card.active .pay-radio { border-color: #2874f0; }
+  .pay-radio-dot {
+    width: 10px; height: 10px;
+    background: #2874f0;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s;
+  }
+  .pay-card.active .pay-radio-dot { transform: translate(-50%, -50%) scale(1); }
+  .pay-info { flex: 1; }
+
+  /* Checkout Button */
+  .btn-checkout {
+    background: #fb641b;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    transition: background 0.25s;
+  }
+  .btn-checkout:hover { background: #e5591a; color: #fff; }
+
+  @media (max-width: 992px) {
+    .sticky-top { position: static !important; }
+  }
+</style>
 {% endblock %}

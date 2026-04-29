@@ -37,13 +37,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    '127.0.0.1',
+    '*',
     'https://onlinebazar.onrender.com',
 
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://onlinebazar.onrender.com',
+    'http://172.16.2.51:8000',
 ]
 # Application definition
 
@@ -73,7 +74,7 @@ ROOT_URLCONF = 'OnlineBazar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/mainApp/templates/'],
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'mainApp' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

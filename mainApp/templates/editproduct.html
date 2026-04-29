@@ -20,19 +20,20 @@
       <div class="card-body p-4 p-md-5">
         <form action="" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
           {% csrf_token %}
-          
+
           <!-- Basic Information Section -->
           <div class="form-section mb-4 animate__animated animate__fadeInLeft">
             <h5 class="section-title"><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
             <div class="row g-3">
               <div class="col-md-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Product Name" value="{{Product.name}}" required>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Product Name"
+                    value="{{Product.name}}" required>
                   <label for="name">Product Name</label>
                   <div class="invalid-feedback">Please enter product name</div>
                 </div>
               </div>
-              
+
               <div class="col-md-4">
                 <div class="form-floating">
                   <select name="maincategory" id="maincategory" class="form-select" required>
@@ -44,7 +45,7 @@
                   <label for="maincategory">Main Category</label>
                 </div>
               </div>
-              
+
               <div class="col-md-4">
                 <div class="form-floating">
                   <select name="subcategory" id="subcategory" class="form-select" required>
@@ -56,7 +57,7 @@
                   <label for="subcategory">Sub Category</label>
                 </div>
               </div>
-              
+
               <div class="col-md-4">
                 <div class="form-floating">
                   <select name="brand" id="brand" class="form-select" required>
@@ -70,75 +71,67 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Pricing Section -->
           <div class="form-section mb-4 animate__animated animate__fadeInRight">
             <h5 class="section-title"><i class="fas fa-tag me-2"></i>Pricing & Stock</h5>
             <div class="row g-3">
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="number" class="form-control" id="baseprice" name="baseprice" placeholder="Base Price" value="{{Product.baseprice}}" required>
+                  <input type="number" class="form-control" id="baseprice" name="baseprice" placeholder="Base Price"
+                    value="{{Product.baseprice}}" required>
                   <label for="baseprice">Base Price (₹)</label>
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="number" class="form-control" id="discount" name="discount" placeholder="Discount" min="0" max="100" value="{{Product.discount}}">
+                  <input type="number" class="form-control" id="discount" name="discount" placeholder="Discount" min="0"
+                    max="100" value="{{Product.discount}}">
                   <label for="discount">Discount (%)</label>
                 </div>
               </div>
-              
+
               <div class="col-md-12">
                 <div class="form-floating">
                   <select name="stock" id="stock" class="form-select">
-                    <option value="In-Stock" {% if Product.stock == "In-Stock" %}selected{% endif %}>In Stock</option>
-                    <option value="Out-Of-Stock" {% if Product.stock == "Out-Of-Stock" %}selected{% endif %}>Out of Stock</option>
+                    <option value="In-Stock" {% if Product.stock=="In-Stock" %}selected{% endif %}>In Stock</option>
+                    <option value="Out-Of-Stock" {% if Product.stock=="Out-Of-Stock" %}selected{% endif %}>Out of Stock
+                    </option>
                   </select>
                   <label for="stock">Stock Status</label>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <!-- Color Selection -->
           <div class="form-section mb-4 animate__animated animate__fadeInLeft">
             <h5 class="section-title"><i class="fas fa-palette me-2"></i>Available Colors</h5>
             <div class="color-options">
               {% for color in colors %}
               <div class="color-option">
-                <input type="checkbox" id="color-{{color}}" name="{{color}}" value="{{color}}" 
-                  {% if Product.color|checkColor:color %}checked{% endif %}>
+                <input type="checkbox" id="color-{{color}}" name="{{color}}" value="{{color}}" {% if
+                  Product.color|checkColor:color %}checked{% endif %}>
                 <label for="color-{{color}}" style="background-color: {{color|lower}};"></label>
                 <span>{{color}}</span>
               </div>
               {% endfor %}
             </div>
           </div>
-          
-          <!-- Size Selection -->
-          <div class="form-section mb-4 animate__animated animate__fadeInRight">
-            <h5 class="section-title"><i class="fas fa-ruler-combined me-2"></i>Available Sizes</h5>
-            <div class="size-options">
-              {% for size in sizes %}
-              <div class="size-option">
-                <input type="checkbox" id="size-{{size}}" name="{{size}}" value="{{size}}" 
-                  {% if Product.size|checkSize:size %}checked{% endif %}>
-                <label for="size-{{size}}">{{size}}</label>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-          
+
+
+
           <!-- Description -->
           <div class="form-section mb-4 animate__animated animate__fadeInUp">
             <h5 class="section-title"><i class="fas fa-align-left me-2"></i>Product Description</h5>
             <div class="form-floating">
-              <textarea class="form-control" id="description" name="description" style="height: 120px">{{Product.description}}</textarea>
+              <textarea class="form-control" id="description" name="description"
+                style="height: 120px">{{Product.description}}</textarea>
               <label for="description">Detailed description...</label>
             </div>
           </div>
-          
+
           <!-- Image Upload -->
           <div class="form-section mb-4 animate__animated animate__fadeInUp">
             <h5 class="section-title"><i class="fas fa-images me-2"></i>Product Images</h5>
@@ -155,7 +148,7 @@
                   {% endif %}
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="image-upload-box">
                   <label for="pic2">Secondary Image</label>
@@ -168,7 +161,7 @@
                   {% endif %}
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="image-upload-box">
                   <label for="pic3">Additional Image</label>
@@ -181,7 +174,7 @@
                   {% endif %}
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="image-upload-box">
                   <label for="pic4">Additional Image</label>
@@ -196,7 +189,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Submit Button -->
           <div class="text-center mt-4 animate__animated animate__fadeInUp">
             <button type="submit" class="btn btn-primary btn-save-product">
@@ -300,14 +293,16 @@
     padding: 1rem 0.75rem;
   }
 
-  .form-control, .form-select {
+  .form-control,
+  .form-select {
     border: 1px solid #e0e0e0;
     padding: 1rem 0.75rem;
     border-radius: 10px;
     transition: all 0.3s;
   }
 
-  .form-control:focus, .form-select:focus {
+  .form-control:focus,
+  .form-select:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
   }
@@ -338,42 +333,13 @@
     transition: all 0.3s;
   }
 
-  .color-option input[type="checkbox"]:checked + label {
+  .color-option input[type="checkbox"]:checked+label {
     border-color: var(--primary);
     transform: scale(1.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 
-  /* Size Options */
-  .size-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-  }
 
-  .size-option {
-    position: relative;
-  }
-
-  .size-option input[type="checkbox"] {
-    display: none;
-  }
-
-  .size-option label {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .size-option input[type="checkbox"]:checked + label {
-    background-color: var(--primary);
-    color: white;
-    border-color: var(--primary);
-  }
 
   /* Image Upload */
   .image-upload-box {
@@ -459,7 +425,7 @@
 
   /* Responsive Adjustments */
   @media (max-width: 992px) {
-    .color-options, .size-options {
+    .color-options {
       gap: 0.8rem;
     }
   }
@@ -469,11 +435,11 @@
       padding-top: 1rem;
       padding-bottom: 1rem;
     }
-    
+
     .form-section {
       padding: 1rem;
     }
-    
+
     .color-option {
       flex: 0 0 calc(33.333% - 0.8rem);
     }
@@ -483,11 +449,11 @@
     .edit-title {
       font-size: 1.5rem;
     }
-    
+
     .color-option {
       flex: 0 0 calc(50% - 0.8rem);
     }
-    
+
     .btn-save-product {
       width: 100%;
     }
@@ -496,14 +462,14 @@
 
 <!-- Scripts -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // Form validation
-    (function() {
+    (function () {
       'use strict'
-      
+
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
       const forms = document.querySelectorAll('.needs-validation')
-      
+
       // Loop over them and prevent submission
       Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
@@ -511,37 +477,37 @@
             event.preventDefault()
             event.stopPropagation()
           }
-          
+
           form.classList.add('was-validated')
         }, false)
       })
     })()
-    
+
     // Add animation to form sections
     const formSections = document.querySelectorAll('.form-section');
     formSections.forEach((section, index) => {
       section.style.animationDelay = `${index * 0.1}s`;
     });
-    
+
     // Button hover effect
     const saveBtn = document.querySelector('.btn-save-product');
     if (saveBtn) {
-      saveBtn.addEventListener('mouseenter', function() {
+      saveBtn.addEventListener('mouseenter', function () {
         this.classList.add('animate__animated', 'animate__pulse');
       });
-      saveBtn.addEventListener('mouseleave', function() {
+      saveBtn.addEventListener('mouseleave', function () {
         this.classList.remove('animate__animated', 'animate__pulse');
       });
     }
-    
+
     // Preview image when selected
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
-      input.addEventListener('change', function() {
+      input.addEventListener('change', function () {
         const preview = this.nextElementSibling;
         if (this.files && this.files[0]) {
           const reader = new FileReader();
-          reader.onload = function(e) {
+          reader.onload = function (e) {
             if (!preview.classList.contains('current-image')) {
               const previewDiv = document.createElement('div');
               previewDiv.className = 'current-image';

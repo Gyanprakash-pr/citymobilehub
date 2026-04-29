@@ -3,24 +3,31 @@
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | Shop Page</title>
+<title>Desi Mobile | Shop Page</title>
 <link rel="stylesheet" href="{% static 'css/shop.css' %}">
 {% endblock %}
 
 {% block body %}
 <div class="shop-page">
   <!-- Shop Header with Breadcrumb -->
-  <section class="shop-header-section">
+  <section class="shop-header-section" style="background: linear-gradient(135deg, #0f172a 0%, var(--primary-color) 100%) !important; padding: 60px 0; position: relative; overflow: hidden; color: white;">
+    <!-- Abstract Background Elements -->
+    <div style="position: absolute; top: -10%; right: -5%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%); border-radius: 50%;"></div>
+    
     <div class="container">
-      <div class="shop-header-content">
+      <div class="shop-header-content" style="position: relative; z-index: 5;">
         <div class="shop-header-text">
-          <h1 class="shop-title">Discover Amazing Products</h1>
-          <p class="shop-subtitle">Find everything you need in one place</p>
+          <div class="glass-pill" style="display: inline-block; padding: 5px 15px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 15px; font-weight: 600; font-size: 11px; letter-spacing: 1px; color: var(--secondary-color);">
+            <i class="fas fa-shopping-bag me-2"></i> PREMIUM CATALOG
+          </div>
+          <h1 class="shop-title" style="font-size: 36px; font-weight: 800; margin-bottom: 10px;">Explore Our <span style="background: linear-gradient(to right, #fff, var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Premium Collection</span></h1>
+          <p class="shop-subtitle" style="opacity: 0.8; font-size: 14px;">High-performance gadgets and elite protection for your devices.</p>
         </div>
-        <nav class="shop-breadcrumb">
-          <ol class="breadcrumb-list">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active">Shop</li>
+        <nav class="shop-breadcrumb" style="margin-top: 20px;">
+          <ol class="breadcrumb-list" style="display: flex; gap: 10px; list-style: none; padding: 0; font-size: 12px; font-weight: 600;">
+            <li class="breadcrumb-item"><a href="/" style="color: rgba(255,255,255,0.6); text-decoration: none;">Home</a></li>
+            <li class="breadcrumb-item" style="color: rgba(255,255,255,0.4);">/</li>
+            <li class="breadcrumb-item active" style="color: white;">Shop</li>
           </ol>
         </nav>
       </div>
@@ -35,9 +42,9 @@
         <div class="sidebar-inner">
           <!-- Mobile Filters Toggle -->
           <button class="btn btn-filter-toggle d-lg-none" type="button" data-bs-toggle="collapse"
-            data-bs-target="#shopFilters">
-            <i class="fas fa-sliders-h me-2"></i> Filters
-            <span class="filter-badge">3</span>
+            data-bs-target="#shopFilters" style="background: linear-gradient(135deg, #0f172a 0%, var(--primary-color) 100%) !important; border: none; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4); padding: 15px 25px; border-radius: 12px; color: white; font-weight: 800; display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px;">
+            <span style="display: flex; align-items: center; gap: 10px;"><i class="fas fa-sliders-h"></i> PREMIUM FILTERS</span>
+            <span class="filter-badge" style="background: var(--secondary-color); color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px;">3</span>
           </button>
 
           <!-- Filters Collapse -->
@@ -57,16 +64,16 @@
                   <i class="fas fa-search search-icon"></i>
                 </div>
                 <div class="filter-options-list">
-                  <a href="/shop/All/{{sc}}/{{br}}/" class="filter-option active">
+                  <a href="/shop/All/{{sc}}/{{br}}/" class="filter-option {% if mc == 'All' %}active{% endif %}">
                     <span class="filter-option-icon"><i class="fas fa-th-large"></i></span>
                     <span class="filter-option-text">All Categories</span>
-                    <span class="filter-option-count">({{Product.count}})</span>
+                    <span class="filter-option-count">({{total_products}})</span>
                   </a>
                   {% for i in Maincategory %}
-                  <a href="/shop/{{i.name}}/{{sc}}/{{br}}/" class="filter-option">
+                  <a href="/shop/{{i.name}}/{{sc}}/{{br}}/" class="filter-option {% if mc == i.name %}active{% endif %}">
                     <span class="filter-option-icon"><i class="fas fa-folder"></i></span>
                     <span class="filter-option-text">{{i.name}}</span>
-                    <span class="filter-option-count">({{i.count}})</span>
+                    <span class="filter-option-count">({{i.product_count}})</span>
                   </a>
                   {% endfor %}
                 </div>
@@ -87,19 +94,19 @@
                   <i class="fas fa-search search-icon"></i>
                 </div>
                 <div class="filter-options-list">
-                  <a href="/shop/{{mc}}/{{sc}}/All/" class="filter-option active">
+                  <a href="/shop/{{mc}}/{{sc}}/All/" class="filter-option {% if br == 'All' %}active{% endif %}">
                     <span class="filter-option-icon"><i class="fas fa-star"></i></span>
                     <span class="filter-option-text">All Brands</span>
-                    <span class="filter-option-count">({{Product.count}})</span>
+                    <span class="filter-option-count">({{total_products}})</span>
                   </a>
                   {% for i in Brand %}
-                  <a href="/shop/{{mc}}/{{sc}}/{{i.name}}/" class="filter-option">
+                  <a href="/shop/{{mc}}/{{sc}}/{{i.name}}/" class="filter-option {% if br == i.name %}active{% endif %}">
                     <span class="filter-option-icon">
                       <img src="{% static 'brands/'|add:i.name|add:'.png' %}" alt="{{i.name}}" class="brand-logo"
                         onerror="this.style.display='none'">
                     </span>
                     <span class="filter-option-text">{{i.name}}</span>
-                    <span class="filter-option-count">({{i.count}})</span>
+                    <span class="filter-option-count">({{i.product_count}})</span>
                   </a>
                   {% endfor %}
                 </div>
@@ -116,15 +123,15 @@
               </div>
               <div class="filter-card-body collapse show" id="priceFilter">
                 <div class="price-filter-wrapper">
-                  <div id="priceRangeSlider" class="price-range-slider"></div>
+                  <div id="priceRangeSlider" class="price-range-slider" data-min="{{min_price|default:0}}" data-max="{{max_price|default:10000}}"></div>
                   <div class="price-inputs">
                     <div class="price-input-group">
                       <label for="minPrice">Min</label>
-                      <input type="text" class="form-control" id="minPrice" placeholder="0">
+                      <input type="text" class="form-control" id="minPrice" placeholder="0" value="{{min_price|default:''}}">
                     </div>
                     <div class="price-input-group">
                       <label for="maxPrice">Max</label>
-                      <input type="text" class="form-control" id="maxPrice" placeholder="10000">
+                      <input type="text" class="form-control" id="maxPrice" placeholder="10000" value="{{max_price|default:''}}">
                     </div>
                   </div>
                 </div>
@@ -150,39 +157,49 @@
           <div class="products-showing">
             Showing <span class="products-count">{{ Product.count }}</span> products
           </div>
-          <div class="products-sort">
-            <label for="sortSelect" class="sort-label">Sort by:</label>
-            <select class="form-select" id="sortSelect">
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest Arrivals</option>
-              <option value="bestselling">Best Selling</option>
-            </select>
+          <div class="products-sort custom-dropdown-wrapper">
+            <label class="sort-label">Sort by:</label>
+            <div class="dropdown custom-sort-dropdown">
+              <button class="btn dropdown-toggle" type="button" id="sortDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if sort_by == 'price-low' %}Price: Low to High
+                {% elif sort_by == 'price-high' %}Price: High to Low
+                {% elif sort_by == 'newest' %}Newest Arrivals
+                {% elif sort_by == 'bestselling' %}Best Selling
+                {% else %}Featured
+                {% endif %}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdownBtn">
+                <li><a class="dropdown-item {% if sort_by == 'featured' or not sort_by %}active{% endif %}" href="#" data-value="featured">Featured</a></li>
+                <li><a class="dropdown-item {% if sort_by == 'price-low' %}active{% endif %}" href="#" data-value="price-low">Price: Low to High</a></li>
+                <li><a class="dropdown-item {% if sort_by == 'price-high' %}active{% endif %}" href="#" data-value="price-high">Price: High to Low</a></li>
+                <li><a class="dropdown-item {% if sort_by == 'newest' %}active{% endif %}" href="#" data-value="newest">Newest Arrivals</a></li>
+                <li><a class="dropdown-item {% if sort_by == 'bestselling' %}active{% endif %}" href="#" data-value="bestselling">Best Selling</a></li>
+              </ul>
+            </div>
+            <!-- Hidden input for the filter script -->
+            <input type="hidden" id="sortSelect" value="{{ sort_by|default:'featured' }}">
           </div>
         </div>
 
         <div class="products-grid">
           <div class="row gx-2 gy-3"> <!-- Added gx-2 and gy-3 for consistent spacing -->
             {% for i in Product %}
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-4 col-4 product-col"> <!-- Changed col-sm-6 to col-sm-4 -->
-              <div class="product-card h-100 d-flex flex-column"> <!-- Added flex classes -->
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 product-col"> <!-- Changed to col-6 for 2 per row -->
+              <div class="product-card h-100 d-flex flex-column shadow-sm"> <!-- Added shadow-sm -->
                 <div class="product-badges">
                   {% if i.discount %}
                   <span class="product-badge discount-badge">-{{i.discount}}%</span>
                   {% endif %}
-                  <span class="product-badge new-badge">New</span>
                 </div>
 
-                <div class="product-image-container flex-grow-1"> <!-- Added flex-grow -->
+                <div class="product-image-container flex-grow-1" style="background: #fdfdfd; display: flex; align-items: center; justify-content: center; min-height: 180px;"> <!-- Added background and center -->
                   <a href="/single-product-page/{{i.id}}/" class="product-image-link h-100 d-block">
-                    <!-- Added height classes -->
                     {% if i.pic1 %}
-                    <img src="{{i.pic1.url}}" class="product-image img-fluid h-100 w-100 object-fit-cover"
-                      alt="{{i.name}}"> <!-- Added img-fluid and object fit -->
+                    <img src="{{i.pic1.url}}" class="product-image img-fluid" style="height: 100%; width: 100%; object-fit: contain;"
+                      alt="{{i.name}}"> <!-- Changed to object-fit: contain -->
                     {% else %}
                     <img src="{% static 'picture/noimg.png' %}"
-                      class="product-image img-fluid h-100 w-100 object-fit-cover" alt="No image">
+                      class="product-image img-fluid" style="height: 100%; width: 100%; object-fit: contain;" alt="No image">
                     {% endif %}
                   </a>
                   <div class="product-actions">
@@ -259,8 +276,11 @@
     // Initialize price range slider
     const priceSlider = document.getElementById('priceRangeSlider');
     if (priceSlider) {
+      const initialMin = parseInt(priceSlider.getAttribute('data-min')) || 0;
+      const initialMax = parseInt(priceSlider.getAttribute('data-max')) || 10000;
+      
       noUiSlider.create(priceSlider, {
-        start: [0, 10000],
+        start: [initialMin, initialMax],
         connect: true,
         range: {
           'min': 0,
@@ -292,11 +312,32 @@
 
       minPriceInput.addEventListener('change', function () {
         priceSlider.noUiSlider.set([this.value, null]);
+        applyFilters();
       });
 
       maxPriceInput.addEventListener('change', function () {
         priceSlider.noUiSlider.set([null, this.value]);
+        applyFilters();
       });
+      
+      priceSlider.noUiSlider.on('change', function (values, handle) {
+        applyFilters();
+      });
+    }
+
+    function applyFilters() {
+      const min = document.getElementById('minPrice').value;
+      const max = document.getElementById('maxPrice').value;
+      const sortSelect = document.getElementById('sortSelect');
+      const sort = sortSelect ? sortSelect.value : 'featured';
+      
+      const searchParams = new URLSearchParams(window.location.search);
+      if (min) searchParams.set('min', min);
+      if (max) searchParams.set('max', max);
+      if (sort && sort !== 'featured') searchParams.set('sort', sort);
+      else searchParams.delete('sort');
+      
+      window.location.search = searchParams.toString();
     }
 
     // Filter search functionality
@@ -338,12 +379,8 @@
     const applyFiltersBtn = document.querySelector('.btn-apply-filters');
     if (applyFiltersBtn) {
       applyFiltersBtn.addEventListener('click', function () {
-        // Add your filter application logic here
         this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Applying...';
-        setTimeout(() => {
-          this.innerHTML = '<i class="fas fa-check-circle me-2"></i> Filters Applied';
-          // Reload or filter products here
-        }, 1000);
+        applyFilters();
       });
     }
 
@@ -356,16 +393,92 @@
     }
 
     // Sort select change
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-      sortSelect.addEventListener('change', function () {
-        // Add your sorting logic here
-        console.log('Sorting by:', this.value);
+    const sortSelectBox = document.getElementById('sortSelect');
+    // Custom Dropdown Sort Logic
+    const sortItems = document.querySelectorAll('.custom-sort-dropdown .dropdown-item');
+    const sortInput = document.getElementById('sortSelect');
+    const sortBtn = document.getElementById('sortDropdownBtn');
+    
+    if (sortItems.length > 0) {
+      sortItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Update visual active state
+          sortItems.forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Update button text to selected text
+          sortBtn.innerHTML = this.textContent; // Using innerHTML if we want to preserve icons, here text is fine
+          
+          // Update the hidden input value and apply
+          if (sortInput) {
+             sortInput.value = this.getAttribute('data-value');
+             // Show a small loader to make it feel premium
+             sortBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Sorting...';
+             applyFilters();
+          }
+        });
       });
     }
 
     // Initialize tooltips
     $('[title]').tooltip();
+    
+    // Quick View Image Expand Logic (Unique Design)
+    const quickViewBtns = document.querySelectorAll('.btn-quickview');
+    quickViewBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const card = this.closest('.product-card');
+        const img = card.querySelector('.product-image').src;
+        
+        // Create Fullscreen Modal Overlay
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(10, 10, 30, 0.85)';
+        overlay.style.backdropFilter = 'blur(10px)';
+        overlay.style.zIndex = '99999';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.4s ease';
+        overlay.style.cursor = 'zoom-out';
+        
+        // Create Expanded Image
+        const expandedImg = document.createElement('img');
+        expandedImg.src = img;
+        expandedImg.style.maxWidth = '90%';
+        expandedImg.style.maxHeight = '90%';
+        expandedImg.style.borderRadius = '20px';
+        expandedImg.style.boxShadow = '0 20px 50px rgba(0,0,0,0.5)';
+        expandedImg.style.transform = 'scale(0.8) translateY(50px)';
+        expandedImg.style.transition = 'all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        
+        overlay.appendChild(expandedImg);
+        document.body.appendChild(overlay);
+        
+        // Trigger Animations
+        requestAnimationFrame(() => {
+          overlay.style.opacity = '1';
+          expandedImg.style.transform = 'scale(1) translateY(0)';
+        });
+        
+        // Close Modal on click
+        overlay.addEventListener('click', function() {
+          overlay.style.opacity = '0';
+          expandedImg.style.transform = 'scale(0.8) translateY(50px)';
+          setTimeout(() => {
+            overlay.remove();
+          }, 400);
+        });
+      });
+    });
   });
 </script>
 {% endblock %}

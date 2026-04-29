@@ -1,14 +1,14 @@
 :root {
-          /* Industrial Color Palette */
-          --primary-color: #2c3e50;     /* Navy Blue */
-          --primary-dark: #1a252f;      /* Dark Navy */
-          --secondary-color: #e74c3c;   /* Vibrant Red */
-          --accent-color: #f39c12;      /* Gold */
-          --light-color: #ecf0f1;       /* Light Gray */
-          --dark-color: #2c3e50;        /* Text Color */
-          --gray-color: #95a5a6;        /* Medium Gray */
-          --white-color: #ffffff;       /* White */
-          --success-color: #27ae60;     /* Green */
+    /* Unique Premium Tech Palette */
+    --primary-color: #8b5cf6;     /* Vivid Violet */
+    --primary-dark: #6d28d9;      /* Deep Violet */
+    --secondary-color: #f97316;   /* Sunset Orange */
+    --accent-color: #0ea5e9;      /* Sky Blue */
+    --light-color: #f8fafc;       /* Slate 50 */
+    --dark-color: #1e293b;        /* Slate 800 */
+    --gray-color: #64748b;        /* Slate 500 */
+    --white-color: #ffffff;
+    --success-color: #10b981;     /* Emerald */
           
           /* Design Elements */
           --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
@@ -859,12 +859,16 @@
     position: relative;
     aspect-ratio: 1/1; /* Square ratio */
     overflow: hidden;
+    background-color: #fdfdfd; /* Subtle light background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .product-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* Ensure whole product is visible */
     transition: transform 0.3s ease;
 }
 

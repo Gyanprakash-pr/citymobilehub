@@ -10,14 +10,6 @@ def cartColor(request, num):
     else:
         return ""
 
-@register.filter("cartSize")
-def cartSize(request, num):
-    cart = request.session.get("cart",None)
-    if(cart):
-        return cart[num][3]
-    else:
-        return ""
-
 @register.filter("cartQty")
 def cartQty(request, num):
     cart = request.session.get("cart",None)

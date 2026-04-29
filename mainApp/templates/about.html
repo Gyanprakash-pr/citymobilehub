@@ -1,341 +1,151 @@
 {% extends 'index.html' %}
-
 {% load static %}
+
 {% block title %}
-<title>Online Bazar | About Us</title>
-<!-- <link rel="stylesheet" href="{% static 'css/about.css' %}"> -->
+<title>Desi Mobile | About Our Mission</title>
 {% endblock %}
 
 {% block body %}
-<div class="about-page">
+<div style="background:var(--light-color);min-height:100vh;" class="about-wrapper">
+
   <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-background"></div>
+  <section class="about-hero" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); padding: 100px 0; color: white; text-align: center; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background: url('https://www.transparenttextures.com/patterns/cubes.png');"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <h1 class="hero-title" style="font-size: 48px; font-weight: 800; margin-bottom: 20px;">Empowering Your <span style="color: var(--secondary-color);">Mobile Life</span></h1>
+      <p class="hero-desc" style="font-size: 18px; opacity: 0.9; max-width: 700px; margin: 0 auto 30px;">
+        Desi Mobile is India's fastest-growing destination for premium mobile accessories. We bridge the gap between quality and affordability.
+      </p>
+      <div class="animate__animated animate__fadeInUp animate__delay-2s">
+        <a href="/shop/All/All/All/" style="background: var(--secondary-color); color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">Explore Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section style="padding: 80px 0;" class="story-section">
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-lg-6 order-lg-1 order-2">
-          <h1 class="hero-title animate__animated animate__fadeInDown">About <span class="text-gradient">Online Bazar</span></h1>
-          <p class="hero-subtitle animate__animated animate__fadeIn animate__delay-1s">Redefining your shopping experience</p>
-          <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
-            <a href="#our-story" class="btn btn-gradient me-3">
-              <span>Our Story</span>
-            </a>
-            <a href="#our-team" class="btn btn-outline-white">
-              <span>Meet Our Team</span>
-            </a>
-          </div>
-        </div>
-        <div class="col-lg-6 order-lg-2 order-1 animate__animated animate__fadeInRight">
-          <div class="hero-image-wrapper">
-            <img src="{% static 'images/pic5.jpg' %}" alt="Online Shopping" class="img-fluid hero-image">
-            <div class="floating-shapes">
-              <div class="shape shape-1"></div>
-              <div class="shape shape-2"></div>
-              <div class="shape shape-3"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Our Story Section -->
-  <section id="our-story" class="story-section">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-subtitle animate__animated animate__fadeIn">Our Journey</span>
-        <h2 class="section-title animate__animated animate__fadeIn">Who We Are</h2>
-        <div class="divider mx-auto animate__animated animate__fadeIn animate__delay-1s"></div>
-      </div>
-      
-      <div class="row justify-content-center mt-5">
-        <div class="col-lg-10">
-          <div class="story-card animate__animated animate__fadeInUp">
-            <div class="story-content">
-              <p class="story-text">
-                Founded in 2023, <strong>Online Bazar</strong> began as a small startup with a big vision - to revolutionize the way people shop online. 
-                What started as a modest platform has blossomed into one of the most trusted e-commerce destinations, 
-                serving thousands of satisfied customers nationwide.
-              </p>
-              <p class="story-text">
-                Our journey has been fueled by innovation, customer-centric values, and an unwavering commitment to quality. 
-                Today, we pride ourselves on offering a curated selection of products that blend quality, affordability, 
-                and style - all delivered with exceptional service.
-              </p>
-            </div>
-            <div class="story-stats">
-              <div class="stat-item">
-                <div class="stat-number" data-count="10000">0</div>
-                <div class="stat-label">Happy Customers</div>
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div style="position: relative;" class="story-img-wrapper">
+            <img src="{% static 'images/pic5.jpg' %}" alt="Desi Mobile Story" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-lg);">
+            <div class="floating-badge" style="position: absolute; bottom: -20px; right: -20px; background: var(--white-color); padding: 20px; border-radius: 15px; box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 15px;">
+              <div style="width: 50px; height: 50px; background: rgba(139, 92, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-check-circle" style="color: var(--primary-color); font-size: 24px;"></i>
               </div>
-              <div class="stat-item">
-                <div class="stat-number" data-count="500">0</div>
-                <div class="stat-label">Brands</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number" data-count="24">0</div>
-                <div class="stat-label">Hour Support</div>
+              <div>
+                <div style="font-weight: 700; font-size: 18px; color: var(--dark-color);">100% Quality</div>
+                <div style="font-size: 12px; color: var(--gray-color);">Verified Products</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mission & Vision Section -->
-  <section class="mission-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 animate__animated animate__fadeInLeft">
-          <div class="mission-card">
-            <div class="mission-icon">
-              <i class="fas fa-bullseye"></i>
-            </div>
-            <h3>Our Mission</h3>
-            <p>
-              To provide a seamless, secure, and enjoyable online shopping experience with the widest selection 
-              of quality products at competitive prices, delivered with exceptional customer service.
+        <div class="col-lg-6 ps-lg-5">
+            <h5 style="color: var(--primary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">Our Story</h5>
+            <h2 class="section-heading" style="font-size: 36px; font-weight: 800; color: var(--dark-color); margin-bottom: 25px;">The Journey of <span style="color: var(--primary-color);">Desi Mobile</span></h2>
+            <p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 20px;">
+                Founded with a simple goal to make high-quality mobile tech accessible to everyone, Desi Mobile has grown from a local vision to a nationwide platform. We believe that technology should be an extension of your personality.
             </p>
-          </div>
-        </div>
-        <div class="col-lg-6 animate__animated animate__fadeInRight">
-          <div class="vision-card">
-            <div class="vision-icon">
-              <i class="fas fa-eye"></i>
-            </div>
-            <h3>Our Vision</h3>
-            <p>
-              To become the most trusted and innovative e-commerce platform that transforms online shopping 
-              into a delightful experience for customers across the globe.
+            <p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 30px;">
+                Our mission is to provide you with accessories that are not just durable, but also "Desi" at heart—designed for the rugged and vibrant lifestyle of our users.
             </p>
-          </div>
+            <div style="display: flex; gap: 30px; flex-wrap: wrap;" class="stats-row">
+                <div>
+                    <h4 style="color: var(--primary-color); font-weight: 800; margin-bottom: 5px;">50k+</h4>
+                    <p style="font-size: 13px; color: var(--gray-color);">Customers</p>
+                </div>
+                <div class="stat-divider" style="border-left: 1px solid #ddd; padding-left: 30px;">
+                    <h4 style="color: var(--primary-color); font-weight: 800; margin-bottom: 5px;">500+</h4>
+                    <p style="font-size: 13px; color: var(--gray-color);">Gadgets</p>
+                </div>
+                <div class="stat-divider" style="border-left: 1px solid #ddd; padding-left: 30px;">
+                    <h4 style="color: var(--primary-color); font-weight: 800; margin-bottom: 5px;">24/7</h4>
+                    <p style="font-size: 13px; color: var(--gray-color);">Support</p>
+                </div>
+            </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Values Section -->
-  <section class="values-section">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-subtitle animate__animated animate__fadeIn">What We Believe In</span>
-        <h2 class="section-title animate__animated animate__fadeIn">Our Core Values</h2>
-        <div class="divider mx-auto animate__animated animate__fadeIn animate__delay-1s"></div>
-      </div>
-      
-      <div class="row mt-5">
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="value-card animate__animated animate__fadeInUp" data-delay="0">
-            <div class="value-icon">
-              <i class="fas fa-heart"></i>
-            </div>
-            <h3>Customer First</h3>
-            <p>We prioritize our customers' needs and work tirelessly to exceed their expectations at every touchpoint.</p>
-          </div>
-        </div>
+  <!-- Founder Section (Single Owner) -->
+  <section style="background: var(--white-color); padding: 80px 0;" class="founder-section">
+    <div class="container text-center">
+        <h5 style="color: var(--primary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;">Meet the Visionary</h5>
+        <h2 class="section-heading" style="font-size: 36px; font-weight: 800; color: var(--dark-color); margin-bottom: 50px;">The Founder Behind <span style="color: var(--primary-color);">Desi Mobile</span></h2>
         
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="value-card animate__animated animate__fadeInUp" data-delay="0.2">
-            <div class="value-icon">
-              <i class="fas fa-award"></i>
+        <div class="founder-card" style="max-width: 400px; margin: 0 auto; background: var(--light-color); padding: 40px; border-radius: 20px; box-shadow: var(--shadow-md); transition: all 0.3s;">
+            <div style="width: 150px; height: 150px; margin: 0 auto 25px; position: relative;">
+                <img src="{% static 'images/gg.jpg' %}" alt="Founder" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 5px solid var(--white-color); box-shadow: var(--shadow-sm);">
+                <div style="position: absolute; bottom: 5px; right: 5px; background: var(--success-color); width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--white-color);"></div>
             </div>
-            <h3>Quality</h3>
-            <p>Every product is carefully curated to ensure only the highest quality reaches our customers.</p>
-          </div>
+            <h3 style="font-size: 24px; font-weight: 800; color: var(--dark-color); margin-bottom: 5px;">Gyan Prakash</h3>
+            <p style="color: var(--primary-color); font-weight: 600; font-size: 14px; text-transform: uppercase; margin-bottom: 20px;">Founder & CEO</p>
+            <p style="font-size: 14px; color: var(--gray-color); line-height: 1.6; margin-bottom: 25px;">
+                "Technology is the most powerful tool for progress. At Desi Mobile, we are committed to making that tool accessible, stylish, and durable for every Indian."
+            </p>
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <a href="#" style="width: 35px; height: 35px; background: var(--white-color); color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: var(--shadow-sm);"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" style="width: 35px; height: 35px; background: var(--white-color); color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: var(--shadow-sm);"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="width: 35px; height: 35px; background: var(--white-color); color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: var(--shadow-sm);"><i class="fab fa-facebook-f"></i></a>
+            </div>
         </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="value-card animate__animated animate__fadeInUp" data-delay="0.4">
-            <div class="value-icon">
-              <i class="fas fa-lightbulb"></i>
-            </div>
-            <h3>Innovation</h3>
-            <p>We continuously evolve our platform to deliver cutting-edge shopping experiences.</p>
-          </div>
-        </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="value-card animate__animated animate__fadeInUp" data-delay="0.6">
-            <div class="value-icon">
-              <i class="fas fa-handshake"></i>
-            </div>
-            <h3>Integrity</h3>
-            <p>We conduct our business with honesty, transparency, and ethical practices.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Team Section -->
-  <section id="our-team" class="team-section">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-subtitle animate__animated animate__fadeIn">The Faces Behind</span>
-        <h2 class="section-title animate__animated animate__fadeIn">Meet Our Team</h2>
-        <div class="divider mx-auto animate__animated animate__fadeIn animate__delay-1s"></div>
-      </div>
-      
-      <div class="row mt-5">
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="team-card animate__animated animate__fadeInUp">
-            <div class="team-image">
-              <img src="{% static 'images/gg.jpg' %}" alt="Team Member" class="rounded-circle">
-              <div class="team-overlay rounded-circle">
-                <div class="social-links">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-              </div>
-            </div>
-            <div class="team-info">
-              <h4>Gyan Prakash</h4>
-              <p>Founder & CEO</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="team-card animate__animated animate__fadeInUp">
-            <div class="team-image">
-              <img src="{% static 'images/pic2.jpg' %}" alt="Team Member" class="rounded-circle">
-              <div class="team-overlay rounded-circle">
-                <div class="social-links">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-              </div>
-            </div>
-            <div class="team-info">
-              <h4>Sarah Johnson</h4>
-              <p>Marketing Director</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="team-card animate__animated animate__fadeInUp">
-            <div class="team-image">
-              <img src="{% static 'images/gg.jpg' %}" alt="Team Member" class="rounded-circle">
-              <div class="team-overlay rounded-circle">
-                <div class="social-links">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-              </div>
-            </div>
-            <div class="team-info">
-              <h4>Gyan Prakash</h4>
-              <p>Tech Lead</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="team-card animate__animated animate__fadeInUp">
-            <div class="team-image">
-              <img src="{% static 'images/pic4.jpg' %}" alt="Team Member" class="rounded-circle">
-              <div class="team-overlay rounded-circle">
-                <div class="social-links">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-              </div>
-            </div>
-            <div class="team-info">
-              <h4>Emma Wilson</h4>
-              <p>Customer Support</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="cta-section">
+  <section style="padding: 100px 0; background: var(--light-color); text-align: center;" class="cta-about">
     <div class="container">
-      <div class="cta-content animate__animated animate__zoomIn">
-        <h2 class="cta-title">Ready to Experience Online Bazar?</h2>
-        <p class="cta-text">Join our growing community of satisfied customers today!</p>
-        <a href="/shop/All/All/All/" class="btn btn-gradient btn-lg">
-          <span>Start Shopping Now</span>
-        </a>
-      </div>
+        <div class="cta-box" style="background: var(--white-color); padding: 60px; border-radius: 30px; box-shadow: var(--shadow-lg);">
+            <h2 style="font-size: 32px; font-weight: 800; color: var(--dark-color); margin-bottom: 20px;">Want to collaborate or buy?</h2>
+            <p style="color: var(--gray-color); max-width: 600px; margin: 0 auto 35px;">
+                We are always open to new ideas and partnerships. If you are interested in our platform, feel free to reach out.
+            </p>
+            <a href="/contact/" style="background: var(--primary-color); color: white; padding: 15px 40px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 16px;">Contact Owner</a>
+        </div>
     </div>
   </section>
+
 </div>
 
-<script>
-  // Animation on scroll
-  document.addEventListener('DOMContentLoaded', function() {
-    const animateElements = document.querySelectorAll('.animate__animated');
-    
-    const animateOnScroll = function() {
-      animateElements.forEach(element => {
-        const elementPosition = element.getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.2;
-        
-        if (elementPosition < screenPosition) {
-          const animationClass = element.classList[1];
-          element.classList.add(animationClass);
-          
-          // For staggered animations
-          if (element.hasAttribute('data-delay')) {
-            const delay = element.getAttribute('data-delay');
-            element.style.animationDelay = delay + 's';
-          }
-        }
-      });
-    };
-    
-    window.addEventListener('scroll', animateOnScroll);
-    animateOnScroll(); // Trigger on load for elements in view
+<style>
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .about-hero { padding: 60px 0 !important; }
+    .hero-title { font-size: 36px !important; }
+    .section-heading { font-size: 28px !important; }
+}
 
-    // Counter animation for stats
-    const statNumbers = document.querySelectorAll('.stat-number');
+@media (max-width: 767px) {
+    .about-hero { padding: 50px 20px !important; }
+    .hero-title { font-size: 30px !important; }
+    .hero-desc { font-size: 15px !important; }
+    .story-section { padding: 40px 0 !important; }
+    .founder-section { padding: 40px 0 !important; }
+    .cta-about { padding: 40px 20px !important; }
+    .cta-box { padding: 40px 20px !important; }
     
-    const animateCounters = function() {
-      statNumbers.forEach(stat => {
-        const target = parseInt(stat.getAttribute('data-count'));
-        const duration = 2000;
-        const start = 0;
-        const increment = target / (duration / 16);
-        let current = start;
-        
-        const timer = setInterval(() => {
-          current += increment;
-          stat.textContent = Math.floor(current);
-          
-          if (current >= target) {
-            stat.textContent = target;
-            clearInterval(timer);
-          }
-        }, 16);
-      });
-    };
+    .floating-badge {
+        position: static !important;
+        margin-top: 20px;
+        width: 100%;
+        justify-content: center;
+    }
     
-    // Trigger counter animation when stats section is in view
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounters();
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
+    .stats-row {
+        gap: 15px !important;
+        justify-content: center;
+    }
+    .stat-divider {
+        border-left: none !important;
+        padding-left: 0 !important;
+        text-align: center;
+    }
     
-    observer.observe(document.querySelector('.story-stats'));
-  });
-</script>
-
+    .founder-card {
+        padding: 30px 20px !important;
+        width: 90% !important;
+    }
+}
+</style>
 {% endblock %}

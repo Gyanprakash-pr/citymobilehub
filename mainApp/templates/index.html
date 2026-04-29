@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load product %}
 <html lang="en">
 
 <head>
@@ -7,7 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block title %}
-  <title>OnlineBazar | Home</title>
+  <title>Desi Mobile | Your Ultimate Mobile Shop</title>
   {% endblock %}
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,6 +27,7 @@
   <link rel="stylesheet" href="{% static 'css/signup.css'%}">
   <link rel="stylesheet" href="{% static 'css/cart.css'%}">
   <link rel="stylesheet" href="{% static 'css/checkout.css'%}">
+  {% block extra_css %}{% endblock %}
 </head>
 
 <body>
@@ -39,7 +41,7 @@
   <nav class="navbar navbar-expand-lg navbar-light custom-navbar fixed-top">
     <div class="container">
       <a class="navbar-brand animate__animated animate__fadeInLeft" href="/">
-        <i class="fas fa-shopping-basket"></i>OnlineBazar
+        <i class="fas fa-mobile-alt me-2"></i>Desi Mobile
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <i class="fas fa-bars"></i>
@@ -75,7 +77,7 @@
           <li class="nav-item me-2">
             <a class="nav-link cart-icon" href="/cart/">
               <i class="fas fa-shopping-cart"></i>
-              <span class="cart-count">0</span>
+              <span class="cart-count">{% if request.session.cart %}{{ request.session.cart|length }}{% else %}0{% endif %}</span>
             </a>
           </li>
           
@@ -106,108 +108,166 @@
   </nav>
 
   {% block body %}
-  <!-- Hero Section - Modern Design -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 animate__animated animate__fadeInLeft">
-          <h1 class="hero-title">Discover Amazing Products</h1>
-          <p class="hero-subtitle">Shop the latest trends and get exclusive deals on thousands of products</p>
-          <div class="hero-cta">
-            <a href="/shop/All/All/All/" class="btn btn-primary me-3">Shop Now</a>
-            <a href="/about/" class="btn btn-outline">Learn More</a>
-          </div>
-          <div class="hero-features">
-            <div class="feature-item">
-              <i class="fas fa-check-circle"></i>
-              <span>Free Shipping</span>
+  <!-- Minimalist Premium Hero Section -->
+  <section class="hero-minimalist" style="background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%); min-height: 85vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 100px 0 60px; text-align: center;">
+    
+    <!-- Abstract Glow -->
+    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 60%); pointer-events: none;"></div>
+
+    <div class="container" style="position: relative; z-index: 5;">
+        <!-- Image on Top (Second Image from previous layout) -->
+        <div class="hero-top-visual animate__animated animate__zoomIn" style="margin-bottom: 50px;">
+            <div class="main-visual-wrapper" style="position: relative; display: inline-block;">
+                <img src="{% static 'picture/hero3.jpg' %}" alt="Desi Mobile" style="width: 100%; max-width: 600px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); transform: perspective(1000px) rotateX(10deg);">
+                <!-- Floating Accent -->
+                <div style="position: absolute; bottom: -20px; right: -20px; background: var(--secondary-color); color: white; padding: 12px 25px; border-radius: 15px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                    NEW TECH '26
+                </div>
             </div>
-            <div class="feature-item">
-              <i class="fas fa-check-circle"></i>
-              <span>Secure Payments</span>
-            </div>
-            <div class="feature-item">
-              <i class="fas fa-check-circle"></i>
-              <span>24/7 Support</span>
-            </div>
-          </div>
         </div>
-        <div class="col-lg-6 animate__animated animate__fadeInRight">
-          <div class="hero-image-container">
-            <img src="{% static 'picture/hero3.jpg' %}" alt="Online Shopping" class="hero-image">
-          </div>
+
+        <!-- Minimal Text Below -->
+        <div class="hero-content-minimal animate__animated animate__fadeInUp animate__delay-1s">
+            <h1 style="font-size: clamp(32px, 6vw, 64px); font-weight: 900; line-height: 1.1; margin-bottom: 20px;">
+                Elegance in <span style="color: var(--secondary-color);">Every Detail.</span>
+            </h1>
+            <p style="font-size: 18px; opacity: 0.7; max-width: 600px; margin: 0 auto 40px; line-height: 1.6;">
+                Premium mobile accessories designed for the modern lifestyle.
+            </p>
+            
+            <div class="hero-cta-minimal">
+                <a href="/shop/All/All/All/" class="btn-minimal-premium" style="background: white; color: #0f172a; padding: 20px 60px; border-radius: 50px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s; font-size: 16px; letter-spacing: 1px;">
+                    EXPLORE COLLECTION <i class="fas fa-arrow-right ms-3"></i>
+                </a>
+            </div>
         </div>
-      </div>
     </div>
   </section>
 
-  <!-- Categories Section -->
- <section class="categories-section">
+  <style>
+    .btn-minimal-premium:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        background: var(--secondary-color) !important;
+        color: white !important;
+    }
+    
+    .hero-top-visual img {
+        animation: heroFloat 8s ease-in-out infinite;
+    }
+    
+    @keyframes heroFloat {
+        0%, 100% { transform: perspective(1000px) rotateX(10deg) translateY(0); }
+        50% { transform: perspective(1000px) rotateX(8deg) translateY(-20px); }
+    }
+
+    @media (max-width: 768px) {
+        .hero-minimalist { padding: 80px 20px; }
+        .hero-top-visual img { max-width: 100%; border-radius: 20px; }
+        .hero-content-minimal h1 { font-size: 36px; }
+    }
+  </style>
+
+  <!-- Categories Section - Circular Galaxy Style -->
+ <section class="galaxy-categories" style="background:var(--white-color); padding: 80px 0; overflow: hidden;">
     <div class="container">
-      <div class="section-header text-center">
-        <h2 class="section-title animate__animated animate__fadeIn">Shop by Category</h2>
-        <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1">Browse our wide range of product categories</p>
+      <div class="section-header text-center" style="margin-bottom:60px;">
+        <h2 class="section-title animate__animated animate__fadeIn">Explore our <span style="color: var(--primary-color);">Galaxy</span></h2>
+        <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1s">Click on any planet to discover premium accessories</p>
       </div>
-      
-      <div class="row g-3"> <!-- Reduced gutter spacing -->
-        <!-- Electronics -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp">
-          <a href="/shop/All/All/All/" class="category-card">
-            <div class="category-icon bg-gradient-blue">
-              <i class="fas fa-laptop"></i>
-            </div>
-            <div class="category-content">
-              <h3>Electronics</h3>
-              <p>Latest gadgets and devices</p>
-              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-            </div>
-          </a>
-        </div>
+
+      <div class="category-orbit-container" style="position: relative; width: 100%; max-width: 600px; height: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
         
-        <!-- Fashion -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp animate__delay-1">
-          <a href="/shop/All/All/All/" class="category-card">
-            <div class="category-icon bg-gradient-pink">
-              <i class="fas fa-tshirt"></i>
+        <!-- Center Piece (The Sun/Desi Mobile) -->
+        <div class="orbit-center animate__animated animate__pulse animate__infinite animate__slower" style="position: absolute; z-index: 10; width: 180px; height: 180px; background: white; border-radius: 50%; box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3); display: flex; align-items: center; justify-content: center; border: 8px solid var(--primary-light);">
+            <div style="text-align: center;">
+                <i class="fas fa-mobile-alt" style="font-size: 50px; color: var(--primary-color); margin-bottom: 10px;"></i>
+                <div style="font-weight: 800; font-size: 16px; color: var(--dark-color); line-height: 1;">DESI<br>MOBILE</div>
             </div>
-            <div class="category-content">
-              <h3>Fashion</h3>
-              <p>Trendy clothes & accessories</p>
-              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-            </div>
-          </a>
         </div>
+
+        <!-- Orbits (Visual Rings) -->
+        <div style="position: absolute; width: 450px; height: 450px; border: 2px dashed rgba(139, 92, 246, 0.1); border-radius: 50%;"></div>
         
-        <!-- Home & Kitchen -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp animate__delay-2">
-          <a href="/shop/All/All/All/" class="category-card">
-            <div class="category-icon bg-gradient-orange">
-              <i class="fas fa-home"></i>
+        <!-- Categories (Planets) -->
+        {% for cat in Maincategory %}
+        {% with cat_img=cat|categoryImage %}
+        <div class="category-planet" id="planet-{{forloop.counter}}" style="position: absolute; transition: all 0.5s ease;">
+          <a href="/shop/{{cat.name}}/All/All/" style="text-decoration: none; display: block; text-align: center;">
+            <div class="planet-icon-wrapper" style="width: 100px; height: 100px; border-radius: 50%; background: white; box-shadow: var(--shadow-md); overflow: hidden; border: 4px solid white; transition: all 0.3s;">
+                {% if cat_img %}
+                <img src="{{ cat_img }}" alt="{{ cat.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-th-large" style="color: white; font-size: 24px;"></i>
+                </div>
+                {% endif %}
             </div>
-            <div class="category-content">
-              <h3>Home & Kitchen</h3>
-              <p>Everything for your home</p>
-              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-            </div>
+            <div class="planet-label" style="margin-top: 10px; font-weight: 700; font-size: 13px; color: var(--dark-color); text-shadow: 0 2px 4px rgba(255,255,255,0.8);">{{ cat.name }}</div>
           </a>
         </div>
-        
-        <!-- Beauty -->
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 animate__animated animate__fadeInUp animate__delay-3">
-          <a href="/shop/All/All/All/" class="category-card">
-            <div class="category-icon bg-gradient-purple">
-              <i class="fas fa-spa"></i>
-            </div>
-            <div class="category-content">
-              <h3>Beauty</h3>
-              <p>Skincare & cosmetics</p>
-              <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-            </div>
-          </a>
-        </div>
+        {% endwith %}
+        {% endfor %}
       </div>
     </div>
-</section>
+ </section>
+
+ <style>
+    .category-planet:hover .planet-icon-wrapper {
+        transform: scale(1.2) translateY(-10px);
+        box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+        border-color: var(--secondary-color);
+    }
+    
+    @media (max-width: 768px) {
+        .category-orbit-container {
+            height: 400px !important;
+            max-width: 100% !important;
+        }
+        .orbit-center {
+            width: 100px !important;
+            height: 100px !important;
+            border-width: 4px !important;
+        }
+        .orbit-center i { font-size: 30px !important; }
+        .orbit-center div { font-size: 10px !important; }
+        
+        .planet-icon-wrapper {
+            width: 60px !important;
+            height: 60px !important;
+            border-width: 2px !important;
+        }
+        .planet-label {
+            font-size: 10px !important;
+            margin-top: 5px !important;
+        }
+    }
+ </style>
+
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const planets = document.querySelectorAll('.category-planet');
+        const count = planets.length;
+        
+        const positionPlanets = () => {
+            const isMobile = window.innerWidth < 768;
+            const radius = isMobile ? 125 : 220; // Reduced mobile radius to prevent cutting
+
+            planets.forEach((planet, index) => {
+                const angle = (index / count) * 2 * Math.PI - (Math.PI / 2);
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                planet.style.left = `calc(50% + ${x}px - ${planet.offsetWidth / 2}px)`;
+                planet.style.top = `calc(50% + ${y}px - ${planet.offsetHeight / 2}px)`;
+            });
+        };
+
+        positionPlanets();
+        window.addEventListener('resize', positionPlanets);
+    });
+ </script>
+
 
   <!-- Featured Products -->
 <section class="products-section">
@@ -217,9 +277,9 @@
         <a href="/shop/All/All/All/" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
       </div>
       
-      <div class="row g-2">  <!-- Reduced gutter spacing -->
+      <div class="row g-3"> <!-- Improved gutter spacing -->
         {% for i in Product %}
-        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-4 col-4">
+        <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6">
           <div class="product-card animate__animated animate__fadeInUp">
             <div class="product-img-container">
               {% if i.pic1 %}
@@ -267,31 +327,29 @@
 </section>
 
 
-  <!-- Banner Section -->
- <section class="banner-section">
+  <!-- Banner Section - Latest Arrivals -->
+ <section class="banner-section" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);">
   <div class="container">
     <div class="banner-content animate__animated animate__fadeIn">
       <div class="banner-text">
-        <h2 class="animate__animated animate__fadeInDown animate__delay-1s">Summer Sale</h2>
-        <h3 class="animate__animated animate__fadeInUp animate__delay-1-5s">Up to <span class="discount-badge">50%</span> Off</h3>
-        <p class="animate__animated animate__fadeIn animate__delay-2s">On selected items. Limited time offer!</p>
-        <div class="countdown animate__animated animate__fadeIn animate__delay-2-5s">
+        <h2 class="animate__animated animate__fadeInDown animate__delay-1s" style="color: var(--primary-color);">New Arrivals</h2>
+        <h3 class="animate__animated animate__fadeInUp animate__delay-1-5s">Latest <span class="discount-badge" style="background: var(--secondary-color);">2026</span> Tech</h3>
+        <p class="animate__animated animate__fadeIn animate__delay-2s" style="color: var(--dark-color);">Fresh stock of premium chargers, cases and more just landed! Get them before they're gone.</p>
+        <div class="countdown animate__animated animate__fadeIn animate__delay-2-5s" style="background: rgba(139, 92, 246, 0.1); color: var(--primary-color);">
           <span id="days">00</span>d 
           <span id="hours">00</span>h 
           <span id="minutes">00</span>m 
           <span id="seconds">00</span>s
         </div>
-        <a href="/shop/All/All/All/" class="btn btn-shop animate__animated animate__pulse animate__infinite animate__slower">
-          <span>Shop Now</span>
-          <i class="fas fa-arrow-right"></i>
-        </a>
+        <a href="/shop/All/All/All/?sort=latest" class="btn btn-shop animate__animated animate__fadeInUp animate__delay-3s" style="background: var(--primary-color); color: white;">Shop Latest Now <i class="fas fa-arrow-right"></i></a>
       </div>
-      <div class="banner-image animate__animated animate__fadeInRight animate__delay-3s">
-        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Summer Collection">
+      <div class="banner-image animate__animated animate__fadeInRight animate__delay-1s">
+        <!-- New relevant image placeholder or generated image -->
+        <img src="{% static 'picture/hero3.jpg' %}" alt="Latest Products" style="max-width: 100%; border-radius: 20px; box-shadow: var(--shadow-lg);">
       </div>
     </div>
   </div>
-</section>
+ </section>
 
  <!-- Testimonials Section -->
 <section class="testimonials-section">
@@ -510,8 +568,8 @@
   <div class="chatbot-container">
     <div class="chatbot-header">
       <div class="chatbot-title">
-        <i class="fas fa-robot"></i>
-        <h3>OnlineBazar Assistant</h3>
+        <i class="fas fa-mobile-alt me-2"></i>
+        <h3>Desi Mobile Assistant</h3>
       </div>
       <button class="chatbot-close" id="closeChat">
         <i class="fas fa-times"></i>
@@ -550,7 +608,7 @@
 </div>
 
  <!-- Newsletter Section -->
-<section class="newsletter-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 0;">
+<section class="newsletter-section" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); padding: 60px 0;">
   <div class="container">
     <div class="newsletter-content text-center text-white animate__animated animate__fadeInUp">
       <h2 class="mb-3" style="font-size: 2.5rem; font-weight: 700;">Stay Updated</h2>
@@ -594,8 +652,8 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-lg-4 mb-4 animate__animated animate__fadeInUp">
-          <h4><i class="fas fa-shopping-basket me-2"></i>OnlineBazar</h4>
-          <p>Your one-stop destination for all your shopping needs. We offer quality products at affordable prices with exceptional customer service.</p>
+          <h4><i class="fas fa-mobile-alt me-2"></i>Desi Mobile</h4>
+          <p>Your one-stop destination for all your mobile needs. We specialize in high-quality chargers, cases, and premium accessories for all major brands.</p>
           <div class="social-icons">
             <a href="https://www.facebook.com/gyan.babu.779/" class="social-icon" target="_blank">
               <i class="fab fa-facebook-f"></i>
@@ -619,18 +677,18 @@
             <li><a href="/about/"><i class="fas fa-chevron-right"></i> About Us</a></li>
             <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Shop</a></li>
             <li><a href="/contact/"><i class="fas fa-chevron-right"></i> Contact</a></li>
-            <li><a href="/about/"><i class="fas fa-chevron-right"></i> Blog</a></li>
+            <li><a href="/add-product/"><i class="fas fa-chevron-right"></i> New Product Add</a></li>
           </ul>
         </div>
         
         <div class="col-lg-2 col-md-6 mb-4 animate__animated animate__fadeInUp animate-delay-1">
           <h4>Categories</h4>
           <ul class="footer-links">
-            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Electronics</a></li>
-            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Fashion</a></li>
-            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Home & Kitchen</a></li>
-            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Beauty</a></li>
-            <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Toys & Games</a></li>
+            <li><a href="/shop/Smartphones/All/All/"><i class="fas fa-chevron-right"></i> Smartphones</a></li>
+            <li><a href="/shop/Chargers & Cables/All/All/"><i class="fas fa-chevron-right"></i> Chargers & Cables</a></li>
+            <li><a href="/shop/Cases & Covers/All/All/"><i class="fas fa-chevron-right"></i> Cases & Covers</a></li>
+            <li><a href="/shop/Audio & Gadgets/All/All/"><i class="fas fa-chevron-right"></i> Audio & Gadgets</a></li>
+            <li><a href="/shop/Screen Protection/All/All/"><i class="fas fa-chevron-right"></i> Screen Protection</a></li>
           </ul>
         </div>
         
@@ -647,14 +705,14 @@
             </li>
             <li>
               <i class="fas fa-envelope"></i>
-              <span>info@onlinebazar.com</span>
+              <span>contact@desimobile.in</span>
             </li>
           </ul>
         </div>
       </div>
       
       <div class="copyright text-center animate__animated animate__fadeIn">
-        <p>&copy; <script>document.write(new Date().getFullYear())</script> OnlineBazar. All Rights Reserved.</p>
+        <p>&copy; <script>document.write(new Date().getFullYear())</script> Desi Mobile. All Rights Reserved.</p>
       </div>
     </div>
   </footer>
@@ -864,5 +922,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

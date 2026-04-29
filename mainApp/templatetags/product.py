@@ -13,15 +13,6 @@ def checkColor(color, item):
             break
     return flag
 
-@register.filter("checkSize")
-def checkSize(size, item):
-    flag = False
-    for i in size.split(","):
-        if(i==item):
-            flag=True
-            break
-    return flag
-
 @register.filter("orderStatus")
 def orderStatus(request,num):
     if(num==0):
@@ -58,3 +49,13 @@ def orderItem(request,num):
 
 
 
+from mainApp.models import Product
+@register.filter("categoryImage")
+def categoryImage(cat):
+    try:
+        p = Product.objects.filter(maincategory=cat).first()
+        if p and p.pic1:
+            return p.pic1.url
+    except Exception:
+        pass
+    return ""

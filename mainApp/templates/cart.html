@@ -30,6 +30,15 @@
     {% endif %}
   </div>
 
+  <!-- Animated Coupon Marquee -->
+  <div class="coupon-marquee-wrapper mb-4 rounded-3 overflow-hidden" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);">
+    <marquee behavior="scroll" direction="left" scrollamount="6" class="text-white fw-bold py-2 m-0" style="font-size: 0.95rem; letter-spacing: 0.5px;">
+      <i class="fas fa-bullhorn me-2 text-warning"></i> MUST GRAB DEAL: Use code "SAVE20" for an instant 20% OFF on all orders above ₹400! <i class="fas fa-bolt ms-2 me-4 text-warning"></i>
+      <i class="fas fa-gift me-2 text-warning"></i> Hurry! Limited time mega sale is live! <i class="fas fa-star ms-2 me-4 text-warning"></i>
+      <i class="fas fa-rupee-sign me-2 text-warning"></i> Guaranteed savings on top brands! Use code "SAVE20" today!
+    </marquee>
+  </div>
+
   {% if Cart %}
   <div class="cart-content">
     <!-- Mobile Cart Items -->
@@ -55,7 +64,7 @@
           <div class="item-attributes">
             
             <span class="color-badge" style="background-color: {{request|cartColor:i|lower}}"></span>
-            <span>{{request|cartColor:i}} | {{request|cartSize:i}}</span>
+            <span>{{request|cartColor:i}}</span>
           </div>
           
           <div class="item-price">₹{{request|cartProductPrice:i}}</div>
@@ -79,59 +88,63 @@
       {% endfor %}
     </div>
 
-    <!-- Desktop Cart Table -->
-    <div class="desktop-cart-table d-none d-md-block">
-      <table class="cart-table">
-        <thead>
-          <tr>
-            <th class="product-image">Image</th>
-            <th class="product-name">Product</th>
-            <th class="product-color">Color</th>
-            <th class="product-size">Size</th>
-            <th class="product-price">Price</th>
-            <th class="product-quantity">Quantity</th>
-            <th class="product-total">Total</th>
-            <th class="product-action">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in Cart %}
-          <tr class="cart-item">
-            <td class="product-image">
+    <!-- Desktop Cart List (Modern Flex Design) -->
+    <div class="desktop-cart-list d-none d-md-block">
+      
+      <div class="cart-list-header">
+        <div class="col-product">Product Details</div>
+        <div class="col-price">Price</div>
+        <div class="col-qty">Quantity</div>
+        <div class="col-total">Total</div>
+        <div class="col-action"></div>
+      </div>
+
+      <div class="cart-list-body">
+        {% for i in Cart %}
+        <div class="cart-list-item">
+          <div class="col-product">
+            <div class="item-img-wrapper">
               {% if request|cartProductImage:i %}
               <img src="{{request|cartProductImage:i}}" alt="Product Image">
               {% else %}
               <img src="{% static 'picture/noimg.png' %}" alt="No Image">
               {% endif %}
-            </td>
-            <td class="product-name">{{request|cartProductName:i}}</td>
-            <td class="product-color">
-              <span class="color-badge" style="background-color: {{request|cartColor:i|lower}}"></span>
-              {{request|cartColor:i}}
-            </td>
-            <td class="product-size">{{request|cartSize:i}}</td>
-            <td class="product-price">₹{{request|cartProductPrice:i}}</td>
-            <td class="product-quantity">
-              <div class="quantity-control">
-                <button class="quantity-btn minus" onclick="window.location.href='/update-cart/{{i}}/-1/'">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <span class="quantity">{{request|cartQty:i}}</span>
-                <button class="quantity-btn plus" onclick="window.location.href='/update-cart/{{i}}/1/'">
-                  <i class="fas fa-plus"></i>
-                </button>
+            </div>
+            <div class="item-info">
+              <h5 class="item-title">{{request|cartProductName:i}}</h5>
+              <div class="item-meta">
+                <span class="meta-tag color-tag">
+                  <span class="color-dot" style="background-color: {{request|cartColor:i|lower}}"></span>
+                  {{request|cartColor:i}}
+                </span>
               </div>
-            </td>
-            <td class="product-total">₹{{request|cartTotal:i}}</td>
-            <td class="product-action">
-              <button class="delete-btn" onclick="fun('{{i}}')">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+            </div>
+          </div>
+          
+          <div class="col-price">
+            <span class="price-val">₹{{request|cartProductPrice:i}}</span>
+          </div>
+          
+          <div class="col-qty">
+            <div class="qty-spinner">
+              <button type="button" class="qty-btn" onclick="window.location.href='/update-cart/{{i}}/-1/'"><i class="fas fa-minus"></i></button>
+              <div class="qty-val">{{request|cartQty:i}}</div>
+              <button type="button" class="qty-btn" onclick="window.location.href='/update-cart/{{i}}/1/'"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          
+          <div class="col-total">
+            <span class="total-val">₹{{request|cartTotal:i}}</span>
+          </div>
+          
+          <div class="col-action">
+            <button type="button" class="remove-btn" onclick="fun('{{i}}')" title="Remove item">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
 
     <div class="cart-footer">
@@ -148,6 +161,8 @@
             </button>
           </div>
           
+          <!-- Available coupons section only visible if there are coupons -->
+          {% if available_coupons %}
           <div class="available-coupons">
             <h6 class="available-coupons-title">
               <i class="fas fa-gift"></i> Available Coupons
@@ -170,13 +185,10 @@
                   Min: ₹{{ coupon.min_order_amount }} | Valid till: {{ coupon.valid_to|date:"d M Y" }}
                 </div>
               </div>
-              {% empty %}
-              <div class="no-coupons">
-                <p>No coupons available</p>
-              </div>
               {% endfor %}
             </div>
           </div>
+          {% endif %}
           
           {% if applied_coupon %}
           <div class="applied-coupon">

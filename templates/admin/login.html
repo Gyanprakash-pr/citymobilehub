@@ -1,0 +1,73 @@
+{% extends "admin/login.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    .password-wrapper input {
+        flex: 1;
+        padding-right: 35px !important;
+    }
+    .toggle-password-admin {
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+        color: #777;
+        font-size: 16px;
+        user-select: none;
+        z-index: 10;
+        line-height: 1;
+        height: 16px;
+    }
+    .toggle-password-admin:hover {
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var passwordRow = document.querySelector('.form-row.field-password');
+        if (passwordRow || document.getElementById('id_password')) {
+            var passwordInput = document.getElementById('id_password');
+            if (passwordInput) {
+                // Ensure the parent is not already the wrapper
+                if (passwordInput.parentNode.className !== 'password-wrapper') {
+                    var wrapper = document.createElement('div');
+                    wrapper.className = 'password-wrapper';
+                    passwordInput.parentNode.insertBefore(wrapper, passwordInput);
+                    wrapper.appendChild(passwordInput);
+                    
+                    var toggleBtn = document.createElement('span');
+                    toggleBtn.className = 'toggle-password-admin';
+                    // Use standard eye emojis
+                    toggleBtn.innerHTML = '👁️';
+                    toggleBtn.title = 'Show password';
+                    wrapper.appendChild(toggleBtn);
+                    
+                    toggleBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (passwordInput.type === 'password') {
+                            passwordInput.type = 'text';
+                            toggleBtn.innerHTML = '🙈';
+                            toggleBtn.title = 'Hide password';
+                        } else {
+                            passwordInput.type = 'password';
+                            toggleBtn.innerHTML = '👁️';
+                            toggleBtn.title = 'Show password';
+                        }
+                    });
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -21,7 +21,7 @@
           <div class="card-body p-4 p-md-5">
             <div class="row g-4">
               <!-- Profile Picture Column -->
-              <div class="col-md-5 text-center">
+              <div class="col-12 col-md-5 text-center">
                 <div class="profile-pic-container mb-4">
                   {% if User.pic %}
                   <img src="{{User.pic.url}}" class="profile-pic img-fluid rounded-4 shadow" id="profileImagePreview">
@@ -44,7 +44,7 @@
               </div>
               
               <!-- Form Column -->
-              <div class="col-md-7">
+              <div class="col-12 col-md-7">
                 <!-- Messages/Alerts -->
                 {% for message in messages %}
                 <div class="alert alert-dismissible fade show animate__animated animate__shakeX" role="alert" style="background-color: #f8d7da; color: #721c24;">
@@ -60,28 +60,28 @@
                   {% csrf_token %}
                   
                   <!-- Personal Info Section -->
-                  <div class="form-section mb-4">
+                  <div class="form-section mb-4 w-100">
                     <h5 class="section-title mb-3"><i class="fas fa-user me-2"></i>Personal Information</h5>
                     <div class="row g-3">
-                      <div class="col-md-12">
+                      <div class="col-12">
                         <div class="form-floating">
-                          <input type="text" class="form-control" id="name" name="name" value="{{User.name}}" required>
+                          <input type="text" class="form-control" id="name" name="name" value="{{User.name}}" placeholder="Full Name" required>
                           <label for="name">Full Name</label>
                           <div class="invalid-feedback">Please enter your name</div>
                         </div>
                       </div>
                       
-                      <div class="col-md-6">
+                      <div class="col-12 col-md-6">
                         <div class="form-floating">
-                          <input type="tel" class="form-control" id="phone" name="phone" value="{{User.phone}}" required>
+                          <input type="tel" class="form-control" id="phone" name="phone" value="{{User.phone}}" placeholder="Phone Number" required>
                           <label for="phone">Phone Number</label>
                           <div class="invalid-feedback">Please enter a valid phone number</div>
                         </div>
                       </div>
                       
-                      <div class="col-md-6">
+                      <div class="col-12 col-md-6">
                         <div class="form-floating">
-                          <input type="email" class="form-control" id="email" name="email" value="{{User.email}}" required>
+                          <input type="email" class="form-control" id="email" name="email" value="{{User.email}}" placeholder="Email Address" required>
                           <label for="email">Email Address</label>
                           <div class="invalid-feedback">Please enter a valid email</div>
                         </div>
@@ -90,33 +90,33 @@
                   </div>
                   
                   <!-- Address Section -->
-                  <div class="form-section mb-4">
+                  <div class="form-section mb-4 w-100">
                     <h5 class="section-title mb-3"><i class="fas fa-home me-2"></i>Address Information</h5>
                     <div class="row g-3">
-                      <div class="col-md-12">
+                      <div class="col-12">
                         <div class="form-floating">
-                          <input type="text" class="form-control" id="addressline1" name="addressline1" value="{{User.addressline1}}">
+                          <input type="text" class="form-control" id="addressline1" name="addressline1" value="{{User.addressline1}}" placeholder="House Number & Street">
                           <label for="addressline1">House Number & Street</label>
                         </div>
                       </div>
                       
-                      <div class="col-md-4">
+                      <div class="col-12 col-md-4">
                         <div class="form-floating">
-                          <input type="text" class="form-control" id="pin" name="pin" value="{{User.pin}}">
+                          <input type="text" class="form-control" id="pin" name="pin" value="{{User.pin}}" placeholder="PIN Code">
                           <label for="pin">PIN Code</label>
                         </div>
                       </div>
                       
-                      <div class="col-md-4">
+                      <div class="col-12 col-md-4">
                         <div class="form-floating">
-                          <input type="text" class="form-control" id="city" name="city" value="{{User.city}}">
+                          <input type="text" class="form-control" id="city" name="city" value="{{User.city}}" placeholder="City">
                           <label for="city">City</label>
                         </div>
                       </div>
                       
-                      <div class="col-md-4">
+                      <div class="col-12 col-md-4">
                         <div class="form-floating">
-                          <input type="text" class="form-control" id="state" name="state" value="{{User.state}}">
+                          <input type="text" class="form-control" id="state" name="state" value="{{User.state}}" placeholder="State">
                           <label for="state">State</label>
                         </div>
                       </div>
@@ -124,20 +124,20 @@
                   </div>
                   
                   <!-- Profile Picture Upload -->
-                  <div class="form-section mb-4">
+                  <div class="form-section mb-4 w-100">
                     <h5 class="section-title mb-3"><i class="fas fa-camera me-2"></i>Profile Picture</h5>
-                    <div class="custom-file-upload">
-                      <label for="pic" class="form-label">Upload New Photo</label>
-                      <input type="file" class="form-control" id="pic" name="pic" accept="image/*">
-                      <small class="text-muted">Max size: 2MB (JPEG, PNG)</small>
+                    <div class="custom-file-upload w-100">
+                      <label for="pic" class="form-label d-block text-center w-100"><i class="fas fa-upload me-2"></i>Click to Upload New Photo</label>
+                      <input type="file" class="form-control mt-2" id="pic" name="pic" accept="image/*">
+                      <small class="text-muted d-block mt-2">Max size: 2MB (JPEG, PNG)</small>
                     </div>
                   </div>
                   
                   <!-- Submit Button -->
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 submit-btn">
-                      <span class="submit-text">Update Profile</span>
-                      <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                  <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 submit-btn shadow">
+                      <span class="submit-text fw-bold">UPDATE PROFILE</span>
+                      <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
                     </button>
                   </div>
                 </form>
@@ -269,14 +269,8 @@
   }
 
   /* Form Elements */
-  .form-floating>label {
-    color: var(--gray);
-    padding: 1rem 0.75rem;
-  }
-
   .form-control {
     border: 1px solid #e0e0e0;
-    padding: 1rem 0.75rem;
     border-radius: 10px;
     transition: all 0.3s;
   }

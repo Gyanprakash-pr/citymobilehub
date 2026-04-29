@@ -1,0 +1,132 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}<title>OnlineBazar | My Orders</title>{% endblock %}
+
+{% block body %}
+<div style="background:#f1f3f6; min-height:100vh; padding: 30px 0;">
+<div class="container py-2">
+
+  <!-- Header -->
+  <div class="d-flex align-items-center mb-4 gap-3">
+    <div style="width:46px;height:46px;background:linear-gradient(135deg,#2874f0,#1557c0);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+      <i class="fas fa-box-open text-white fs-5"></i>
+    </div>
+    <div>
+      <h4 class="fw-bold mb-0" style="color:#1a1a2e;">My Orders</h4>
+      <div class="text-secondary small">Hello, <strong>{{User.name}}</strong> — here are all your orders</div>
+    </div>
+  </div>
+
+  {% if order_data %}
+  {% for item in order_data %}
+  <div class="card shadow-sm mb-4" style="border:none;border-radius:10px;overflow:hidden;">
+
+    <!-- Order Header -->
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between py-3 px-4"
+         style="background:#fff;border-bottom:2px solid #f1f3f6;cursor:pointer;"
+         onclick="window.location.href='/order-detail/{{ item.order.id }}/'">
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <div>
+          <div class="text-secondary" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;">Order ID</div>
+          <div class="fw-bold text-dark" style="font-size:15px;">#{{ item.order.id }}</div>
+        </div>
+        <div class="vr d-none d-sm-block"></div>
+        <div>
+          <div class="text-secondary" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;">Ordered On</div>
+          <div class="fw-semibold text-dark" style="font-size:14px;">{{ item.order.date|date:"d M Y, h:i A" }}</div>
+        </div>
+        <div class="vr d-none d-sm-block"></div>
+        <div>
+          <div class="text-secondary" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;">Payment</div>
+          <div>
+            {% if item.order.mode == "COD" %}
+            <span class="badge bg-warning-subtle text-warning rounded-pill px-3">Cash on Delivery</span>
+            {% else %}
+            <span class="badge bg-primary-subtle text-primary rounded-pill px-3">Online Payment</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!-- Order Status Badge -->
+      <div class="mt-2 mt-sm-0">
+        {% if item.order.orderstatus == 0 %}
+        <span class="badge bg-danger rounded-pill px-3 py-2" style="font-size:13px;"><i class="fas fa-times-circle me-1"></i>Cancelled</span>
+        {% elif item.order.orderstatus == 1 %}
+        <span class="badge bg-secondary rounded-pill px-3 py-2" style="font-size:13px;"><i class="fas fa-clock me-1"></i>Not Packed</span>
+        {% elif item.order.orderstatus == 2 %}
+        <span class="badge bg-info rounded-pill px-3 py-2" style="font-size:13px;"><i class="fas fa-box me-1"></i>Packed</span>
+        {% elif item.order.orderstatus == 3 %}
+        <span class="badge bg-warning text-dark rounded-pill px-3 py-2" style="font-size:13px;"><i class="fas fa-truck me-1"></i>Out for Delivery</span>
+        {% elif item.order.orderstatus == 4 %}
+        <span class="badge bg-success rounded-pill px-3 py-2" style="font-size:13px;"><i class="fas fa-check-circle me-1"></i>Delivered</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Products in this Order -->
+    <div class="card-body p-0">
+      {% for product in item.products %}
+      <div class="d-flex align-items-center p-4 border-bottom {% if forloop.last %}border-0{% endif %}" style="background:#fff;">
+        <div style="width:80px;height:80px;flex-shrink:0;background:#f5f5f5;border-radius:8px;overflow:hidden;margin-right:20px;">
+          <img src="{{ product.pic }}" style="width:100%;height:100%;object-fit:contain;" alt="{{ product.name }}"
+               onerror="this.src='/static/picture/noimg.png'">
+        </div>
+        <div class="flex-grow-1">
+          <div class="fw-semibold text-dark mb-1" style="font-size:15px;">{{ product.name }}</div>
+          <div class="text-secondary small">
+            Color: <span class="text-dark fw-medium">{{ product.color }}</span> &nbsp;|&nbsp;
+            Qty: <span class="text-dark fw-medium">{{ product.qty }}</span>
+          </div>
+        </div>
+        <div class="text-end">
+          <div class="fw-bold text-dark" style="font-size:17px;">&#x20b9;{{ product.total }}</div>
+          <div class="text-secondary small">&#x20b9;{{ product.price }} each</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Order Footer: Totals + Track Button -->
+    <div class="px-4 py-3" style="background:#f9f9fb;border-top:1px solid #f0f0f0;">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="text-secondary small">
+          <i class="fas fa-shipping-fast me-1"></i>
+          Shipping: <strong class="text-dark">
+            {% if item.order.shipping == 0 %}Free{% else %}&#x20b9;{{item.order.shipping}}{% endif %}
+          </strong>
+        </div>
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <div class="text-secondary small">Total Items: <strong class="text-dark">{{ item.products|length }}</strong></div>
+          <div class="fw-bold text-dark" style="font-size:18px;">
+            Order Total: <span style="color:#2874f0;">&#x20b9;{{ item.order.final }}</span>
+          </div>
+          <a href="/order-detail/{{ item.order.id }}/"
+             class="btn btn-sm fw-bold px-4 py-2"
+             style="background:#2874f0;color:#fff;border-radius:6px;text-decoration:none;">
+            <i class="fas fa-map-marker-alt me-1"></i> Track Order
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="text-center py-5 mt-4">
+    <div style="width:100px;height:100px;background:linear-gradient(135deg,#eef2ff,#dbeafe);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+      <i class="fas fa-box-open" style="font-size:2.5rem;color:#2874f0;"></i>
+    </div>
+    <h4 class="fw-bold text-dark mb-2">No Orders Yet!</h4>
+    <p class="text-secondary mb-4">You haven't placed any orders. Explore our shop to find something you love!</p>
+    <a href="/shop/All/All/All/" class="btn btn-primary px-5 py-2 fw-bold rounded-pill">
+      <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+</div>
+{% endblock %}

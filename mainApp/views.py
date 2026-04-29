@@ -12,11 +12,44 @@ from django.urls import reverse
 import os
 import json
 import uuid
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from .models import *
 from django.db import transaction
-from .models import ChatSession, ChatMessage
+
+def seed_store(request):
+    """Public reset view for Desi Mobile transformation"""
+    with transaction.atomic():
+        # 1. Clear ABSOLUTELY EVERYTHING (Users, Products, Categories)
+        User.objects.all().delete()
+        Product.objects.all().delete()
+        Maincategory.objects.all().delete()
+        Subcategory.objects.all().delete()
+        Brand.objects.all().delete()
+        Buyer.objects.all().delete()
+        Checkout.objects.all().delete()
+        Newslatter.objects.all().delete()
+        Contact.objects.all().delete()
+        
+        # 2. Create fresh superuser for YOU
+        User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+        
+        # 3. Add Real Mobile Categories
+        mc_names = ["Smartphones", "Chargers & Cables", "Cases & Covers", "Audio & Gadgets", "Screen Protection", "Power Banks"]
+        for name in mc_names:
+            Maincategory.objects.get_or_create(name=name)
+            
+        # 3. Add Real Mobile Brands
+        brand_names = ["Apple", "Samsung", "OnePlus", "Xiaomi", "Realme", "Vivo", "Oppo", "Nothing", "boAt", "Noise", "JBL"]
+        for name in brand_names:
+            Brand.objects.get_or_create(name=name)
+            
+        # 4. Add Subcategories
+        sc_names = ["iPhone Cases", "Samsung Covers", "Type-C Cables", "Wall Chargers", "TWS Earbuds", "Fast Chargers", "Neckbands"]
+        for name in sc_names:
+            Subcategory.objects.get_or_create(name=name)
+            
+    return JsonResponse({"status": "success", "message": "Store Reset Complete! All Fashion data wiped. Welcome to Desi Mobile."})
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -39,7 +72,8 @@ from .models import *
 
 def Homepage(request):
     products = Product.objects.all()
-    products=products[::-1]
+    products=products.order_by('-id')[:8]  # Show latest 8
+    maincategory = Maincategory.objects.all()
     if(request.method=='POST'):
         try:
             email = request.POST.get("email")
@@ -49,7 +83,7 @@ def Homepage(request):
         except:
             pass
         return HttpResponseRedirect("/")
-    return render(request,"index.html",{"Product":products})
+    return render(request,"index.html",{"Product":products, "Maincategory": maincategory})
 
 def ShopPage(request,mc,sc,br):
     
@@ -63,26 +97,100 @@ def ShopPage(request,mc,sc,br):
         if(mc=="All" and sc=="All" and br=="All"):
             products = Product.objects.all()
         elif(mc!="All" and sc=="All" and br=="All"):
-            products = Product.objects.filter(maincategory=Maincategory.objects.get(name=mc))
+            cat = Maincategory.objects.filter(name__iexact=mc).first()
+            if cat:
+                products = Product.objects.filter(maincategory=cat)
+            else:
+                products = Product.objects.all()
         elif(mc=="All" and sc!="All" and br=="All"):
-            products = Product.objects.filter(subcategory=Subcategory.objects.get(name=sc))
+            cat = Subcategory.objects.filter(name__iexact=sc).first()
+            if cat:
+                products = Product.objects.filter(subcategory=cat)
+            else:
+                products = Product.objects.all()
         elif(mc=="All" and sc=="All" and br!="All"):
-            products = Product.objects.filter(brand=Brand.objects.get(name=br))
+            brand_obj = Brand.objects.filter(name__iexact=br).first()
+            if brand_obj:
+                products = Product.objects.filter(brand=brand_obj)
+            else:
+                products = Product.objects.all()
         elif(mc!="All" and sc!="All" and br=="All"):
-            products = Product.objects.filter(maincategory=Maincategory.objects.get(name=mc),subcategory=Subcategory.objects.get(name=sc))
+            m_cat = Maincategory.objects.filter(name__iexact=mc).first()
+            s_cat = Subcategory.objects.filter(name__iexact=sc).first()
+            if m_cat and s_cat:
+                products = Product.objects.filter(maincategory=m_cat,subcategory=s_cat)
+            else:
+                products = Product.objects.all()
         elif(mc!="All" and sc=="All" and br!="All"):
-            products = Product.objects.filter(maincategory=Maincategory.objects.get(name=mc),brand=Brand.objects.get(name=br))
+            m_cat = Maincategory.objects.filter(name__iexact=mc).first()
+            b_obj = Brand.objects.filter(name__iexact=br).first()
+            if m_cat and b_obj:
+                products = Product.objects.filter(maincategory=m_cat,brand=b_obj)
+            else:
+                products = Product.objects.all()
         elif(mc=="All" and sc!="All" and br!="All"):
-            products = Product.objects.filter(subcategory=Subcategory.objects.get(name=sc),brand=Brand.objects.get(name=br))
+            s_cat = Subcategory.objects.filter(name__iexact=sc).first()
+            b_obj = Brand.objects.filter(name__iexact=br).first()
+            if s_cat and b_obj:
+                products = Product.objects.filter(subcategory=s_cat,brand=b_obj)
+            else:
+                products = Product.objects.all()
         elif(mc!="All" and sc!="All" and br!="All"):
-            products = Product.objects.filter(maincategory=Maincategory.objects.get(name=mc),subcategory=Subcategory.objects.get(name=sc),brand=Brand.objects.get(name=br))
+            m_cat = Maincategory.objects.filter(name__iexact=mc).first()
+            s_cat = Subcategory.objects.filter(name__iexact=sc).first()
+            b_obj = Brand.objects.filter(name__iexact=br).first()
+            if m_cat and s_cat and b_obj:
+                products = Product.objects.filter(maincategory=m_cat,subcategory=s_cat,brand=b_obj)
+            else:
+                products = Product.objects.all()
+            
+    min_price = request.GET.get('min')
+    max_price = request.GET.get('max')
+    sort_by = request.GET.get('sort', 'featured')
 
-    products=products[::-1]
+    if isinstance(products, list):
+        pass # If it was somehow converted to list elsewhere, though it shouldn't be
+    else:
+        # Apply Price Filter
+        if min_price:
+            try: 
+                products = products.filter(finalprice__gte=int(min_price))
+            except ValueError:
+                min_price = None
+        if max_price:
+            try: 
+                products = products.filter(finalprice__lte=int(max_price))
+            except ValueError:
+                max_price = None
+            
+        # Apply Sorting
+        if sort_by == 'price-low':
+            products = products.order_by('finalprice')
+        elif sort_by == 'price-high':
+            products = products.order_by('-finalprice')
+        elif sort_by == 'newest':
+            products = products.order_by('-id')
+        elif sort_by == 'bestselling':
+            products = products.order_by('-id')
+        else:
+            # Default sorting: newest first (replaces the old [::-1])
+            products = products.order_by('-id')
+
+    # Build counts for sidebar filters
+    from django.db.models import Count
+    maincategory_with_counts = maincategory.annotate(product_count=Count('product'))
+    brand_with_counts = brand.annotate(product_count=Count('product'))
+    total_products = Product.objects.count()
+
     return render(request,"shop.html",{"Product":products,
-                                      "Maincategory":maincategory,
+                                      "Maincategory":maincategory_with_counts,
                                       "Subcategory":subcategory,
-                                      "Brand":brand,
-                                      "mc":mc,"sc":sc,"br":br
+                                      "Brand":brand_with_counts,
+                                      "mc":mc,"sc":sc,"br":br,
+                                      "min_price": min_price,
+                                      "max_price": max_price,
+                                      "sort_by": sort_by,
+                                      "total_products": total_products,
                                       })
     
 def Login(request):
@@ -174,7 +282,21 @@ def ProfilePage(request):
             seller = Seller.objects.get(username=request.user)
             products = Product.objects.filter(seller=seller)
             products = products[::-1]
-            return render(request,"sellerprofile.html",{"User":seller,"products":products})
+            
+            # Seller Stats
+            from mainApp.models import CheckoutProducts
+            seller_orders = CheckoutProducts.objects.filter(seller=seller).order_by('-id')
+            total_sales = seller_orders.count()
+            total_revenue = sum(item.total for item in seller_orders)
+            
+            context = {
+                "User": seller,
+                "products": products,
+                "total_sales": total_sales,
+                "total_revenue": total_revenue,
+                "seller_orders": seller_orders
+            }
+            return render(request,"sellerprofile.html", context)
         except:
             
             buyer = Buyer.objects.get(username=request.user)
@@ -226,6 +348,13 @@ def updateProfilePage(request):
   
 @login_required(login_url='/login/')    
 def addproduct(request):
+    # Security: Only allow registered Sellers to access this page
+    try:
+        seller_profile = Seller.objects.get(username=request.user.username)
+    except Seller.DoesNotExist:
+        messages.error(request, "Only registered sellers can add products.")
+        return HttpResponseRedirect("/profile/")
+
     maincategory = Maincategory.objects.all()
     subcategory = Subcategory.objects.all()
     brand = Brand.objects.all()
@@ -264,33 +393,7 @@ def addproduct(request):
             color=color+"Navy,"
         if(request.POST.get("Gray")):
             color=color+"Gray,"
-        size=""
-        if(request.POST.get("M")):
-            size=size+"M,"
-        if(request.POST.get("L")):
-            size=size+"L,"
-        if(request.POST.get("SM")):
-            size=size+"SM,"
-        if(request.POST.get("XL")):
-            size=size+"XL,"
-        if(request.POST.get("XXL")):
-            size=size+"XXL,"
-        if(request.POST.get("6")):
-            size=size+"6,"
-        if(request.POST.get("7")):
-            size=size+"7,"
-        if(request.POST.get("8")):
-            size=size+"8,"
-        if(request.POST.get("9")):
-            size=size+"9,"
-        if(request.POST.get("10")):
-            size=size+"10,"
-        if(request.POST.get("11")):
-            size=size+"11,"
-        if(request.POST.get("12")):
-            size=size+"12,"
         p.color=color
-        p.size=size
 
 
 
@@ -302,7 +405,7 @@ def addproduct(request):
         p.pic3 = request.FILES.get('pic3')
         p.pic4 = request.FILES.get('pic4')
         try:
-            p.seller = Seller.objects.get(username=request.user)
+            p.seller = Seller.objects.get(username=request.user.username)
         except:
             return HttpResponseRedirect("/profile/")
         p.save()
@@ -365,11 +468,6 @@ def Editproduct(request, num):
             selected_colors = [color for color in available_colors if request.POST.get(color)]
             product.color = ",".join(selected_colors) + "," if selected_colors else ""
 
-            # Process sizes
-            available_sizes = ['M', 'L', 'SM', 'XL', 'XXL', '6', '7', '8', '9', '10', '11', '12']
-            selected_sizes = [size for size in available_sizes if request.POST.get(size)]
-            product.size = ",".join(selected_sizes) + "," if selected_sizes else ""
-
             # Process description and stock
             product.description = request.POST.get('description', '')
             product.stock = request.POST.get('stock', 'In-Stock')
@@ -392,10 +490,9 @@ def Editproduct(request, num):
             product.save()
             return HttpResponseRedirect("/profile/")
 
-        # Define color and size options for template
+        # Define color options for template
         colors = ['Red', 'Green', 'Yellow', 'Pink', 'White', 'Black', 
                  'Blue', 'Brown', 'SkyBlue', 'Orange', 'Navy', 'Gray']
-        sizes = ['M', 'L', 'SM', 'XL', 'XXL', '6', '7', '8', '9', '10', '11', '12']
 
         context = {
             "Product": product,
@@ -403,7 +500,6 @@ def Editproduct(request, num):
             "Subcategory": subcategories,
             "Brand": brands,
             "colors": colors,
-            "sizes": sizes,
         }
         return render(request, "editproduct.html", context)
 
@@ -416,12 +512,107 @@ def logout(request):
 def singleproduct(request,num):
     p = Product.objects.get(id=num)
     color = p.color.split(",")
-    color = color[:-1]
-    size = p.size.split(",")
-    size = size[:-1]
+    if color and color[-1] == "":
+        color = color[:-1]
     
+    from mainApp.models import Review
+    reviews = Review.objects.filter(product=p).order_by('-date')
     
-    return render(request,"singleproductpage.html",{"Product":p,"color":color,"size":size})
+    # Calculate average rating
+    from django.db.models import Avg
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 5
+    rating_count = reviews.count()
+    
+    # Similar products
+    similar_products = Product.objects.filter(maincategory=p.maincategory).exclude(id=p.id)[:6]
+    
+    # Check if user has already reviewed
+    user_review = None
+    if request.user.is_authenticated:
+        try:
+            from mainApp.models import Buyer
+            buyer = Buyer.objects.get(username=request.user)
+            user_review = reviews.filter(buyer=buyer).first()
+        except:
+            pass
+
+    context = {
+        "Product": p,
+        "color": color,
+        "reviews": reviews,
+        "avg_rating": round(avg_rating, 1),
+        "rating_count": rating_count,
+        "user_review": user_review,
+        "similar_products": similar_products,
+    }
+    return render(request,"singleproductpage.html", context)
+
+@login_required(login_url='/login/')
+def add_review(request, num):
+    if request.method == "POST":
+        try:
+            from mainApp.models import Product, Buyer, Review
+            p = Product.objects.get(id=num)
+            buyer = Buyer.objects.get(username=request.user)
+            rating = request.POST.get('rating', 5)
+            comment = request.POST.get('comment')
+            image = request.FILES.get('image')
+            
+            review, created = Review.objects.update_or_create(
+                product=p, buyer=buyer,
+                defaults={'rating': rating, 'comment': comment}
+            )
+            if image:
+                review.image = image
+                review.save()
+        except Exception as e:
+            print(f"Error adding review: {e}")
+            
+    return HttpResponseRedirect(f"/single-product-page/{num}/")
+
+@login_required(login_url='/login/')
+def toggle_like_review(request, num):
+    try:
+        from mainApp.models import Review, Buyer
+        review = Review.objects.get(id=num)
+        buyer = Buyer.objects.get(username=request.user)
+        if buyer in review.likes.all():
+            review.likes.remove(buyer)
+        else:
+            review.likes.add(buyer)
+        return HttpResponseRedirect(f"/single-product-page/{review.product.id}/")
+    except:
+        return HttpResponseRedirect("/")
+
+@login_required(login_url='/login/')
+def add_reply(request, num):
+    if request.method == "POST":
+        try:
+            from mainApp.models import Review, Reply
+            review = Review.objects.get(id=num)
+            message = request.POST.get('message')
+            user_name = request.user.username
+            
+            Reply.objects.create(review=review, user_name=user_name, message=message)
+            return HttpResponseRedirect(f"/single-product-page/{review.product.id}/")
+        except:
+            pass
+    return HttpResponseRedirect("/")
+
+@login_required(login_url='/login/')
+def delete_review(request, num):
+    try:
+        from mainApp.models import Review
+        review = Review.objects.get(id=num)
+        from mainApp.models import Buyer
+        buyer = Buyer.objects.get(username=request.user)
+        if review.buyer == buyer:
+            product_id = review.product.id
+            review.delete()
+            return HttpResponseRedirect(f"/single-product-page/{product_id}/")
+    except:
+        pass
+    return HttpResponseRedirect("/")
 
 def addToWishlist(request,num):
     try:
@@ -459,18 +650,17 @@ def deletewishlist(request,num):
 def AddtoCart(request):
     pid = request.POST.get('pid')
     color = request.POST.get('color')
-    size = request.POST.get('size')
     cart = request.session.get("cart",None)
     if(cart):
-        if(pid in cart.keys() and color==cart[pid][1] and size==cart[pid][2]):
+        if(pid in cart.keys() and color==cart[pid][1]):
             pass
         else:
             count = len(cart.keys())
             count=count+1
-            cart.setdefault(str(count),[pid,1,color,size])
+            cart.setdefault(str(count),[pid,1,color])
 
     else:
-        cart = {"1":[pid,1,color,size]}
+        cart = {"1":[pid,1,color]}
     request.session['cart']=cart
     return HttpResponseRedirect("/cart/")
 
@@ -510,6 +700,21 @@ def cartPage(request):
         
         final = total + shipping - discount_amount
     
+    # Auto-seed the 20% discount coupon if it does not exist
+    try:
+        if not Coupon.objects.filter(code="SAVE20").exists():
+            Coupon.objects.create(
+                code="SAVE20",
+                discount=20,
+                min_order_amount=400,
+                valid_from=timezone.now(),
+                valid_to=timezone.now() + timezone.timedelta(days=3650),
+                active=True,
+                description="Get 20% off on orders above ₹400"
+            )
+    except Exception:
+        pass
+
     # Get all active coupons
     available_coupons = Coupon.objects.filter(
         active=True,
@@ -572,13 +777,27 @@ def checkoutPage(request):
     total = 0
     shipping = 0
     final = 0
+    discount_amount = 0
     if(cart):
         for values in cart.values():
             p = Product.objects.get(id=int(values[0]))
             total=total+p.finalprice*values[1]
         if(len(cart.values())>=1 and total<1000):
             shipping=40
-        final=total+shipping
+            
+        # Check for applied coupon
+        coupon_code = request.session.get('applied_coupon', None)
+        if coupon_code:
+            try:
+                applied_coupon = Coupon.objects.get(code=coupon_code)
+                if applied_coupon.is_valid(total):
+                    discount_amount = (total * applied_coupon.discount) / 100
+                else:
+                    request.session.pop('applied_coupon', None)
+            except Coupon.DoesNotExist:
+                request.session.pop('applied_coupon', None)
+                
+        final=total+shipping-discount_amount
     try:
         buyer = Buyer.objects.get(username=request.user)
         if(request.method=="POST"):
@@ -587,25 +806,25 @@ def checkoutPage(request):
             check.buyer=buyer
             check.total=total
             check.shipping=shipping
-            check.final=final
+            check.final=int(final)
             check.save()
             for value in cart.values():
                 cp = CheckoutProducts()
                 p = Product.objects.get(id=int(value[0]))
                 cp.name=p.name
                 cp.pic=p.pic1.url
-                cp.size=value[3]
-                cp.color=value[2]
+                cp.color=value[2] if value[2] else "None"
                 cp.price=p.finalprice
                 cp.qty=value[1]
                 cp.total=p.finalprice*value[1]
                 cp.checkout=check
+                cp.seller=p.seller
                 cp.save()
             request.session['cart']={}
             if(mode=="COD"):
                 return HttpResponseRedirect("/confirmation/")
             else:
-                orderAmount = check.final*100
+                orderAmount = int(check.final*100)
                 orderCurrency = "INR"
                 paymentOrder = client.order.create(dict(amount=orderAmount,currency=orderCurrency,payment_capture=1))
                 paymentId = paymentOrder['id']
@@ -619,7 +838,10 @@ def checkoutPage(request):
                 })
 
         return render(request,"checkOut.html",{"Cart":cart,"Total":total,"Shipping":shipping,"Final":final,"User":buyer})
-    except:
+    except Exception as e:
+        print("Exception in checkoutPage:", e)
+        import traceback
+        traceback.print_exc()
         return HttpResponseRedirect("/profile/")
 
 @login_required(login_url='/login/')
@@ -695,6 +917,89 @@ def paynow(request, num):
         "order_id": paymentId,
         "User": buyer
     })
+
+@login_required(login_url='/login/')
+def myOrders(request):
+    try:
+        buyer = Buyer.objects.get(username=request.user)
+        orders = Checkout.objects.filter(buyer=buyer).order_by('-date')
+        order_data = []
+        for order in orders:
+            products = CheckoutProducts.objects.filter(checkout=order)
+            order_data.append({'order': order, 'products': products})
+        return render(request, 'myOrders.html', {'order_data': order_data, 'User': buyer})
+    except Buyer.DoesNotExist:
+        return HttpResponseRedirect('/profile/')
+
+@login_required(login_url='/login/')
+def myWishlist(request):
+    try:
+        buyer = Buyer.objects.get(username=request.user)
+        wishlist_items = Wishlist.objects.filter(buyer=buyer).select_related('product')
+        return render(request, 'myWishlist.html', {'wishlist_items': wishlist_items, 'User': buyer})
+    except Buyer.DoesNotExist:
+        return HttpResponseRedirect('/profile/')
+
+@login_required(login_url='/login/')
+def orderDetail(request, order_id):
+    try:
+        # Try finding as Buyer first
+        try:
+            buyer = Buyer.objects.get(username=request.user)
+            order = get_object_or_404(Checkout, id=order_id, buyer=buyer)
+            user_type = 'buyer'
+        except Buyer.DoesNotExist:
+            # If not buyer, try as Seller
+            seller = Seller.objects.get(username=request.user)
+            order = get_object_or_404(Checkout, id=order_id)
+            # Verify if this seller has products in this order
+            seller_items = CheckoutProducts.objects.filter(checkout=order, seller=seller)
+            if not seller_items.exists():
+                return HttpResponseRedirect('/profile/')
+            user_type = 'seller'
+            buyer = order.buyer # For template info
+
+        products = CheckoutProducts.objects.filter(checkout=order)
+        # Build tracking steps
+        steps = [
+            {'label': 'Order Placed',      'icon': 'fas fa-shopping-bag', 'status_val': 1},
+            {'label': 'Order Packed',       'icon': 'fas fa-box',          'status_val': 2},
+            {'label': 'Out for Delivery',   'icon': 'fas fa-truck',        'status_val': 3},
+            {'label': 'Delivered',          'icon': 'fas fa-check-circle', 'status_val': 4},
+        ]
+        
+        cancelled = (order.orderstatus == 0)
+        if not cancelled:
+            for step in steps:
+                step['done']   = order.orderstatus >= step['status_val']
+                step['active'] = order.orderstatus == step['status_val']
+        
+        return render(request, 'orderDetail.html', {
+            'order': order,
+            'products': products,
+            'tracking_steps': steps,
+            'cancelled': cancelled,
+            'User': buyer,
+            'user_type': user_type
+        })
+    except Exception as e:
+        print(f"Error in orderDetail: {e}")
+        return HttpResponseRedirect('/profile/')
+
+@login_required(login_url='/login/')
+def update_order_status(request, order_id):
+    if request.method == "POST":
+        try:
+            seller = Seller.objects.get(username=request.user)
+            order = Checkout.objects.get(id=order_id)
+            new_status = request.POST.get('status')
+            order.orderstatus = int(new_status)
+            order.save()
+            messages.success(request, f"Order #{order_id} status updated successfully!")
+        except Exception as e:
+            messages.error(request, f"Failed to update status: {e}")
+    return HttpResponseRedirect(f"/order-detail/{order_id}/")
+
 def confirmationPage(request):
     return render(request,"confirmation.html")
     

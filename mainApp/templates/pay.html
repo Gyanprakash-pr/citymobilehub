@@ -1,68 +1,78 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block title %}
-<title>Online Bazar | Secure Payment</title>
+<title>Desi Mobile | Secure Payment</title>
 {% endblock %}
 
 {% block body %}
-<div class="payment-container animate__animated animate__fadeIn">
-  <div class="container py-5">
+<div class="payment-immersive-wrapper" style="background: #f8fafc; min-height: 90vh; padding: 60px 0;">
+  <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8">
-        <!-- Payment Card -->
-        <div class="payment-card shadow-lg rounded-4 overflow-hidden animate__animated animate__zoomIn">
-          <!-- Payment Header -->
-          <div class="payment-header text-center py-4 position-relative">
-            <div class="payment-icon animate__animated animate__bounceIn">
-              <i class="fas fa-lock"></i>
-            </div>
-            <h2 class="text-white mb-1">Secure Payment</h2>
-            <p class="text-white-50 mb-0">Complete your purchase</p>
-            <div class="watermark">₹</div>
-          </div>
-          
-          <!-- Payment Body -->
-          <div class="payment-body p-4 p-md-5">
-            <!-- Order Summary -->
-            <div class="order-summary mb-4 animate__animated animate__fadeInLeft">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Order Summary</h5>
-                <span class="badge bg-primary">#{{order_id|slice:"-8:"|upper}}</span>
-              </div>
-              <div class="amount-display animate__animated animate__pulse animate__infinite animate__slower">
-                <span>Total Amount:</span>
-                <span class="amount">₹{{final_amount}}</span>
-              </div>
-            </div>
-            
-            <!-- Payment Button -->
-            <div class="text-center mt-4 animate__animated animate__fadeInUp">
-              <button id="rzp-button1" class="btn btn-pay-now w-100 py-3">
-                <span class="btn-text">Pay Now</span>
-                <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
-              </button>
-              <p class="text-muted small mt-3">
-                <i class="fas fa-shield-alt me-1"></i> Secure 256-bit SSL encrypted payment
-              </p>
-            </div>
-          </div>
-        </div>
+      <div class="col-lg-5 col-md-8 col-sm-11">
         
-        <!-- Payment Methods -->
-        <div class="payment-methods mt-4 animate__animated animate__fadeInUp">
-          <div class="d-flex justify-content-center flex-wrap gap-3">
-            <div class="method-logo">
+        <!-- Payment Card -->
+        <div class="desi-payment-card animate__animated animate__fadeInUp" style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);">
+          
+          <!-- Header: Immersive Theme -->
+          <div class="payment-hero-header" style="background: linear-gradient(135deg, #0f172a 0%, var(--primary-color) 100%); padding: 40px; text-align: center; position: relative; overflow: hidden; color: white;">
+            <!-- Decorative circle -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
+            
+            <div class="header-icon-box" style="width: 70px; height: 70px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+                <i class="fas fa-lock" style="font-size: 28px; color: var(--secondary-color);"></i>
+            </div>
+            <h2 style="font-weight: 800; letter-spacing: -0.5px; margin-bottom: 5px;">Secure Checkout</h2>
+            <p style="opacity: 0.7; font-size: 13px; font-weight: 500;">Powered by Razorpay Secure</p>
+          </div>
+
+          <!-- Body -->
+          <div class="payment-details-body" style="padding: 40px;">
+            
+            <!-- Order Info Chip -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <span style="font-weight: 700; color: var(--dark-color); font-size: 15px;">Order Summary</span>
+                <span style="background: var(--primary-light); color: var(--primary-color); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 11px; letter-spacing: 0.5px;">#{{order_id|slice:"-6:"|upper}}</span>
+            </div>
+
+            <!-- Amount Display Card -->
+            <div class="premium-amount-box" style="background: var(--light-color); border: 1px solid var(--light-gray); border-radius: 18px; padding: 25px; text-align: center; margin-bottom: 30px; position: relative;">
+                <div style="font-size: 12px; font-weight: 600; color: var(--gray-color); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Total Payable Amount</div>
+                <div style="font-size: 42px; font-weight: 900; color: var(--primary-color); line-height: 1;">
+                    <span style="font-size: 24px; vertical-align: top; margin-right: 2px;">₹</span>{% widthratio amount 100 1 %}
+                </div>
+                <div style="font-size: 11px; color: var(--success-color); font-weight: 700; margin-top: 10px;">
+                    <i class="fas fa-check-circle me-1"></i> Inclusive of all taxes & shipping
+                </div>
+            </div>
+
+            <!-- Security Badges -->
+            <div style="display: flex; gap: 10px; margin-bottom: 35px;">
+                <div style="flex: 1; background: #f0fdf4; border: 1px solid #dcfce7; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-shield-check" style="color: #16a34a;"></i>
+                    <span style="font-size: 10px; font-weight: 700; color: #166534;">SSL ENCRYPTED</span>
+                </div>
+                <div style="flex: 1; background: #eff6ff; border: 1px solid #dbeafe; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-user-shield" style="color: #2563eb;"></i>
+                    <span style="font-size: 10px; font-weight: 700; color: #1e40af;">DATA SECURED</span>
+                </div>
+            </div>
+
+            <!-- Pay Button -->
+            <button id="rzp-button1" class="btn-premium-pay" style="width: 100%; height: 60px; background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; border: none; border-radius: 15px; font-weight: 800; font-size: 16px; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);">
+                PAY NOW WITH RAZORPAY <i class="fas fa-arrow-right"></i>
+            </button>
+            <p style="text-align: center; font-size: 11px; color: var(--gray-color); margin-top: 15px; font-weight: 500;">
+                Click to pay securely. You will be redirected back after payment.
+            </p>
+          </div>
+
+          <!-- Bottom Footer -->
+          <div style="background: #fafafa; padding: 20px; border-top: 1px solid #f0f0f0; display: flex; justify-content: center; gap: 20px; color: #bbb; font-size: 20px;">
               <i class="fab fa-cc-visa"></i>
-            </div>
-            <div class="method-logo">
               <i class="fab fa-cc-mastercard"></i>
-            </div>
-            <div class="method-logo">
-              <i class="fas fa-mobile-screen"></i>
-            </div>
-            <div class="method-logo">
+              <i class="fas fa-mobile-alt"></i>
               <i class="fas fa-university"></i>
-            </div>
+              <i class="fas fa-wallet"></i>
           </div>
         </div>
       </div>
@@ -70,26 +80,36 @@
   </div>
 </div>
 
+<style>
+    .btn-premium-pay:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(139, 92, 246, 0.6);
+        filter: brightness(1.1);
+    }
+    .btn-premium-pay:active {
+        transform: scale(0.98);
+    }
+</style>
+
 <!-- Razorpay Integration -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Configure Razorpay
     var options = {
       "key": "{{api_key}}",
-      "name": "Online Bazar",
-      "description": "Order Payment",
+      "amount": "{{amount}}",
+      "currency": "INR",
+      "name": "Desi Mobile",
+      "description": "Order #{{order_id|slice:'-6:'|upper}} Payment",
+      "image": "{% static 'picture/logo.png' %}",
       "order_id": "{{order_id}}",
       "handler": function (response) {
-        // Button loading state
         const btn = document.getElementById('rzp-button1');
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing...';
         btn.disabled = true;
-        
-        // Redirect on success
-        window.location.href = "/paymentSuccess/" + 
-          response.razorpay_payment_id + "/" + 
-          response.razorpay_order_id + "/" + 
+        window.location.href = "/paymentSuccess/" +
+          response.razorpay_payment_id + "/" +
+          response.razorpay_order_id + "/" +
           response.razorpay_signature + "/";
       },
       "prefill": {
@@ -97,215 +117,21 @@
         "email": "{{User.email}}",
         "contact": "{{User.phone}}"
       },
-      "notes": {
-        "order_id": "{{order_id}}"
-      },
       "theme": {
-        "color": "#4361ee",
-        "hide_topbar": true
+        "color": "#8b5cf6"
       }
     };
 
     var rzp1 = new Razorpay(options);
     
-    rzp1.on('payment.failed', function (response) {
-      Swal.fire({
-        title: 'Payment Failed',
-        text: 'Your payment could not be processed. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'Try Again',
-        confirmButtonColor: '#4361ee'
-      }).then(() => {
-        window.location.href = "/checkout/";
-      });
-    });
-
     document.getElementById('rzp-button1').onclick = function (e) {
-      // Button animation
-      this.classList.add('animate__animated', 'animate__pulse');
-      setTimeout(() => {
-        this.classList.remove('animate__animated', 'animate__pulse');
-      }, 1000);
-      
       rzp1.open();
       e.preventDefault();
     }
   });
 </script>
 
-<!-- Styles -->
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-  @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
-  :root {
-    --primary: #4361ee;
-    --primary-light: #eef2ff;
-    --secondary: #3f37c9;
-    --dark: #212529;
-    --light: #f8f9fa;
-  }
-
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-  }
-
-  .payment-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-
-  /* Payment Card */
-  .payment-card {
-    background-color: white;
-    border: none;
-    transition: all 0.3s ease;
-  }
-
-  .payment-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-  }
-
-  .payment-header {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    position: relative;
-    overflow: hidden;
-  }
-
-  .payment-header::after {
-    content: '';
-    position: absolute;
-    bottom: -50px;
-    right: -50px;
-    width: 100px;
-    height: 100px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-  }
-
-  .watermark {
-    position: absolute;
-    bottom: 20px;
-    right: 30px;
-    font-size: 5rem;
-    opacity: 0.1;
-    font-weight: bold;
-    color: white;
-  }
-
-  .payment-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 1rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-  }
-
-  /* Order Summary */
-  .order-summary {
-    background-color: var(--light);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border-left: 4px solid var(--primary);
-  }
-
-  .amount-display {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.2rem;
-    padding: 1rem;
-    background-color: white;
-    border-radius: 8px;
-    margin-top: 1rem;
-  }
-
-  .amount {
-    font-weight: bold;
-    color: var(--primary);
-    font-size: 1.5rem;
-  }
-
-  /* Pay Now Button */
-  .btn-pay-now {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border: none;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    border-radius: 50px;
-    overflow: hidden;
-    position: relative;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: white;
-  }
-
-  .btn-pay-now:hover {
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-    color: white;
-  }
-
-  .btn-pay-now:hover .btn-icon {
-    transform: translateX(5px);
-  }
-
-  .btn-icon {
-    transition: all 0.3s;
-  }
-
-  /* Payment Methods */
-  .method-logo {
-    width: 50px;
-    height: 30px;
-    background-color: white;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary);
-    font-size: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: all 0.3s;
-  }
-
-  .method-logo:hover {
-    transform: translateY(-3px);
-    color: var(--secondary);
-  }
-
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .payment-container {
-      padding-top: 2rem;
-    }
-    
-    .watermark {
-      font-size: 3rem;
-      bottom: 10px;
-      right: 15px;
-    }
-    
-    .amount-display {
-      flex-direction: column;
-      text-align: center;
-      gap: 0.5rem;
-    }
-  }
-</style>
-
-<!-- Include SweetAlert for beautiful alerts -->
+<!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
+%}

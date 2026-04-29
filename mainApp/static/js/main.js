@@ -117,21 +117,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const productId = this.closest('.product-card').querySelector('.wishlist-btn').getAttribute('data-product-id');
             
-            // Add to cart logic would go here
+            // We no longer manually stop the submission because we redirect to checkout/cart
+            // addToCart handles the real form submit which will navigate away!
             addToCart(productId, 1);
             
-            // Visual feedback
-            this.innerHTML = '<i class="fas fa-check"></i> Added!';
+            // Visual feedback (in case of slow connection)
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
             this.classList.add('added-to-cart');
-            
-            // Update cart count
-            updateCartCount();
-            
-            // Reset button after delay
-            setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
-                this.classList.remove('added-to-cart');
-            }, 2000);
         });
     });
 
@@ -225,45 +217,66 @@ function showToast(message, type = 'success') {
 }
 
 function addToCart(productId, quantity) {
-    // In a real implementation, this would make an AJAX call to your backend
-    console.log(`Adding product ${productId} to cart with quantity ${quantity}`);
+    // Submit an actual POST request to the backend instead of storing in LocalStorage
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/add-to-cart/';
     
-    // For demo purposes, we'll use localStorage
-    let cart = JSON.parse(localStorage.getItem('onlineBazarCart')) || [];
-    const existingItem = cart.find(item => item.id === productId);
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
+    // Add CSRF Token
+    const csrfElement = document.querySelector('[name=csrfmiddlewaretoken]');
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    if (csrfElement) {
+        csrfInput.value = csrfElement.value;
     } else {
-        cart.push({ id: productId, quantity: quantity });
+        const match = document.cookie.match(new RegExp('(^| )csrftoken=([^;]+)'));
+        csrfInput.value = match ? match[2] : '';
     }
+    form.appendChild(csrfInput);
+
+    const pidInput = document.createElement('input');
+    pidInput.type = 'hidden';
+    pidInput.name = 'pid';
+    pidInput.value = productId;
+    form.appendChild(pidInput);
+
+    const colorInput = document.createElement('input');
+    colorInput.type = 'hidden';
+    colorInput.name = 'color';
+    colorInput.value = "";
+    form.appendChild(colorInput);
     
-    localStorage.setItem('onlineBazarCart', JSON.stringify(cart));
-    showToast('Product added to cart!', 'success');
+    const sizeInput = document.createElement('input');
+    sizeInput.type = 'hidden';
+    sizeInput.name = 'size';
+    sizeInput.value = "";
+    form.appendChild(sizeInput);
+
+    document.body.appendChild(form);
+    form.submit();
 }
 
 function removeFromCart(productId) {
-    let cart = JSON.parse(localStorage.getItem('onlineBazarCart')) || [];
-    cart = cart.filter(item => item.id !== productId);
-    localStorage.setItem('onlineBazarCart', JSON.stringify(cart));
-    updateCartCount();
+    // Should be handled by backend URL in django templates
 }
 
 function updateCartCount() {
-    const cartCountElements = document.querySelectorAll('.cart-count');
-    if (cartCountElements.length > 0) {
-        let cart = JSON.parse(localStorage.getItem('onlineBazarCart')) || [];
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        
-        cartCountElements.forEach(element => {
-            element.textContent = totalItems;
-            if (totalItems > 0) {
-                element.style.display = 'flex';
-            } else {
-                element.style.display = 'none';
-            }
-        });
+    // Clean up old localStorage cart to prevent mismatch
+    if (localStorage.getItem('onlineBazarCart')) {
+        localStorage.removeItem('onlineBazarCart');
     }
+    
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(element => {
+        // Hide badge if count is 0
+        const val = parseInt(element.textContent);
+        if (val > 0) {
+            element.style.display = 'flex';
+        } else {
+            element.style.display = 'none';
+        }
+    });
 }
 
 function addToWishlist(productId) {
