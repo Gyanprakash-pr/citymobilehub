@@ -2,224 +2,271 @@
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | Sign Up</title>
+<title>City Mobile | Create Account</title>
 {% endblock %}
 
-
-
 {% block body %}
-<div class="signup-wrapper">
-    <!-- Particles Background -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Signup Container -->
-    <div class="signup-container">
-        <div class="signup-card">
-            <!-- Left Side - Header with Benefits -->
-            <div class="signup-header">
-                <img src="{% static 'images/signup.png' %}" alt="Online Bazar" class="signup-logo">
-                <h2 class="signup-title">Join Our Community</h2>
-                <p class="signup-subtitle">Create your account in just 1 minute</p>
-                
-                <div class="signup-benefits">
-                    <h4>Why join us?</h4>
-                    <ul>
-                        <li>Access to exclusive deals</li>
-                        <li>Faster checkout process</li>
-                        <li>Personalized recommendations</li>
-                        <li>Track your order history</li>
-                        <li>Earn reward points</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Right Side - Form -->
-            <div class="signup-form">
-                <!-- Error Messages -->
-                {% for message in messages %}
-                <div class="alert alert-error animate__animated animate__shakeX">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>{{ message }}</span>
-                </div>
-                {% endfor %}
-
-                <!-- Signup Form -->
-                <form method="post" class="signup-form">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="floating-label-group">
-                                <input type="text" id="name" name="name" class="floating-input" placeholder=" " required>
-                                <label class="floating-label">Full Name</label>
-                                <i class="fas fa-user input-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="floating-label-group">
-                                <input type="text" id="username" name="username" class="floating-input" placeholder=" " required>
-                                <label class="floating-label">Username</label>
-                                <i class="fas fa-at input-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="floating-label-group">
-                                <input type="tel" id="phone" name="phone" class="floating-input" placeholder=" " required>
-                                <label class="floating-label">Phone Number</label>
-                                <i class="fas fa-phone input-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="floating-label-group">
-                                <input type="email" id="email" name="email" class="floating-input" placeholder=" " required>
-                                <label class="floating-label">Email</label>
-                                <i class="fas fa-envelope input-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="floating-label-group">
-                                <input type="password" id="password" name="password" class="floating-input" placeholder=" " required>
-                                <label class="floating-label">Password</label>
-                                <i class="fas fa-lock input-icon"></i>
-                                <div class="password-strength">
-                                    <div class="strength-bar">
-                                        <div class="strength-level" style="width: 0%"></div>
+<div class="signup-page-v2" style="background: #f8fafc; min-height: 100vh; padding: 100px 0 60px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="signup-glass-card">
+                    <div class="row g-0">
+                        <!-- Brand Side -->
+                        <div class="col-lg-5 d-none d-lg-block brand-side">
+                            <div class="brand-content h-100 p-5 d-flex flex-column justify-content-between text-white">
+                                <div>
+                                    <h2 class="display-5 fw-bold mb-3" style="font-family: 'Montserrat', sans-serif;">Unlock <br>Premium <br>Access.</h2>
+                                    <p class="lead opacity-75">Join thousands of tech enthusiasts getting exclusive deals daily.</p>
+                                </div>
+                                <div class="perks-list">
+                                    <div class="perk-item d-flex align-items-center mb-3">
+                                        <div class="perk-icon"><i class="fas fa-bolt"></i></div>
+                                        <span>Lightning fast checkout</span>
                                     </div>
-                                    <span class="strength-text">Weak</span>
+                                    <div class="perk-item d-flex align-items-center mb-3">
+                                        <div class="perk-icon"><i class="fas fa-gift"></i></div>
+                                        <span>Exclusive reward points</span>
+                                    </div>
+                                    <div class="perk-item d-flex align-items-center">
+                                        <div class="perk-icon"><i class="fas fa-shield-alt"></i></div>
+                                        <span>Secure 256-bit encryption</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="floating-label-group">
-                                <input type="password" id="cpassword" name="cpassword" class="floating-input" placeholder=" " required>
-                                <label class="floating-label">Confirm Password</label>
-                                <i class="fas fa-lock input-icon"></i>
-                                <span class="password-match"></span>
+
+                        <!-- Form Side -->
+                        <div class="col-lg-7">
+                            <div class="form-side p-4 p-md-5 bg-white h-100">
+                                <div class="form-header mb-4">
+                                    <h3 class="fw-bold text-dark">Create Account</h3>
+                                    <p class="text-muted">Fill in your details to get started</p>
+                                </div>
+
+                                {% for message in messages %}
+                                <div class="alert alert-danger border-0 shadow-sm mb-4 animate__animated animate__headShake" style="border-radius: 12px; font-size: 14px;">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> {{ message }}
+                                </div>
+                                {% endfor %}
+
+                                <form method="post" class="needs-validation">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="actype" value="buyer">
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="modern-input-group">
+                                                <label class="form-label small fw-bold text-secondary">FULL NAME</label>
+                                                <div class="input-wrapper">
+                                                    <i class="far fa-user"></i>
+                                                    <input type="text" name="name" class="form-control" placeholder="Gyan Babu" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="modern-input-group">
+                                                <label class="form-label small fw-bold text-secondary">USERNAME</label>
+                                                <div class="input-wrapper">
+                                                    <i class="fas fa-at"></i>
+                                                    <input type="text" name="username" class="form-control" placeholder="gyan123" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="modern-input-group">
+                                                <label class="form-label small fw-bold text-secondary">EMAIL ADDRESS</label>
+                                                <div class="input-wrapper">
+                                                    <i class="far fa-envelope"></i>
+                                                    <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="modern-input-group">
+                                                <label class="form-label small fw-bold text-secondary">PHONE NUMBER</label>
+                                                <div class="input-wrapper">
+                                                    <i class="fas fa-mobile-alt"></i>
+                                                    <input type="tel" name="phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="modern-input-group">
+                                                <label class="form-label small fw-bold text-secondary">PASSWORD</label>
+                                                <div class="input-wrapper">
+                                                    <i class="fas fa-lock"></i>
+                                                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="modern-input-group">
+                                                <label class="form-label small fw-bold text-secondary">CONFIRM PASSWORD</label>
+                                                <div class="input-wrapper">
+                                                    <i class="fas fa-lock"></i>
+                                                    <input type="password" name="cpassword" class="form-control" placeholder="••••••••" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mt-4 mb-4">
+                                        <input class="form-check-input" type="checkbox" id="termsAgree" required>
+                                        <label class="form-check-label small text-muted" for="termsAgree">
+                                            I agree to the <a href="#" class="text-primary text-decoration-none fw-bold">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none fw-bold">Privacy Policy</a>.
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm signup-btn">
+                                        SIGN UP NOW <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+
+                                    <div class="text-center mt-4">
+                                        <p class="small text-muted">Already have an account? <a href="/login/" class="text-primary fw-bold text-decoration-none">Sign In</a></p>
+                                    </div>
+                                </form>
+
+                                <div class="divider-text my-4"><span>OR REGISTER WITH</span></div>
+
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <a href="#" class="btn btn-outline-light border text-dark w-100 py-2 small fw-bold d-flex align-items-center justify-content-center gap-2">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="16" alt=""> Google
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="#" class="btn btn-outline-light border text-dark w-100 py-2 small fw-bold d-flex align-items-center justify-content-center gap-2">
+                                            <i class="fab fa-facebook text-primary"></i> Facebook
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="actype">
-                            <i class="fas fa-user-tag"></i> Account Type
-                        </label>
-                        <select id="actype" name="actype" required>
-                            <option value="" disabled selected>Select account type</option>
-                            <option value="buyer">Buyer</option>
-                            <option value="seller">Seller</option>
-                        </select>
-                    </div>
-
-                    <!-- Terms & Conditions Section -->
-                    <div class="terms-container">
-    <h5>
-        <i class="fas fa-file-contract"></i> Terms & Conditions
-        <span class="toggle-terms">(Click to Read)</span>
-    </h5>
-    <div class="terms-content" style="display: none;">
-        <p>By creating an account, you agree to our Terms of Service and Privacy Policy:</p>
-        <ol>
-            <li>You must provide accurate and complete information</li>
-            <li>You are responsible for maintaining account security</li>
-            <li>We may send you service-related emails</li>
-            <li>You must be at least 13 years old to register</li>
-            <li>Prohibited activities may result in account termination</li>
-        </ol>
-        <p>For full terms, please visit our website.</p>
-    </div>
-    <div class="form-check">
-        <input type="checkbox" id="terms" required>
-        <label for="terms">
-            I agree to the Terms & Conditions and Privacy Policy
-        </label>
-    </div>
-</div>
-                    <button type="submit" class="signup-button">
-                        <span class="button-text">Create Account</span>
-                        <i class="fas fa-user-plus"></i>
-                    </button>
-                </form>
-
-                <!-- Login Link -->
-                <div class="login-link">
-                    Already have an account? <a href="/login/">Sign In</a>
-                </div>
-
-                <!-- Social Login -->
-                <div class="social-login">
-                    <div class="divider">
-                        <span>or sign up with</span>
-                    </div>
-                    <div class="social-icons">
-                        <a href="#" class="social-icon google">
-                            <i class="fab fa-google"></i>
-                        </a>
-                        <a href="#" class="social-icon facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="social-icon twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleTerms = document.querySelector('.toggle-terms');
-    const termsContent = document.querySelector('.terms-content');
+<style>
+    .signup-glass-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
     
-    if (toggleTerms && termsContent) {
-        toggleTerms.addEventListener('click', function() {
-            termsContent.classList.toggle('show');
-            
-            // Toggle icon
-            const icon = this.closest('h5').querySelector('i');
-            if (termsContent.classList.contains('show')) {
-                icon.classList.remove('fa-file-contract');
-                icon.classList.add('fa-file-alt');
-                this.textContent = '(Click to Hide)';
-            } else {
-                icon.classList.remove('fa-file-alt');
-                icon.classList.add('fa-file-contract');
-                this.textContent = '(Click to Read)';
-            }
-        });
+    .brand-side {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        position: relative;
     }
-});
-</script>
-<script>
-// Auto-scroll testimonials on desktop
-document.addEventListener('DOMContentLoaded', function() {
-  const carousel = document.querySelector('.testimonials-carousel');
-  
-  function checkScroll() {
-    if (window.innerWidth >= 1200) {
-      carousel.style.animation = 'scrollTestimonials 30s linear infinite';
-      carousel.addEventListener('mouseenter', () => {
-        carousel.style.animationPlayState = 'paused';
-      });
-      carousel.addEventListener('mouseleave', () => {
-        carousel.style.animationPlayState = 'running';
-      });
-    } else {
-      carousel.style.animation = 'none';
+    
+    .brand-side::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0; left: 0;
+        background: url('https://www.transparenttextures.com/patterns/cubes.png');
+        opacity: 0.1;
     }
-  }
-  
-  window.addEventListener('resize', checkScroll);
-  checkScroll();
-});
-</script>
-{% endblock %}
+    
+    .perk-icon {
+        width: 32px;
+        height: 32px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 14px;
+    }
+    
+    .modern-input-group {
+        margin-bottom: 5px;
+    }
+    
+    .input-wrapper {
+        position: relative;
+    }
+    
+    .input-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+    
+    .input-wrapper .form-control {
+        height: 50px;
+        padding-left: 45px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+    
+    .input-wrapper .form-control:focus {
+        background: white;
+        border-color: #7c3aed;
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    }
+    
+    .input-wrapper .form-control:focus + i {
+        color: #7c3aed;
+    }
+    
+    .signup-btn {
+        background: #4f46e5;
+        border: none;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+    
+    .signup-btn:hover {
+        background: #4338ca;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+    }
+    
+    .divider-text {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .divider-text::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: #e2e8f0;
+        z-index: -1;
+    }
+    
+    .divider-text span {
+        background: white;
+        padding: 0 15px;
+        color: #94a3b8;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    @media (max-width: 991px) {
+        .signup-page-v2 { padding: 40px 0; }
+        .signup-glass-card { border-radius: 20px; }
+        .form-side { padding: 30px 20px !important; }
+    }
+</style>
+{% endblock %}

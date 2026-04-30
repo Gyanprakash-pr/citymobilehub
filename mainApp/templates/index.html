@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 {% load static %}
 {% load product %}
 <html lang="en">
@@ -8,7 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block title %}
-  <title>Desi Mobile | Your Ultimate Mobile Shop</title>
+  <title>City Mobile | Your Ultimate Mobile Shop</title>
   {% endblock %}
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,6 +18,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#6366f1">
+  <link rel="apple-touch-icon" href="/static/picture/logo.png">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'css/style.css'%}">
   <link rel="stylesheet" href="{% static 'css/contact.css'%}">
@@ -41,7 +46,8 @@
   <nav class="navbar navbar-expand-lg navbar-light custom-navbar fixed-top">
     <div class="container">
       <a class="navbar-brand animate__animated animate__fadeInLeft" href="/">
-        <i class="fas fa-mobile-alt me-2"></i>Desi Mobile
+        <img src="{% static 'picture/logo.png' %}" alt="City Mobile" style="height: 45px; width: 45px; object-fit: cover; border-radius: 50%; margin-right: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);">
+        City Mobile
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <i class="fas fa-bars"></i>
@@ -118,7 +124,7 @@
         <!-- Image on Top (Second Image from previous layout) -->
         <div class="hero-top-visual animate__animated animate__zoomIn" style="margin-bottom: 50px;">
             <div class="main-visual-wrapper" style="position: relative; display: inline-block;">
-                <img src="{% static 'picture/hero3.jpg' %}" alt="Desi Mobile" style="width: 100%; max-width: 600px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); transform: perspective(1000px) rotateX(10deg);">
+                <img src="{% static 'picture/hero3.jpg' %}" alt="City Mobile" style="width: 100%; max-width: 600px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); transform: perspective(1000px) rotateX(10deg);">
                 <!-- Floating Accent -->
                 <div style="position: absolute; bottom: -20px; right: -20px; background: var(--secondary-color); color: white; padding: 12px 25px; border-radius: 15px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
                     NEW TECH '26
@@ -182,12 +188,10 @@
         <div class="orbit-center animate__animated animate__pulse animate__infinite animate__slower" style="position: absolute; z-index: 10; width: 180px; height: 180px; background: white; border-radius: 50%; box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3); display: flex; align-items: center; justify-content: center; border: 8px solid var(--primary-light);">
             <div style="text-align: center;">
                 <i class="fas fa-mobile-alt" style="font-size: 50px; color: var(--primary-color); margin-bottom: 10px;"></i>
-                <div style="font-weight: 800; font-size: 16px; color: var(--dark-color); line-height: 1;">DESI<br>MOBILE</div>
+                <div style="font-weight: 800; font-size: 16px; color: var(--dark-color); line-height: 1;">CITY<br>MOBILE</div>
             </div>
         </div>
 
-        <!-- Orbits (Visual Rings) -->
-        <div style="position: absolute; width: 450px; height: 450px; border: 2px dashed rgba(139, 92, 246, 0.1); border-radius: 50%;"></div>
         
         <!-- Categories (Planets) -->
         {% for cat in Maincategory %}
@@ -250,20 +254,30 @@
         const count = planets.length;
         
         const positionPlanets = () => {
+            const container = document.querySelector('.category-orbit-container');
+            if (!container) return;
+            
             const isMobile = window.innerWidth < 768;
-            const radius = isMobile ? 125 : 220; // Reduced mobile radius to prevent cutting
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+            const radius = isMobile ? (containerWidth * 0.35) : 220; 
 
             planets.forEach((planet, index) => {
+                // Fixed planet dimensions for calculation (since they might be small on mobile)
+                const planetWidth = isMobile ? 60 : 100;
+                const planetHeight = isMobile ? 80 : 130; // Including label
+
                 const angle = (index / count) * 2 * Math.PI - (Math.PI / 2);
                 const x = Math.cos(angle) * radius;
                 const y = Math.sin(angle) * radius;
                 
-                planet.style.left = `calc(50% + ${x}px - ${planet.offsetWidth / 2}px)`;
-                planet.style.top = `calc(50% + ${y}px - ${planet.offsetHeight / 2}px)`;
+                planet.style.left = `calc(50% + ${x}px - ${planetWidth / 2}px)`;
+                planet.style.top = `calc(50% + ${y}px - ${planetHeight / 2}px)`;
             });
         };
 
-        positionPlanets();
+        // Run with small delay to ensure rendering
+        setTimeout(positionPlanets, 100);
         window.addEventListener('resize', positionPlanets);
     });
  </script>
@@ -310,9 +324,9 @@
                 <span class="rating-count">(24)</span>
               </div>
               <div class="price-container">
-                <span class="final-price">₹{{ i.finalprice }}</span>
+                <span class="final-price">â‚¹{{ i.finalprice }}</span>
                 {% if i.discount > 0 %}
-                <span class="base-price">₹{{ i.baseprice }}</span>
+                <span class="base-price">â‚¹{{ i.baseprice }}</span>
                 {% endif %}
               </div>
               <a href="/single-product-page/{{ i.id }}" class="btn btn-add-to-cart">
@@ -328,331 +342,361 @@
 
 
   <!-- Banner Section - Latest Arrivals -->
- <section class="banner-section" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);">
-  <div class="container">
-    <div class="banner-content animate__animated animate__fadeIn">
-      <div class="banner-text">
-        <h2 class="animate__animated animate__fadeInDown animate__delay-1s" style="color: var(--primary-color);">New Arrivals</h2>
-        <h3 class="animate__animated animate__fadeInUp animate__delay-1-5s">Latest <span class="discount-badge" style="background: var(--secondary-color);">2026</span> Tech</h3>
-        <p class="animate__animated animate__fadeIn animate__delay-2s" style="color: var(--dark-color);">Fresh stock of premium chargers, cases and more just landed! Get them before they're gone.</p>
-        <div class="countdown animate__animated animate__fadeIn animate__delay-2-5s" style="background: rgba(139, 92, 246, 0.1); color: var(--primary-color);">
-          <span id="days">00</span>d 
-          <span id="hours">00</span>h 
-          <span id="minutes">00</span>m 
-          <span id="seconds">00</span>s
-        </div>
-        <a href="/shop/All/All/All/?sort=latest" class="btn btn-shop animate__animated animate__fadeInUp animate__delay-3s" style="background: var(--primary-color); color: white;">Shop Latest Now <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="banner-image animate__animated animate__fadeInRight animate__delay-1s">
-        <!-- New relevant image placeholder or generated image -->
-        <img src="{% static 'picture/hero3.jpg' %}" alt="Latest Products" style="max-width: 100%; border-radius: 20px; box-shadow: var(--shadow-lg);">
-      </div>
-    </div>
-  </div>
- </section>
-
- <!-- Testimonials Section -->
-<section class="testimonials-section">
-  <div class="container">
-    <h2 class="text-center section-title animate__animated animate__fadeIn">What Our Customers Say</h2>
-    <p class="text-center section-subtitle animate__animated animate__fadeIn animate__delay-1s">Trusted by thousands of happy customers</p>
-    
-    <div class="testimonials-carousel">
-      <div class="testimonial-card animate__animated animate__fadeInUp">
-        <div class="testimonial-rating">
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-        </div>
-        <p class="testimonial-text">"Great products and excellent customer service. My order arrived quickly and was exactly as described."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">
-            <img src="{% static 'images/pic3.jpg' %}" alt="Rahul Sharma">
-            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
-          </div>
-          <div class="author-info">
-            <h4>Rahul Sharma</h4>
-            <p>Verified Buyer</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="testimonial-card animate__animated animate__fadeInUp animate__delay-1s">
-        <div class="testimonial-rating">
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-        </div>
-        <p class="testimonial-text">"I love shopping here! The prices are competitive and the quality is always top-notch."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">
-            <img src="{% static 'images/pic2.jpg' %}" alt="Priya Patel">
-            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
-          </div>
-          <div class="author-info">
-            <h4>Priya Patel</h4>
-            <p>Verified Buyer</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="testimonial-card animate__animated animate__fadeInUp animate__delay-2s">
-        <div class="testimonial-rating">
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star"></i></span>
-          <span class="star"><i class="fas fa-star-half-alt"></i></span>
-        </div>
-        <p class="testimonial-text">"The return process was so easy when I needed to exchange an item. Will definitely shop here again!"</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">
-            <img src="{% static 'images/pic1.jpg' %}" alt="Amit Singh">
-            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
-          </div>
-          <div class="author-info">
-            <h4>Amit Singh</h4>
-            <p>Verified Buyer</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Customer Support Section -->
-<section class="support-section py-5">
-  <div class="container">
-    <div class="section-header text-center mb-5">
-      <h2 class="section-title animate__animated animate__fadeIn">24/7 Customer Support</h2>
-      <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1s">We're here to help you anytime</p>
-    </div>
-    
-    <div class="row g-4">
-      <!-- Support Card 1 -->
-      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp">
-        <div class="support-card">
-          <div class="support-icon bg-primary">
-            <i class="fas fa-phone-alt"></i>
-          </div>
-          <div class="support-body">
-            <h3>Phone Support</h3>
-            <p>Talk directly to our support team for immediate assistance.</p>
-            <a href="tel:+916205102076" class="support-link">
-              +91 6205102076 <i class="fas fa-arrow-right"></i>
+  <section class="banner-section py-5" style="background: #f8fafc; overflow: hidden; position: relative;">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6 order-2 order-lg-1">
+          <div class="banner-text animate__animated animate__fadeInLeft">
+            <h6 class="text-uppercase fw-bold ls-2 mb-3" style="color: var(--secondary-color); font-size: 14px;">Season Refresh</h6>
+            <h2 class="display-5 fw-bold mb-3" style="color: var(--dark-color);">New Arrivals <span style="color: var(--primary-color);">2026</span></h2>
+            <p class="lead text-muted mb-4">Discover the next generation of mobile tech. Premium chargers, ultra-durable cases, and high-fidelity audio gadgets have just arrived.</p>
+            
+            <!-- Professional Countdown -->
+            <div class="countdown-wrapper d-flex gap-2 gap-md-3 mb-5">
+              <div class="countdown-box">
+                <span id="days" class="number">00</span>
+                <span class="label">Days</span>
+              </div>
+              <div class="countdown-box">
+                <span id="hours" class="number">00</span>
+                <span class="label">Hrs</span>
+              </div>
+              <div class="countdown-box">
+                <span id="minutes" class="number">00</span>
+                <span class="label">Mins</span>
+              </div>
+              <div class="countdown-box">
+                <span id="seconds" class="number">00</span>
+                <span class="label">Secs</span>
+              </div>
+            </div>
+            
+            <a href="/shop/All/All/All/?sort=latest" class="btn-premium-action">
+              <span>Shop Collection</span>
+              <i class="fas fa-arrow-right"></i>
             </a>
-            <div class="support-hours">
-              <i class="far fa-clock"></i> 24/7 Availability
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2">
+          <div class="banner-visual position-relative animate__animated animate__fadeInRight">
+            <div class="visual-bg-glow"></div>
+            <img src="{% static 'picture/discount.jpg' %}" alt="Special Discount" class="img-fluid rounded-5 shadow-2xl">
+            <div class="floating-badge shadow-lg">
+              <span class="d-block fw-bold">Up to</span>
+              <span class="h4 fw-900 mb-0">40% OFF</span>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Support Card 2 -->
-      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp animate__delay-1s">
-        <div class="support-card">
-          <div class="support-icon bg-success">
-            <i class="fas fa-comments"></i>
-          </div>
-          <div class="support-body">
-            <h3>Live Chat</h3>
-            <p>Chat with our support agents in real-time for quick answers.</p>
-            <button class="btn btn-chat" id="liveChatBtn">
-              Start Live Chat <i class="fas fa-arrow-right"></i>
-            </button>
-            <div class="support-hours">
-              <i class="far fa-clock"></i> 8AM - 12AM (IST)
-            </div>
-          </div>
-        </div>
+    </div>
+  </section>
+
+  <style>
+    .ls-2 { letter-spacing: 2px; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+    .fw-900 { font-weight: 900; }
+    
+    .countdown-box {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 16px;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .countdown-box .number {
+      display: block;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary-color);
+      line-height: 1;
+    }
+    .countdown-box .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-top: 5px;
+    }
+    
+    .btn-premium-action {
+      background: var(--dark-color);
+      color: white;
+      padding: 18px 45px;
+      border-radius: 50px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      transition: all 0.3s;
+      border: none;
+    }
+    .btn-premium-action:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+      color: white;
+    }
+    
+    .visual-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+      z-index: -1;
+    }
+    
+    .floating-badge {
+      position: absolute;
+      bottom: 30px;
+      left: -20px;
+      background: var(--secondary-color);
+      color: white;
+      padding: 20px;
+      border-radius: 24px;
+      text-align: center;
+      animation: floatBadge 4s ease-in-out infinite;
+    }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @media (max-width: 768px) {
+      .countdown-box { padding: 10px; min-width: 65px; }
+      .countdown-box .number { font-size: 18px; }
+      .floating-badge { bottom: 10px; left: 10px; padding: 12px; }
+    }
+  </style>
+
+  <!-- Customer Support Section - Reinstated & Modernized -->
+  <section class="support-section py-5" style="background: white;">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <h2 class="display-6 fw-bold mb-2">24/7 Customer Support</h2>
+        <p class="text-muted">We're here to help you anytime, anywhere.</p>
+        <div class="mx-auto" style="width: 60px; height: 4px; background: var(--primary-color); border-radius: 2px;"></div>
       </div>
       
-      <!-- Support Card 3 -->
-      <div class="col-lg-4 col-md-6 animate__animated animate__fadeInUp animate__delay-2s">
-        <div class="support-card">
-          <div class="support-icon bg-warning">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <div class="support-body">
-            <h3>Email Support</h3>
-            <p>Send us an email and we'll respond within 24 hours.</p>
-            <a href="mailto:support@onlinebazar.com" class="support-link">
-              support@onlinebazar.com <i class="fas fa-arrow-right"></i>
+      <div class="row g-4">
+        <!-- Support Card 1 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0" style="background: #f8fafc; transition: all 0.3s;">
+            <div class="support-icon-wrapper mb-4 mx-auto" style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+              <i class="fas fa-phone-alt" style="font-size: 24px; color: var(--primary-color);"></i>
+            </div>
+            <h3 class="h5 fw-bold mb-3">Phone Support</h3>
+            <p class="small text-muted mb-4">Talk directly to our tech experts for immediate assistance with your orders.</p>
+            <a href="tel:+916205102076" class="fw-bold text-decoration-none" style="color: var(--primary-color);">
+              +91 6205102076 <i class="fas fa-arrow-right ms-2"></i>
             </a>
-            <div class="support-hours">
-              <i class="far fa-clock"></i> 24/7 Response
+          </div>
+        </div>
+        
+        <!-- Support Card 2 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0" style="background: #f8fafc; transition: all 0.3s;">
+            <div class="support-icon-wrapper mb-4 mx-auto" style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+              <i class="fas fa-comments" style="font-size: 24px; color: var(--success-color);"></i>
+            </div>
+            <h3 class="h5 fw-bold mb-3">Live Chat</h3>
+            <p class="small text-muted mb-4">Chat with our support agents in real-time for quick answers to your queries.</p>
+            <button class="btn btn-sm rounded-pill px-4 fw-bold" style="background: var(--success-color); color: white;" onclick="openChat()">
+              Start Chat <i class="fas fa-bolt ms-2"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Support Card 3 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0" style="background: #f8fafc; transition: all 0.3s;">
+            <div class="support-icon-wrapper mb-4 mx-auto" style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+              <i class="fas fa-envelope" style="font-size: 24px; color: var(--secondary-color);"></i>
+            </div>
+            <h3 class="h5 fw-bold mb-3">Email Support</h3>
+            <p class="small text-muted mb-4">Send us an email and our dedicated team will respond within 24 business hours.</p>
+            <a href="mailto:contact@citymobile.in" class="fw-bold text-decoration-none" style="color: var(--secondary-color);">
+              contact@citymobile.in <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- FAQ Section -->
+      <div class="faq-minimal mt-5 pt-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <h3 class="text-center fw-bold mb-4">Common Questions</h3>
+            <div class="accordion accordion-flush custom-accordion" id="supportFaq">
+              <div class="accordion-item mb-3 border rounded-4 overflow-hidden">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    How can I track my order?
+                  </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#supportFaq">
+                  <div class="accordion-body text-muted">
+                    Log in to your account and go to "My Orders" to see real-time updates and tracking IDs for all your shipments.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item mb-3 border rounded-4 overflow-hidden">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    What is your return policy?
+                  </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#supportFaq">
+                  <div class="accordion-body text-muted">
+                    We offer a 7-day easy return policy for defective mobile accessories. Items must be in original packaging.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- FAQ Section -->
-    <div class="faq-section mt-5 pt-4 animate__animated animate__fadeIn">
-      <div class="text-center mb-4">
-        <h3>Frequently Asked Questions</h3>
-        <p class="text-muted">Quick answers to common questions</p>
-      </div>
-      
-      <div class="accordion" id="faqAccordion">
-        <!-- FAQ Item 1 -->
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-              How can I track my order?
-            </button>
-          </h2>
-          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              You can track your order by logging into your account and visiting the "My Orders" section. We'll also send you email updates with tracking information at each stage of delivery.
-            </div>
-          </div>
-        </div>
-        
-        <!-- FAQ Item 2 -->
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-              What is your return policy?
-            </button>
-          </h2>
-          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              We offer a 30-day return policy for most items. Items must be unused, in original packaging with all tags attached. Some items like perishables and personal care products may not be returnable.
-            </div>
-          </div>
-        </div>
-        
-        <!-- FAQ Item 3 -->
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-              How do I apply a discount code?
-            </button>
-          </h2>
-          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              During checkout, you'll see a field to enter your discount code. Simply type or paste the code and click "Apply". The discount will be automatically calculated and applied to your order total.
-            </div>
-          </div>
-        </div>
-        
-        <!-- FAQ Item 4 -->
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-              What payment methods do you accept?
-            </button>
-          </h2>
-          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              We accept all major credit/debit cards (Visa, MasterCard, American Express), UPI payments, net banking, and popular digital wallets like Paytm, PhonePe, and Google Pay. We also offer Cash on Delivery (COD) for eligible orders.
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="text-center mt-4">
-        <a href="/contact/" class="btn btn-outline-primary">
-          View All FAQs <i class="fas fa-arrow-right ms-2"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- Live Chat Modal -->
-<div class="chatbot-modal" id="chatbotModal">
-  <div class="chatbot-container">
-    <div class="chatbot-header">
-      <div class="chatbot-title">
-        <i class="fas fa-mobile-alt me-2"></i>
-        <h3>Desi Mobile Assistant</h3>
-      </div>
-      <button class="chatbot-close" id="closeChat">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    
-    <div class="chatbot-body" id="chatMessages">
-      <!-- Bot welcome message -->
-      <div class="message bot-message">
-        <div class="message-content">
-          <div class="message-text">
-            Hi there! 👋 I'm your shopping assistant. How can I help you today?
-          </div>
-          <div class="message-time">Just now</div>
-        </div>
-        <div class="quick-replies">
-          <button class="quick-reply-btn" data-message="Track my order">Track my order</button>
-          <button class="quick-reply-btn" data-message="Return policy">Return policy</button>
-          <button class="quick-reply-btn" data-message="Payment issues">Payment issues</button>
-        </div>
-      </div>
-    </div>
-    
-    <div class="chatbot-footer">
-      <div class="typing-indicator" id="typingIndicator">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="chatbot-input">
-        <input type="text" id="userMessage" placeholder="Type your message..." autocomplete="off">
-        <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
-      </div>
-    </div>
-  </div>
-</div>
+  <style>
+    .support-card:hover {
+      transform: translateY(-10px);
+      background: white !important;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+    }
+    .custom-accordion .accordion-button:not(.collapsed) {
+      background-color: var(--light-color);
+      color: var(--primary-color);
+      box-shadow: none;
+    }
+    .custom-accordion .accordion-button:focus {
+      box-shadow: none;
+    }
+  </style>
 
- <!-- Newsletter Section -->
-<section class="newsletter-section" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); padding: 60px 0;">
-  <div class="container">
-    <div class="newsletter-content text-center text-white animate__animated animate__fadeInUp">
-      <h2 class="mb-3" style="font-size: 2.5rem; font-weight: 700;">Stay Updated</h2>
-      <p class="mb-4" style="font-size: 1.2rem; opacity: 0.9;">Subscribe to our newsletter and never miss updates on new products and exclusive offers!</p>
-      
-      <form class="newsletter-form" method="post" action="/">
-        {% csrf_token %}
-        <div class="input-group mx-auto" style="max-width: 500px;">
-          <input type="email" 
-                 class="form-control form-control-lg" 
-                 name="email" 
-                 placeholder="Your email address" 
-                 required
-                 style="border: none; border-radius: 50px 0 0 50px; padding: 15px 25px;"
-                 onfocus="this.style.boxShadow='0 0 0 0.2rem rgba(255,255,255,0.25)'"
-                 onblur="this.style.boxShadow='none'">
-          <button class="btn btn-light btn-lg px-4" 
-                  type="submit"
-                  style="border-radius: 0 50px 50px 0; font-weight: 600; color: #764ba2; transition: all 0.3s ease;"
-                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)'"
-                  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-            Subscribe <i class="fas fa-paper-plane ml-2"></i>
-          </button>
+  <!-- Newsletter Section - Professional Dark Theme -->
+  <section class="newsletter-v2 py-5" style="background: #0f172a; position: relative; overflow: hidden;">
+    <!-- Abstract Background Elements -->
+    <div style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);"></div>
+    <div style="position: absolute; bottom: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(249, 115, 22, 0.05) 0%, transparent 70%);"></div>
+
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+          <div class="newsletter-icon mb-4">
+            <i class="fas fa-paper-plane" style="font-size: 40px; color: var(--primary-color);"></i>
+          </div>
+          <h2 class="text-white display-6 fw-bold mb-3">Join the Tech Circle</h2>
+          <p class="text-white opacity-75 mb-5 mx-auto" style="max-width: 600px;">Subscribe to our newsletter and be the first to receive exclusive offers, tech tips, and product launches directly in your inbox.</p>
+          
+          <form class="newsletter-form-v2 d-flex flex-column flex-md-row gap-2 mx-auto" style="max-width: 600px;" method="post" action="/">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Enter your business email" required 
+                   style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 18px 30px; color: white; flex-grow: 1; outline: none; transition: all 0.3s;">
+            <button type="submit" class="btn-subscribe-modern">
+              SUBSCRIBE <i class="fas fa-bolt ms-2"></i>
+            </button>
+          </form>
+          
+          <div class="mt-4 d-flex align-items-center justify-content-center gap-4 text-white opacity-50 small fw-bold">
+            <span><i class="fas fa-check-circle me-1 text-success"></i> No Spam</span>
+            <span><i class="fas fa-check-circle me-1 text-success"></i> Weekly Updates</span>
+            <span><i class="fas fa-check-circle me-1 text-success"></i> Exclusive Deals</span>
+          </div>
         </div>
-      </form>
-      
-      <div class="mt-3 animate__animated animate__fadeIn animate__delay-1s">
-        <small style="opacity: 0.7;">We respect your privacy. Unsubscribe at any time.</small>
       </div>
     </div>
-  </div>
-  
-  <!-- Decorative elements -->
-  <div class="position-absolute" style="top: 20px; left: 20px; width: 50px; height: 50px; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
-  <div class="position-absolute" style="bottom: 30px; right: 10%; width: 30px; height: 30px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: pulse 3s ease infinite;"></div>
-</section>
+  </section>
+
+  <style>
+    .newsletter-form-v2 input:focus {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+    }
+    .btn-subscribe-modern {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 40px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .btn-subscribe-modern:hover {
+      background: var(--primary-dark);
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .btn-subscribe-modern { width: 100%; }
+      .newsletter-v2 { padding: 60px 20px !important; }
+    }
+  </style>
   {% endblock %}
 
   <!-- Footer -->
+    <!-- Recently Viewed Section -->
+  <section id="recentlyViewedSection" class="py-5" style="background: #f1f5f9; display: none;">
+    <div class="container">
+      <div class="section-header d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold mb-0"><i class="fas fa-history me-2 text-primary"></i>Continue Shopping</h2>
+        <button onclick="localStorage.removeItem('recentlyViewed'); location.reload();" class="btn btn-sm text-muted">Clear History</button>
+      </div>
+      <div id="recentlyViewedContainer" class="row g-3 flex-nowrap overflow-auto hide-scrollbar pb-3">
+        <!-- Recently viewed items will be injected here via JS -->
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const recent = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+      const section = document.getElementById('recentlyViewedSection');
+      const container = document.getElementById('recentlyViewedContainer');
+      
+      if (recent.length > 0 && container && section) {
+        section.style.display = 'block';
+        recent.forEach(item => {
+          container.innerHTML += 
+            <div class="col-6 col-md-3 col-lg-2">
+              <a href="\" class="text-decoration-none">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden transition-all hover-up">
+                  <div style="height: 150px; background: white; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                    <img src="\" alt="\" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                  </div>
+                  <div class="card-body p-2 text-center">
+                    <p class="small fw-bold mb-1 text-dark text-truncate">\</p>
+                    <p class="small text-primary fw-bold mb-0">₹\</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ;
+        });
+      }
+    });
+  </script>
+
+  <style>
+    .hover-up:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
   <footer class="footer">
     <div class="container">
       <div class="row g-4">
         <div class="col-lg-4 mb-4 animate__animated animate__fadeInUp">
-          <h4><i class="fas fa-mobile-alt me-2"></i>Desi Mobile</h4>
+          <h4><i class="fas fa-mobile-alt me-2"></i>City Mobile</h4>
           <p>Your one-stop destination for all your mobile needs. We specialize in high-quality chargers, cases, and premium accessories for all major brands.</p>
           <div class="social-icons">
             <a href="https://www.facebook.com/gyan.babu.779/" class="social-icon" target="_blank">
@@ -677,7 +721,9 @@
             <li><a href="/about/"><i class="fas fa-chevron-right"></i> About Us</a></li>
             <li><a href="/shop/All/All/All/"><i class="fas fa-chevron-right"></i> Shop</a></li>
             <li><a href="/contact/"><i class="fas fa-chevron-right"></i> Contact</a></li>
+            {% if request.user|is_seller %}
             <li><a href="/add-product/"><i class="fas fa-chevron-right"></i> New Product Add</a></li>
+            {% endif %}
           </ul>
         </div>
         
@@ -697,25 +743,99 @@
           <ul class="footer-contact">
             <li>
               <i class="fas fa-map-marker-alt"></i>
-              <span>123 Shopping Street, New Delhi, India</span>
+              <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India" target="_blank" style="color: inherit; text-decoration: none;">123 Shopping Street, New Delhi, India</a>
             </li>
             <li>
               <i class="fas fa-phone-alt"></i>
-              <span>+91 6205102076</span>
+              <a href="tel:+916205102076" style="color: inherit; text-decoration: none;">+91 6205102076</a>
             </li>
             <li>
               <i class="fas fa-envelope"></i>
-              <span>contact@desimobile.in</span>
+              <a href="mailto:contact@citymobile.in" style="color: inherit; text-decoration: none;">contact@citymobile.in</a>
             </li>
           </ul>
         </div>
       </div>
       
       <div class="copyright text-center animate__animated animate__fadeIn">
-        <p>&copy; <script>document.write(new Date().getFullYear())</script> Desi Mobile. All Rights Reserved.</p>
+        <p>&copy; <script>document.write(new Date().getFullYear())</script> City Mobile. All Rights Reserved.</p>
       </div>
     </div>
   </footer>
+
+  <!-- Chatbot Modal -->
+  <div id="chatbotModal" class="chatbot-modal-v2 shadow-2xl animate__animated" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 380px; height: 550px; background: white; border-radius: 20px; flex-direction: column; z-index: 1001; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
+    <!-- Chat Header -->
+    <div class="chat-header p-3 text-white d-flex align-items-center justify-content-between" style="background: var(--primary-color);">
+      <div class="d-flex align-items-center gap-3">
+        <div class="avatar" style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div>
+          <h6 class="mb-0 fw-bold">City Mobile AI</h6>
+          <small class="opacity-75"><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i> Always Online</small>
+        </div>
+      </div>
+      <button id="closeChat" class="btn text-white p-0 border-0"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Chat Messages Area -->
+    <div id="chatMessages" class="chat-messages p-3 flex-grow-1" style="overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+      <!-- Welcome Message -->
+      <div class="message bot-message">
+        <div class="message-content p-3 rounded-4 shadow-sm bg-white" style="max-width: 85%;">
+          <p class="mb-0 small">Hello! ðŸ‘‹ I'm your City Mobile assistant. How can I help you today?</p>
+          <span class="text-muted" style="font-size: 10px;">Just now</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div id="typingIndicator" class="px-3 py-2" style="display: none; align-items: center; gap: 8px; background: #f8fafc;">
+      <div class="typing-dot" style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out;"></div>
+      <div class="typing-dot" style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out 0.2s;"></div>
+      <div class="typing-dot" style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out 0.4s;"></div>
+    </div>
+
+    <!-- Chat Input Area -->
+    <div class="chat-input-area p-3 border-top bg-white">
+      <div class="input-group">
+        <input type="text" id="userMessage" class="form-control border-0 bg-light rounded-pill px-3" placeholder="Type a message..." style="box-shadow: none;">
+        <button id="sendMessage" class="btn btn-primary rounded-circle ms-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    .user-message { align-self: flex-end; }
+    .user-message .message-content { background: var(--primary-color) !important; color: white !important; }
+    .bot-message { align-self: flex-start; }
+    .chat-toggle-btn:hover { transform: scale(1.1) rotate(5deg); }
+    
+    /* Quick Replies Styling */
+    .quick-replies { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .quick-reply-btn { 
+      background: white; 
+      border: 1px solid var(--primary-color); 
+      color: var(--primary-color); 
+      padding: 5px 12px; 
+      border-radius: 20px; 
+      font-size: 12px; 
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .quick-reply-btn:hover { background: var(--primary-color); color: white; }
+    
+    @media (max-width: 480px) {
+      .chatbot-modal-v2 { width: calc(100% - 40px) !important; right: 20px !important; bottom: 20px !important; height: 80vh !important; }
+    }
+  </style>
 
   <!-- Back to Top Button -->
   <a href="#" class="back-to-top animate__animated animate__fadeInUp">
@@ -763,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const typingIndicator = document.getElementById('typingIndicator');
   
   // Event Listeners
-  liveChatBtn?.addEventListener('click', openChat);
+  window.openChat = openChat; // Make it global
   closeChat?.addEventListener('click', closeChatModal);
   sendMessageBtn?.addEventListener('click', sendUserMessage);
   userMessage?.addEventListener('keypress', function(e) {
@@ -925,3 +1045,26 @@ document.addEventListener('DOMContentLoaded', function() {
 {% block extra_js %}{% endblock %}
 </body>
 </html>
+  <!-- PWA Registration & Recently Viewed Tracking -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/static/service-worker.js')
+          .then(reg => console.log('Service Worker Registered'))
+          .catch(err => console.log('Service Worker: Error', err));
+      });
+    }
+
+    // Global function to save recently viewed product
+    window.saveRecentlyViewed = function(id, name, price, img, url) {
+      let recent = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+      // Remove if already exists
+      recent = recent.filter(item => item.id !== id);
+      // Add to beginning
+      recent.unshift({id, name, price, img, url});
+      // Keep only last 8
+      recent = recent.slice(0, 8);
+      localStorage.setItem('recentlyViewed', JSON.stringify(recent));
+    };
+  </script>
+

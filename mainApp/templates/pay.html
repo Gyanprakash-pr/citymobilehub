@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block title %}
-<title>Desi Mobile | Secure Payment</title>
+<title>City Mobile | Secure Payment</title>
 {% endblock %}
 
 {% block body %}
@@ -99,7 +99,7 @@
       "key": "{{api_key}}",
       "amount": "{{amount}}",
       "currency": "INR",
-      "name": "Desi Mobile",
+      "name": "City Mobile",
       "description": "Order #{{order_id|slice:'-6:'|upper}} Payment",
       "image": "{% static 'picture/logo.png' %}",
       "order_id": "{{order_id}}",

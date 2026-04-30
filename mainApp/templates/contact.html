@@ -2,16 +2,16 @@
 {% load static %}
 
 {% block title %}
-<title>Online Bazar | Contact Us</title>
+<title>City Mobile | Contact Us</title>
 {% endblock %}
 
 {% block body %}
 <div class="contact-container">
     <!-- Contact Header -->
     <div class="contact-header text-center">
-        <h1 class="contact-title">Get in Touch</h1>
+        <h1 class="contact-title" style="color: var(--primary-color);">Get in Touch</h1>
         <p class="contact-subtitle">We're here to help and answer any questions you might have</p>
-        <div class="contact-divider"></div>
+        <div class="contact-divider" style="background: var(--primary-color);"></div>
     </div>
 
     <!-- Contact Content -->
@@ -23,8 +23,8 @@
                 
                 <!-- Messages/Alerts -->
                 {% for message in messages %}
-                <div class="contact-alert">
-                    <i class="fas fa-check-circle alert-icon"></i>
+                <div class="contact-alert" style="border-left-color: var(--success-color);">
+                    <i class="fas fa-check-circle alert-icon" style="color: var(--success-color);"></i>
                     <span>{{ message }}</span>
                     <button class="alert-close">&times;</button>
                 </div>
@@ -37,7 +37,6 @@
                             <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
                             <label for="name">Your Name</label>
                         </div>
-                        <div class="invalid-feedback">Please enter your name</div>
                     </div>
                     
                     <div class="form-group">
@@ -45,7 +44,6 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
                             <label for="email">Email Address</label>
                         </div>
-                        <div class="invalid-feedback">Please enter a valid email</div>
                     </div>
                     
                     <div class="form-group">
@@ -53,7 +51,6 @@
                             <input type="tel" class="form-control" id="phone" name="phone" placeholder="+91 1234567890" required>
                             <label for="phone">Phone Number</label>
                         </div>
-                        <div class="invalid-feedback">Please enter your phone number</div>
                     </div>
                     
                     <div class="form-group">
@@ -61,7 +58,6 @@
                             <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
                             <label for="subject">Subject</label>
                         </div>
-                        <div class="invalid-feedback">Please enter a subject</div>
                     </div>
                     
                     <div class="form-group">
@@ -69,10 +65,9 @@
                             <textarea class="form-control" id="message" name="message" placeholder="Your message" required></textarea>
                             <label for="message">Your Message</label>
                         </div>
-                        <div class="invalid-feedback">Please enter your message</div>
                     </div>
                     
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="submit-btn" style="background: var(--primary-color);">
                         <span class="submit-text">Send Message</span>
                         <span class="spinner"></span>
                     </button>
@@ -87,35 +82,35 @@
                 
                 <div class="info-content">
                     <!-- Contact Item 1 -->
-                    <div class="info-item">
-                        <div class="info-icon">
+                    <div class="info-item" style="background: var(--light-color);">
+                        <div class="info-icon" style="color: var(--primary-color);">
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div class="info-details">
                             <h3>Email</h3>
-                            <a href="mailto:gyanbabu193@gmail.com">gyanbabu193@gmail.com</a>
+                            <a href="mailto:contact@citymobile.in">contact@citymobile.in</a>
                         </div>
                     </div>
                     
                     <!-- Contact Item 2 -->
-                    <div class="info-item">
-                        <div class="info-icon">
+                    <div class="info-item" style="background: var(--light-color);">
+                        <div class="info-icon" style="color: var(--success-color);">
                             <i class="fas fa-phone-alt"></i>
                         </div>
                         <div class="info-details">
                             <h3>Phone</h3>
-                            <a href="tel:+918795649840">+91 8795649840</a>
+                            <a href="tel:+916205102076">+91 6205102076</a>
                         </div>
                     </div>
                     
                     <!-- Contact Item 3 -->
-                    <div class="info-item">
-                        <div class="info-icon">
+                    <div class="info-item" style="background: var(--light-color);">
+                        <div class="info-icon" style="color: var(--secondary-color);">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
                         <div class="info-details">
                             <h3>Address</h3>
-                            <p>Sector 22, Noida, UP</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India" target="_blank" style="text-decoration: none;">123 Shopping Street, New Delhi, India</a>
                         </div>
                     </div>
                     

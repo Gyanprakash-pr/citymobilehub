@@ -1,4 +1,4 @@
-from tabnanny import check
+# Template tags for product related functionality
 from django import template
 register = template.Library()
 from mainApp.models import CheckoutProducts
@@ -59,3 +59,13 @@ def categoryImage(cat):
     except Exception:
         pass
     return ""
+@register.filter("split")
+def split(value, arg):
+    return value.split(arg)
+
+from mainApp.models import Seller
+@register.filter("is_seller")
+def is_seller(user):
+    if user.is_authenticated:
+        return Seller.objects.filter(username=user.username).exists()
+    return False

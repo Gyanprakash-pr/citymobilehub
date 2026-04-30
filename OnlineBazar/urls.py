@@ -62,9 +62,8 @@ urlpatterns = [
     path('chatbot/start-chat/', views.start_chat, name='start_chat'),
     path('chatbot/send-message/', views.handle_message, name='handle_message'),
     
-
-    
-    
+    # Allauth Social Login
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

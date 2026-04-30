@@ -242,7 +242,7 @@ def ForgetPassword(request):
 
 def SignUp(request):
     if(request.method=="POST"):
-        actype = request.POST.get('actype')
+        actype = request.POST.get('actype', 'buyer') # Default to buyer
         if(actype=="seller"):
             u = Seller()
         else:
@@ -270,39 +270,52 @@ def SignUp(request):
 
     return render(request,"Sgnup.html")
 
+from django.core.paginator import Paginator
+
 @login_required(login_url='/login/')
 def ProfilePage(request):
-
     user = User.objects.get(username=request.user)
     if(user.is_superuser):
         return HttpResponseRedirect("/admin/")
     else:
         try:
-
             seller = Seller.objects.get(username=request.user)
-            products = Product.objects.filter(seller=seller)
-            products = products[::-1]
+            products_list = Product.objects.filter(seller=seller).order_by('-id')
+            
+            # Pagination for products
+            paginator = Paginator(products_list, 8) # 8 products per page to show pagination now
+            page_number = request.GET.get('page')
+            products = paginator.get_page(page_number)
             
             # Seller Stats
             from mainApp.models import CheckoutProducts
-            seller_orders = CheckoutProducts.objects.filter(seller=seller).order_by('-id')
-            total_sales = seller_orders.count()
-            total_revenue = sum(item.total for item in seller_orders)
+            seller_orders_all = CheckoutProducts.objects.filter(seller=seller).order_by('-id')
+            total_sales = seller_orders_all.count()
+            total_revenue = sum(item.total for item in seller_orders_all)
+            
+            # Pagination for orders (optional but good for scalability)
+            order_paginator = Paginator(seller_orders_all, 10)
+            order_page = request.GET.get('order_page')
+            seller_orders = order_paginator.get_page(order_page)
             
             context = {
                 "User": seller,
                 "products": products,
                 "total_sales": total_sales,
                 "total_revenue": total_revenue,
-                "seller_orders": seller_orders
+                "seller_orders": seller_orders,
+                "is_paginated": products.has_other_pages(),
             }
             return render(request,"sellerprofile.html", context)
         except:
-            
             buyer = Buyer.objects.get(username=request.user)
             wishlist = Wishlist.objects.filter(buyer=buyer)
-            checkouts = Checkout.objects.filter(buyer=buyer)
-            checkouts = checkouts[::-1]
+            checkouts_list = Checkout.objects.filter(buyer=buyer).order_by('-id')
+            
+            # Pagination for buyer orders
+            paginator = Paginator(checkouts_list, 10)
+            page_number = request.GET.get('page')
+            checkouts = paginator.get_page(page_number)
             
             return render(request,"buyerprofile.html",{"User":buyer,"Wishlist":wishlist,"Orders":checkouts})
 
@@ -335,14 +348,7 @@ def updateProfilePage(request):
                         os.remove(pic_path)
                 user.pic = request.FILES.get('pic')
                 
-                user.save()
-                        
-         
-            # if(request.FILES.get("pic")):
-            #     if(user.pic):
-            #         os.remove("media/"+str(user.pic))
-            #     user.pic=request.FILES.get('pic')
-            # user.save()
+            user.save()
             return HttpResponseRedirect("/profile/")
     return render(request,"updateProfile.html",{"User":user}) 
   
@@ -359,57 +365,52 @@ def addproduct(request):
     subcategory = Subcategory.objects.all()
     brand = Brand.objects.all()
     if(request.method=="POST"):
-        p = Product()
-        p.name = request.POST.get('name')
-        p.maincategory = Maincategory.objects.get(name=request.POST.get('maincategory'))
-
-        p.subcategory = Subcategory.objects.get(name=request.POST.get('subcategory'))
-        p.brand = Brand.objects.get(name=request.POST.get('brand'))
-        p.baseprice = int(request.POST.get('baseprice'))
-        p.discount = int(request.POST.get('discount'))
-        p.finalprice = p.baseprice-p.baseprice*p.discount/100
-        color=""
-        if(request.POST.get("Red")):
-            color=color+"Red,"
-        if(request.POST.get("Green")):
-            color=color+"Green,"
-        if(request.POST.get("Yellow")):
-            color=color+"Yellow,"
-        if(request.POST.get("Pink")):
-            color=color+"Pink,"
-        if(request.POST.get("White")):
-            color=color+"White,"
-        if(request.POST.get("Black")):
-            color=color+"Black,"
-        if(request.POST.get("Blue")):
-            color=color+"Blue,"
-        if(request.POST.get("Brown")):
-            color=color+"Brown,"
-        if(request.POST.get("SkyBlue")):
-            color=color+"SkyBlue,"
-        if(request.POST.get("Orange")):
-            color=color+"Orange,"
-        if(request.POST.get("Navy")):
-            color=color+"Navy,"
-        if(request.POST.get("Gray")):
-            color=color+"Gray,"
-        p.color=color
-
-
-
-
-        p.description = request.POST.get('description')
-        p.stock = request.POST.get('stock')
-        p.pic1 = request.FILES.get('pic1')
-        p.pic2 = request.FILES.get('pic2')
-        p.pic3 = request.FILES.get('pic3')
-        p.pic4 = request.FILES.get('pic4')
         try:
-            p.seller = Seller.objects.get(username=request.user.username)
-        except:
+            p = Product()
+            p.name = request.POST.get('name')
+            
+            # Using ID lookups for better reliability
+            mc_id = request.POST.get('maincategory')
+            sc_id = request.POST.get('subcategory')
+            br_id = request.POST.get('brand')
+            
+            p.maincategory = Maincategory.objects.get(id=mc_id)
+            p.subcategory = Subcategory.objects.get(id=sc_id)
+            p.brand = Brand.objects.get(id=br_id)
+            
+            p.baseprice = int(request.POST.get('baseprice'))
+            p.discount = int(request.POST.get('discount'))
+            p.finalprice = int(p.baseprice - (p.baseprice * p.discount / 100))
+            
+            # Optimized color handling
+            color_list = request.POST.getlist('colors[]')
+            custom_color = request.POST.get('custom_color')
+            if custom_color:
+                color_list.append(custom_color)
+            p.color = ",".join(color_list) + "," if color_list else ""
+
+            p.description = request.POST.get('description')
+            p.stock = request.POST.get('stock')
+            p.warranty = request.POST.get('warranty')
+            p.guarantee = request.POST.get('guarantee')
+            p.pic1 = request.FILES.get('pic1')
+            p.pic2 = request.FILES.get('pic2')
+            p.pic3 = request.FILES.get('pic3')
+            p.pic4 = request.FILES.get('pic4')
+            
+            p.seller = seller_profile
+            p.save()
+            messages.success(request, f"Product '{p.name}' listed successfully!")
             return HttpResponseRedirect("/profile/")
-        p.save()
-        return HttpResponseRedirect("/profile/")                    
+        except Exception as e:
+            print(f"Error adding product: {e}")
+            messages.error(request, f"Error creating product: {str(e)}")
+            return render(request, "addProduct.html", {
+                "Maincategory": maincategory,
+                "Subcategory": subcategory,
+                "Brand": brand,
+                "error": str(e)
+            })
     
     return render(request,"addProduct.html",{"Maincategory":maincategory,"Subcategory":subcategory,"Brand":brand})
 
@@ -471,6 +472,8 @@ def Editproduct(request, num):
             # Process description and stock
             product.description = request.POST.get('description', '')
             product.stock = request.POST.get('stock', 'In-Stock')
+            product.warranty = request.POST.get('warranty', '6 Months Warranty')
+            product.guarantee = request.POST.get('guarantee', '7 Days Replacement')
 
             # Process images
             for i in range(1, 5):
@@ -922,12 +925,21 @@ def paynow(request, num):
 def myOrders(request):
     try:
         buyer = Buyer.objects.get(username=request.user)
-        orders = Checkout.objects.filter(buyer=buyer).order_by('-date')
+        status = request.GET.get('status')
+        if status and status != 'All':
+            orders = Checkout.objects.filter(buyer=buyer, orderstatus=int(status)).order_by('-id')
+        else:
+            orders = Checkout.objects.filter(buyer=buyer).order_by('-id')
+            
         order_data = []
         for order in orders:
             products = CheckoutProducts.objects.filter(checkout=order)
             order_data.append({'order': order, 'products': products})
-        return render(request, 'myOrders.html', {'order_data': order_data, 'User': buyer})
+        return render(request, 'myOrders.html', {
+            'order_data': order_data, 
+            'User': buyer,
+            'current_status': status or 'All'
+        })
     except Buyer.DoesNotExist:
         return HttpResponseRedirect('/profile/')
 
@@ -1127,14 +1139,25 @@ def handle_message(request):
                 'message': 'Message cannot be empty'
             }, status=400)
         
-        # Get session
+        # Get session and link to buyer if logged in
         try:
             session = ChatSession.objects.get(session_id=session_id)
+            if not session.buyer and request.user.is_authenticated:
+                try:
+                    buyer = Buyer.objects.get(username=request.user.username)
+                    session.buyer = buyer
+                    session.save()
+                except Buyer.DoesNotExist:
+                    pass
         except ChatSession.DoesNotExist:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Invalid session ID'
-            }, status=404)
+            # Fallback if session not found, create it
+            buyer = None
+            if request.user.is_authenticated:
+                try:
+                    buyer = Buyer.objects.get(username=request.user.username)
+                except Buyer.DoesNotExist:
+                    pass
+            session = ChatSession.objects.create(session_id=session_id, buyer=buyer)
         
         # Save user message
         ChatMessage.objects.create(
@@ -1174,9 +1197,60 @@ def handle_message(request):
             'status': 'error',
             'message': str(e)
         }, status=500)
+
 def generate_bot_response(user_message, session=None):
     user_message = user_message.lower()
     
+    # Track Order Keyword Logic
+    if any(keyword in user_message for keyword in ['track', 'order', 'status']):
+        if session and session.buyer:
+            orders = Checkout.objects.filter(buyer=session.buyer).order_by('-id')[:3]
+            if orders:
+                status_map = {0: "Cancelled", 1: "Not Packed", 2: "Packed", 3: "Out for Delivery", 4: "Delivered"}
+                order_list = []
+                for o in orders:
+                    status_text = status_map.get(o.orderstatus, "Unknown")
+                    order_list.append(f"📦 Order #{o.id}: {status_text} (Date: {o.date.strftime('%d %b')})")
+                
+                response_text = "I found your recent orders:\n\n" + "\n".join(order_list) + "\n\nWhich one would you like more details on?"
+                return {
+                    'text': response_text,
+                    'quick_replies': [f"Status of #{o.id}" for o in orders] + ['Back to main menu'],
+                    'actions': ['list_orders']
+                }
+            else:
+                return {
+                    'text': "I couldn't find any orders in your account. Would you like to browse our latest products?",
+                    'quick_replies': ['Browse Shop', 'Contact Support', 'Main Menu'],
+                    'actions': ['no_orders']
+                }
+        else:
+            return {
+                'text': "Please log in to track your specific orders. I can help you with general tracking info otherwise.",
+                'quick_replies': ['Login Now', 'General Info', 'Contact Support'],
+                'actions': ['auth_required']
+            }
+
+    # Handle specific order status requests
+    if 'status of #' in user_message:
+        try:
+            order_id = int(user_message.split('#')[-1])
+            order = Checkout.objects.get(id=order_id)
+            status_map = {0: "Cancelled", 1: "Processing", 2: "Packed & Ready", 3: "Out for Delivery", 4: "Delivered"}
+            status_desc = {
+                1: "Your order has been received and is currently in the processing queue.",
+                2: "Great news! Your items have been packed and are waiting for the courier partner.",
+                3: "Your package is with our delivery partner and will reach you soon!",
+                4: "Your order has been successfully delivered. Hope you like it!"
+            }
+            return {
+                'text': f"Status for Order #{order_id}: **{status_map.get(order.orderstatus)}**\n\n{status_desc.get(order.orderstatus, 'Please check back later for more updates.')}",
+                'quick_replies': ['Track another order', 'Main Menu'],
+                'actions': ['order_detail']
+            }
+        except:
+            return {'text': "Sorry, I couldn't find details for that order ID.", 'quick_replies': ['Main Menu']}
+
     # Enhanced responses with more options
     responses = {
         'track': {
@@ -1185,58 +1259,72 @@ def generate_bot_response(user_message, session=None):
             'actions': ['show_orders']
         },
         'return': {
-            'text': 'We offer 30-day easy returns. Please keep the product in original condition with tags attached.',
-            'quick_replies': ['Initiate return', 'Check return status', 'Download return label'],
+            'text': 'We offer 7-day easy returns for "City Mobile" products. Please keep the original packaging intact.',
+            'quick_replies': ['Initiate return', 'Check return status', 'Return policy'],
             'actions': ['start_return']
         },
         'payment': {
-            'text': 'For payment issues, you can check payment methods or contact our support team at payments@onlinebazar.com',
-            'quick_replies': ['Payment options', 'Failed payment help', 'Refund status'],
+            'text': 'We support UPI, Cards, and COD. For any payment issues, contact us at payments@citymobile.in',
+            'quick_replies': ['Payment options', 'Refund status', 'Support'],
             'actions': ['payment_help']
+        },
+        'location': {
+            'text': '📍 Our main store is located at: 123 Shopping Street, New Delhi, India. We are open from 10 AM to 9 PM.',
+            'quick_replies': ['Open on Map', 'Check Hours', 'Contact Store'],
+            'actions': ['show_location']
+        },
+        'offer': {
+            'text': '🔥 Current Offers:\n1. Use code **CITY10** for 10% off!\n2. Free Shipping on orders above ₹999.\n3. Buy 2 Cases, Get 1 Free!',
+            'quick_replies': ['Browse Accessories', 'Apply Coupon', 'Latest Products'],
+            'actions': ['show_offers']
+        },
+        'warranty': {
+            'text': '🛡️ All City Mobile electronics come with a 6-month replacement warranty. Physical damage is not covered.',
+            'quick_replies': ['Register Warranty', 'Claim Warranty', 'Support'],
+            'actions': ['show_warranty']
+        },
+        'bulk': {
+            'text': '💼 For bulk orders or corporate gifting, please email us at bulk@citymobile.in for special pricing.',
+            'quick_replies': ['Request Quote', 'Corporate Inquiry'],
+            'actions': ['bulk_order']
         },
         'clear': {
             'text': 'Chat history has been cleared. How can I help you now?',
-            'quick_replies': ['Track order', 'Return product', 'Payment issue'],
+            'quick_replies': ['Track order', 'Offers', 'Location'],
             'actions': ['clear_chat']
         },
         'hi': {
-            'text': 'Hello! 👋 Welcome to OnlineBazar support. I can help with orders, returns, payments and more!',
-            'quick_replies': ['Track my order', 'Return policy', 'Payment issues'],
+            'text': 'Hello! 👋 Welcome to City Mobile support. I can help with orders, offers, locations, and more!',
+            'quick_replies': ['Track my order', 'Today\'s Offers', 'Store Location'],
             'actions': ['welcome']
-        },
-        'thank': {
-            'text': 'You\'re welcome! 😊 Is there anything else I can help you with today?',
-            'quick_replies': ['No, thank you', 'Yes, need more help', 'Rate this chat'],
-            'actions': ['thank_you']
         }
     }
     
-    # Check for specific commands first
-    if 'clear' in user_message or 'reset' in user_message:
-        if session:
-            session.messages.all().delete()
-        return responses['clear']
-    
+    # Keyword Mapping for better coverage
+    keyword_map = {
+        'where': 'location', 'address': 'location', 'map': 'location',
+        'discount': 'offer', 'coupon': 'offer', 'sale': 'offer', 'promo': 'offer',
+        'time': 'location', 'hour': 'location', 'open': 'location',
+        'repair': 'warranty', 'guarantee': 'warranty', 'fix': 'warranty',
+        'wholesale': 'bulk', 'corporate': 'bulk', 'business': 'bulk'
+    }
+
+    # Check for keywords from map
+    for word, key in keyword_map.items():
+        if word in user_message:
+            return responses[key]
+
+    # Basic keyword matching
     if any(greet in user_message for greet in ['hi', 'hello', 'hey']):
         return responses['hi']
     
-    if any(thank in user_message for thank in ['thank', 'thanks', 'appreciate']):
-        return responses['thank']
-    
-    # Check for other keywords
     for keyword, response in responses.items():
         if keyword in user_message:
             return response
     
-    # Default response with more options
+    # Default response
     return {
-        'text': 'I can help you with:',
-        'quick_replies': [
-            'Track my order',
-            'Start a return',
-            'Payment issues',
-            'Clear chat history',
-            'Talk to human agent'
-        ],
+        'text': 'I am the City Mobile AI. How can I help you today?',
+        'quick_replies': ['Track my order', 'Latest Offers', 'Store Location', 'Clear chat'],
         'actions': ['show_options']
     }

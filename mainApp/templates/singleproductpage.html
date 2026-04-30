@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-<title>Desi Mobile | {{Product.name}}</title>
+<title>City Mobile | {{Product.name}}</title>
 {% endblock %}
 
 {% block body %}
@@ -135,6 +135,14 @@
             <div class="col-6">
               <div style="font-size:11px;color:var(--gray-color);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Brand</div>
               <div style="font-size:14px;font-weight:600;color:var(--dark-color);">{{Product.brand}}</div>
+            </div>
+            <div class="col-6">
+              <div style="font-size:11px;color:var(--gray-color);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Warranty</div>
+              <div style="font-size:14px;font-weight:600;color:var(--success-color);">{{Product.warranty}}</div>
+            </div>
+            <div class="col-6">
+              <div style="font-size:11px;color:var(--gray-color);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Guarantee</div>
+              <div style="font-size:14px;font-weight:600;color:var(--primary-color);">{{Product.guarantee}}</div>
             </div>
           </div>
         </div>
@@ -382,7 +390,20 @@ function stopAutoPlay() {
 }
 
 // Start auto-play on load
-document.addEventListener('DOMContentLoaded', startAutoPlay);
+document.addEventListener('DOMContentLoaded', function() {
+  startAutoPlay();
+  
+  // Save to recently viewed
+  if (typeof window.saveRecentlyViewed === 'function') {
+    window.saveRecentlyViewed(
+      "{{Product.id}}", 
+      "{{Product.name}}", 
+      "{{Product.finalprice}}", 
+      "{% if Product.pic1 %}{{Product.pic1.url}}{% else %}{% static 'picture/noimg.png' %}{% endif %}",
+      window.location.pathname
+    );
+  }
+});
 
 // Pause on hover
 const galleryContainer = document.getElementById('mainProductImg').parentElement;

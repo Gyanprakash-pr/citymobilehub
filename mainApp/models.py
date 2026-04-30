@@ -58,6 +58,8 @@ class Product(models.Model):
     color = models.CharField(max_length=100)
     description = models.TextField()
     stock = models.CharField(max_length=20,default="In stock")
+    warranty = models.CharField(max_length=100, default="6 Months Warranty", null=True, blank=True)
+    guarantee = models.CharField(max_length=100, default="7 Days Replacement", null=True, blank=True)
     pic1 = models.ImageField(upload_to="images",default="no.png",null=True,blank=True)
     pic2 = models.ImageField(upload_to="images",default="no.png",null=True,blank=True)
     pic3 = models.ImageField(upload_to="images",default="no.png",null=True,blank=True)
@@ -172,11 +174,12 @@ class Coupon(models.Model):
 
 class ChatSession(models.Model):
     session_id = models.CharField(max_length=100, unique=True)
+    buyer = models.ForeignKey(Buyer, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Chat Session: {self.session_id}"
+        return f"Chat Session: {self.session_id} ({self.buyer.username if self.buyer else 'Guest'})"
 
 class ChatMessage(models.Model):
     session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name='messages')

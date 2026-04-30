@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}
 <title>Online Bazar | Login</title>
@@ -78,7 +79,7 @@
                     <span>or continue with</span>
                 </div>
                 <div class="social-icons">
-                    <a href="#" class="social-icon google">
+                    <a href="{% provider_login_url 'google' %}" class="social-icon google">
                         <i class="fab fa-google"></i>
                     </a>
                     <a href="#" class="social-icon facebook">

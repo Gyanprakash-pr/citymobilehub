@@ -18,6 +18,44 @@
     </div>
   </div>
 
+  <!-- Filters -->
+  <div class="filter-section mb-4">
+    <div class="d-flex gap-2 flex-nowrap overflow-auto pb-2" style="scrollbar-width: none;">
+      <a href="/orders/?status=All" class="filter-chip {% if current_status == 'All' %}active{% endif %}">All</a>
+      <a href="/orders/?status=1" class="filter-chip {% if current_status == '1' %}active{% endif %}">Not Packed</a>
+      <a href="/orders/?status=2" class="filter-chip {% if current_status == '2' %}active{% endif %}">Packed</a>
+      <a href="/orders/?status=3" class="filter-chip {% if current_status == '3' %}active{% endif %}">Out for Delivery</a>
+      <a href="/orders/?status=4" class="filter-chip {% if current_status == '4' %}active{% endif %}">Delivered</a>
+      <a href="/orders/?status=0" class="filter-chip {% if current_status == '0' %}active{% endif %}">Cancelled</a>
+    </div>
+  </div>
+
+  <style>
+    .filter-chip {
+      padding: 8px 20px;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .filter-chip:hover {
+      background: #f8f9fa;
+      color: #2874f0;
+      border-color: #2874f0;
+    }
+    .filter-chip.active {
+      background: #2874f0;
+      color: white;
+      border-color: #2874f0;
+      box-shadow: 0 4px 10px rgba(40, 116, 240, 0.2);
+    }
+  </style>
+
   {% if order_data %}
   {% for item in order_data %}
   <div class="card shadow-sm mb-4" style="border:none;border-radius:10px;overflow:hidden;">

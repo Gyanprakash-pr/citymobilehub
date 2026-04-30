@@ -92,14 +92,28 @@
                 </div>
               </div>
 
-              <div class="col-md-12">
+              <div class="col-md-4">
                 <div class="form-floating">
                   <select name="stock" id="stock" class="form-select">
-                    <option value="In-Stock" {% if Product.stock=="In-Stock" %}selected{% endif %}>In Stock</option>
-                    <option value="Out-Of-Stock" {% if Product.stock=="Out-Of-Stock" %}selected{% endif %}>Out of Stock
+                    <option value="In-Stock" {% if Product.stock == "In-Stock" %}selected{% endif %}>In Stock</option>
+                    <option value="Out-Of-Stock" {% if Product.stock == "Out-Of-Stock" %}selected{% endif %}>Out of Stock
                     </option>
                   </select>
                   <label for="stock">Stock Status</label>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="warranty" name="warranty" placeholder="Warranty" value="{{Product.warranty}}">
+                  <label for="warranty">Warranty Period</label>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="guarantee" name="guarantee" placeholder="Guarantee" value="{{Product.guarantee}}">
+                  <label for="guarantee">Guarantee / Replacement</label>
                 </div>
               </div>
             </div>
@@ -111,8 +125,7 @@
             <div class="color-options">
               {% for color in colors %}
               <div class="color-option">
-                <input type="checkbox" id="color-{{color}}" name="{{color}}" value="{{color}}" {% if
-                  Product.color|checkColor:color %}checked{% endif %}>
+                <input type="checkbox" id="color-{{color}}" name="{{color}}" value="{{color}}" {% if Product.color|checkColor:color %}checked{% endif %}>
                 <label for="color-{{color}}" style="background-color: {{color|lower}};"></label>
                 <span>{{color}}</span>
               </div>

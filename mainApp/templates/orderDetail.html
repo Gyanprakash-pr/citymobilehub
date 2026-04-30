@@ -38,36 +38,81 @@
     </div>
   </div>
 
-  <!-- Seller Action: Update Status -->
+  <!-- Seller Action: Modern Minimalist Redesign -->
   {% if user_type == 'seller' %}
-  <div class="card shadow-sm mb-4 border-0" style="border-radius:12px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);">
-    <div class="card-body p-4 text-white">
-      <h6 class="fw-bold text-uppercase mb-3" style="font-size:12px; letter-spacing:1px; opacity:0.8;">Seller Controls</h6>
-      <div class="row align-items-end g-3">
-        <div class="col-md-8">
-          <label class="form-label fw-bold mb-2">Update Order Progress</label>
-          <form action="/update-order-status/{{order.id}}/" method="post" class="d-flex gap-2">
-            {% csrf_token %}
-            <select name="status" class="form-select border-0 rounded-3 shadow-none" style="height:48px;">
+  <div class="card shadow-sm mb-4 border-0" style="border-radius:20px; background: #fff; overflow:hidden; border: 1px solid #f0f0f0 !important;">
+    <div class="row g-0">
+      <!-- Form Section -->
+      <div class="col-md-7 p-4 p-lg-5">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <div style="width:32px; height:32px; background:#eef2ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+            <i class="fas fa-edit text-primary" style="font-size:14px;"></i>
+          </div>
+          <h6 class="fw-bold text-dark mb-0" style="letter-spacing: -0.2px;">Update Order Status</h6>
+        </div>
+        
+        <form action="/update-order-status/{{order.id}}/" method="post">
+          {% csrf_token %}
+          <div class="status-input-group mb-3">
+            <select name="status" class="form-select custom-modern-select">
               <option value="1" {% if order.orderstatus == 1 %}selected{% endif %}>Order Placed (Not Packed)</option>
               <option value="2" {% if order.orderstatus == 2 %}selected{% endif %}>Order Packed</option>
               <option value="3" {% if order.orderstatus == 3 %}selected{% endif %}>Out for Delivery</option>
               <option value="4" {% if order.orderstatus == 4 %}selected{% endif %}>Delivered</option>
               <option value="0" {% if order.orderstatus == 0 %}selected{% endif %}>Cancelled</option>
             </select>
-            <button type="submit" class="btn btn-white fw-bold px-4 rounded-3" style="background:white; color:var(--primary-color); height:48px; border:none;">
-              Update Status
-            </button>
-          </form>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 fw-bold py-3 shadow-sm rounded-3" style="background:#2874f0; border:none; transition: all 0.3s;">
+            UPDATE PROGRESS
+          </button>
+        </form>
+      </div>
+
+      <!-- Customer Detail Section -->
+      <div class="col-md-5 p-4 p-lg-5" style="background:#fafbfc; border-left: 1px solid #f0f0f0;">
+        <h6 class="text-secondary fw-bold text-uppercase mb-4" style="font-size:11px; letter-spacing:1px;">Delivery To</h6>
+        <div class="d-flex gap-3 mb-4">
+          <div style="width:48px; height:48px; background:#fff; border-radius:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid #eee;">
+            <i class="fas fa-map-marker-alt text-danger"></i>
+          </div>
+          <div>
+            <div class="fw-bold text-dark mb-1" style="font-size:15px;">{{User.addressline1}}</div>
+            <div class="text-secondary small">{{User.city}}, {{User.state}} - {{User.pin}}</div>
+          </div>
         </div>
-        <div class="col-md-4 text-md-end">
-          <div class="small opacity-75">Customer Address:</div>
-          <div class="fw-bold">{{User.addressline1}}, {{User.city}}</div>
-          <div class="small opacity-75">{{User.phone}}</div>
+        
+        <div class="pt-3 border-top">
+          <a href="tel:{{User.phone}}" class="btn w-100 d-flex align-items-center justify-content-center gap-2 py-2" style="background:#fff; border:1px solid #e0e0e0; color:#333; border-radius:12px; font-size:14px; font-weight:600; transition:all 0.2s;">
+            <i class="fas fa-phone-alt text-success"></i> {{User.phone}}
+          </a>
         </div>
       </div>
     </div>
   </div>
+
+  <style>
+    .custom-modern-select {
+      height: 56px;
+      border: 2px solid #f0f0f0 !important;
+      border-radius: 12px !important;
+      font-size: 15px;
+      font-weight: 500;
+      color: #333;
+      padding-left: 15px;
+      background-color: #fcfcfc;
+      transition: all 0.2s;
+    }
+    .custom-modern-select:focus {
+      border-color: #2874f0 !important;
+      background-color: #fff;
+      box-shadow: 0 0 0 4px rgba(40,116,240,0.1) !important;
+    }
+    .btn-primary:hover {
+      background: #1557c0 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(40,116,240,0.2) !important;
+    }
+  </style>
   {% endif %}
 
   <!-- Tracking Timeline Card -->
