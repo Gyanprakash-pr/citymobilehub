@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 
 {% load static %}
 {% load cart %}
@@ -23,7 +23,7 @@
         <i class="fas fa-shopping-cart"></i>
       </div>
       <h4>Your cart is empty</h4>
-      <a href="/shop/All/All/All/" class="btn btn-primary">
+      <a href="/shop/All/All/All/" class="btn btn-primary-theme">
         <i class="fas fa-store mr-2"></i>Start Shopping
       </a>
     </div>
@@ -33,7 +33,7 @@
   <!-- Animated Coupon Marquee -->
   <div class="coupon-marquee-wrapper mb-4 rounded-3 overflow-hidden" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);">
     <marquee behavior="scroll" direction="left" scrollamount="6" class="text-white fw-bold py-2 m-0" style="font-size: 0.95rem; letter-spacing: 0.5px;">
-      <i class="fas fa-bullhorn me-2 text-warning"></i> MUST GRAB DEAL: Use code "SAVE20" for an instant 20% OFF on all orders above ₹400! <i class="fas fa-bolt ms-2 me-4 text-warning"></i>
+      <i class="fas fa-bullhorn me-2 text-warning"></i> MUST GRAB DEAL: Use code "SAVE20" for an instant 20% OFF on all orders above &#8377;400! <i class="fas fa-bolt ms-2 me-4 text-warning"></i>
       <i class="fas fa-gift me-2 text-warning"></i> Hurry! Limited time mega sale is live! <i class="fas fa-star ms-2 me-4 text-warning"></i>
       <i class="fas fa-rupee-sign me-2 text-warning"></i> Guaranteed savings on top brands! Use code "SAVE20" today!
     </marquee>
@@ -67,7 +67,7 @@
             <span>{{request|cartColor:i}}</span>
           </div>
           
-          <div class="item-price">₹{{request|cartProductPrice:i}}</div>
+          <div class="item-price">&#8377;{{request|cartProductPrice:i}}</div>
           
           <div class="item-quantity">
             <button class="quantity-btn minus" onclick="window.location.href='/update-cart/{{i}}/-1/'">
@@ -81,7 +81,7 @@
           
           <div class="item-total">
             <span>Total:</span>
-            <span class="total-price">₹{{request|cartTotal:i}}</span>
+            <span class="total-price">&#8377;{{request|cartTotal:i}}</span>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@
           </div>
           
           <div class="col-price">
-            <span class="price-val">₹{{request|cartProductPrice:i}}</span>
+            <span class="price-val">&#8377;{{request|cartProductPrice:i}}</span>
           </div>
           
           <div class="col-qty">
@@ -134,7 +134,7 @@
           </div>
           
           <div class="col-total">
-            <span class="total-val">₹{{request|cartTotal:i}}</span>
+            <span class="total-val">&#8377;{{request|cartTotal:i}}</span>
           </div>
           
           <div class="col-action">
@@ -182,7 +182,7 @@
                   Apply
                 </button>
                 <div class="coupon-meta">
-                  Min: ₹{{ coupon.min_order_amount }} | Valid till: {{ coupon.valid_to|date:"d M Y" }}
+                  Min: &#8377;{{ coupon.min_order_amount }} | Valid till: {{ coupon.valid_to|date:"d M Y" }}
                 </div>
               </div>
               {% endfor %}
@@ -216,21 +216,21 @@
           <div class="summary-details">
             <div class="summary-row">
               <span>Subtotal</span>
-              <span>₹{{Total}}</span>
+              <span>&#8377;{{Total}}</span>
             </div>
             <div class="summary-row">
               <span>Shipping</span>
-              <span>₹{{Shipping}}</span>
+              <span>&#8377;{{Shipping}}</span>
             </div>
             {% if applied_coupon %}
             <div class="summary-row discount">
               <span>Discount ({{ applied_coupon.discount }}%)</span>
-              <span>-₹{{ discount_amount }}</span>
+              <span>-&#8377;{{ discount_amount }}</span>
             </div>
             {% endif %}
             <div class="summary-row total">
               <span>Total</span>
-              <span>₹{{Final}}</span>
+              <span>&#8377;{{Final}}</span>
             </div>
           </div>
           
@@ -311,3 +311,5 @@
 <!-- Include SweetAlert2 for beautiful alerts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
+
+

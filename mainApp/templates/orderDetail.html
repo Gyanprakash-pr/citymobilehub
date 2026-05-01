@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 {% load static %}
 
 {% block title %}<title>OnlineBazar | Order #{{ order.id }}</title>{% endblock %}
@@ -62,7 +62,7 @@
               <option value="0" {% if order.orderstatus == 0 %}selected{% endif %}>Cancelled</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary w-100 fw-bold py-3 shadow-sm rounded-3" style="background:#2874f0; border:none; transition: all 0.3s;">
+          <button type="submit" class="btn btn-primary-theme w-100 fw-bold py-3 shadow-sm rounded-3" style="background:#6366f1; border:none; transition: all 0.3s;">
             UPDATE PROGRESS
           </button>
         </form>
@@ -103,12 +103,12 @@
       transition: all 0.2s;
     }
     .custom-modern-select:focus {
-      border-color: #2874f0 !important;
+      border-color: #6366f1 !important;
       background-color: #fff;
       box-shadow: 0 0 0 4px rgba(40,116,240,0.1) !important;
     }
-    .btn-primary:hover {
-      background: #1557c0 !important;
+    .btn-primary-theme:hover {
+      background: #4f46e5 !important;
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(40,116,240,0.2) !important;
     }
@@ -245,7 +245,7 @@
           </div>
           <div class="d-flex justify-content-between border-top pt-3">
             <span class="fw-bold text-dark">Grand Total</span>
-            <span class="fw-bold text-dark" style="font-size:18px;color:#2874f0!important;">&#x20b9;{{ order.final }}</span>
+            <span class="fw-bold text-dark" style="font-size:18px;color:#6366f1!important;">&#x20b9;{{ order.final }}</span>
           </div>
         </div>
       </div>
@@ -295,8 +295,8 @@
   }
 
   .tracking-step.done .step-icon {
-    border-color: #2874f0;
-    background: #2874f0;
+    border-color: #6366f1;
+    background: #6366f1;
     color: #fff;
     box-shadow: 0 4px 12px rgba(40,116,240,.3);
   }
@@ -326,7 +326,7 @@
   }
 
   .step-line.done {
-    background: linear-gradient(to right, #2874f0, #2874f0);
+    background: linear-gradient(to right, #6366f1, #6366f1);
   }
 
   .step-label {
@@ -341,7 +341,7 @@
     color: #333;
   }
 
-  .tracking-step.done .step-name { color: #2874f0; }
+  .tracking-step.done .step-name { color: #6366f1; }
   .tracking-step.active .step-name { color: #fb641b; }
 
   .step-sub {
@@ -356,3 +356,5 @@
   }
 </style>
 {% endblock %}
+
+

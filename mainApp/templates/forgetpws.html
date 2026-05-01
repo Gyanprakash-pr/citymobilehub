@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 {% load static %}
 
 {% block title %}
@@ -8,7 +8,7 @@
 {% block body %}
 <div class="container d-flex justify-content-center align-items-center min-vh-100" style="background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a18cd1, #fbc2eb);">
     <div class="col-lg-4 col-md-6 col-sm-8 col-10 shadow-lg p-4 rounded" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px);">
-        <h3 class="text-center mb-3" style="font-family: cursive; color: #007bff;">Forget Password</h3>
+        <h3 class="text-center mb-3" style="font-family: cursive; color: #6366f1;">Forget Password</h3>
         
         {% for message in messages %}
             <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
@@ -30,8 +30,10 @@
               <label for="password2" class="form-label" style="font-family: cursive;">Confirm Password</label>
               <input type="password" class="form-control" name="password2" placeholder="Enter New Password Again" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100" style="font-family: cursive;">Submit</button>
+            <button type="submit" class="btn btn-primary-theme w-100" style="font-family: cursive;">Submit</button>
         </form>
     </div>
 </div>
 {% endblock %}
+
+

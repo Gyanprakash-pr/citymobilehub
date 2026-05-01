@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 {% load static %}
 
 {% block title %}
@@ -110,8 +110,8 @@
         <!-- Price -->
         <div style="background:var(--light-color);border-radius:10px;padding:16px 20px;margin-bottom:18px;border-left:4px solid var(--primary-color);">
           <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
-            <span style="font-size:30px;font-weight:800;color:var(--dark-color);">₹{{Product.finalprice}}</span>
-            <span style="font-size:17px;text-decoration:line-through;color:var(--gray-color);">₹{{Product.baseprice}}</span>
+            <span style="font-size:30px;font-weight:800;color:var(--dark-color);">&#8377;{{Product.finalprice}}</span>
+            <span style="font-size:17px;text-decoration:line-through;color:var(--gray-color);">&#8377;{{Product.baseprice}}</span>
             <span style="background:rgba(16, 185, 129, 0.1);color:var(--success-color);font-size:13px;font-weight:700;padding:4px 12px;border-radius:20px;">{{Product.discount}}% off</span>
           </div>
           <div style="font-size:12px;color:var(--gray-color);margin-top:6px;"><i class="fas fa-shield-alt me-1" style="color:var(--primary-color);"></i>Inclusive of all taxes &bull; Free Delivery Available</div>
@@ -324,7 +324,7 @@
         </div>
         <div style="padding:12px;">
           <div style="font-size:13px;color:var(--dark-color);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{sp.name}}</div>
-          <div style="font-size:15px;font-weight:700;color:var(--primary-color);margin-top:4px;">₹{{sp.finalprice}}</div>
+          <div style="font-size:15px;font-weight:700;color:var(--primary-color);margin-top:4px;">&#8377;{{sp.finalprice}}</div>
         </div>
       </a>
       {% endfor %}
@@ -434,3 +434,5 @@ function setStars(rating) {
 }
 </script>
 {% endblock %}
+
+

@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 {% load static %}
 {% load product %}
 
@@ -80,7 +80,7 @@
                 <div class="form-floating">
                   <input type="number" class="form-control" id="baseprice" name="baseprice" placeholder="Base Price"
                     value="{{Product.baseprice}}" required>
-                  <label for="baseprice">Base Price (₹)</label>
+                  <label for="baseprice">Base Price (&#8377;)</label>
                 </div>
               </div>
 
@@ -205,7 +205,7 @@
 
           <!-- Submit Button -->
           <div class="text-center mt-4 animate__animated animate__fadeInUp">
-            <button type="submit" class="btn btn-primary btn-save-product">
+            <button type="submit" class="btn btn-primary-theme btn-save-product">
               <span class="btn-text">Update Product</span>
               <span class="btn-icon"><i class="fas fa-save"></i></span>
             </button>
@@ -538,3 +538,5 @@
   });
 </script>
 {% endblock %}
+
+

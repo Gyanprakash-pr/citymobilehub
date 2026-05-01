@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 
 {% load static %}
 
@@ -229,9 +229,9 @@
                     <span class="rating-count">(24)</span>
                   </div>
                   <div class="product-price">
-                    <span class="current-price">₹{{i.finalprice}}</span>
+                    <span class="current-price">&#8377;{{i.finalprice}}</span>
                     {% if i.discount %}
-                    <span class="original-price">₹{{i.baseprice}}</span>
+                    <span class="original-price">&#8377;{{i.baseprice}}</span>
                     {% endif %}
                   </div>
                   <button class="btn-add-to-cart mt-auto"
@@ -290,10 +290,10 @@
         tooltips: [true, true],
         format: {
           to: function (value) {
-            return '₹' + Math.round(value);
+            return '&#8377;' + Math.round(value);
           },
           from: function (value) {
-            return value.replace('₹', '');
+            return value.replace('&#8377;', '');
           }
         }
       });
@@ -482,3 +482,5 @@
   });
 </script>
 {% endblock %}
+
+

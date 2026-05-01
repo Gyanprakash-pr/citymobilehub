@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 {% load static %}
 {% block title %}
 <title>City Mobile | Secure Payment</title>
@@ -38,7 +38,7 @@
             <div class="premium-amount-box" style="background: var(--light-color); border: 1px solid var(--light-gray); border-radius: 18px; padding: 25px; text-align: center; margin-bottom: 30px; position: relative;">
                 <div style="font-size: 12px; font-weight: 600; color: var(--gray-color); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Total Payable Amount</div>
                 <div style="font-size: 42px; font-weight: 900; color: var(--primary-color); line-height: 1;">
-                    <span style="font-size: 24px; vertical-align: top; margin-right: 2px;">₹</span>{% widthratio amount 100 1 %}
+                    <span style="font-size: 24px; vertical-align: top; margin-right: 2px;">&#8377;</span>{% widthratio amount 100 1 %}
                 </div>
                 <div style="font-size: 11px; color: var(--success-color); font-weight: 700; margin-top: 10px;">
                     <i class="fas fa-check-circle me-1"></i> Inclusive of all taxes & shipping
@@ -135,3 +135,5 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
 %}
+
+

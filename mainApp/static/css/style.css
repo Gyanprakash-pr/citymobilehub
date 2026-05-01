@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     /* Premium Modern Tech Palette - Desi Mobile Official */
     --primary-color: #6366f1;     /* Royal Indigo - Trust & Tech */
     --primary-dark: #4f46e5;      /* Deep Indigo */
@@ -198,13 +198,13 @@
           transition: var(--transition);
         }
 
-        .hero-btns .btn-primary {
+        .hero-btns .btn-primary-theme {
           background-color: var(--accent-color);
           color: var(--primary-color);
           border: 2px solid var(--accent-color);
         }
 
-        .hero-btns .btn-primary:hover {
+        .hero-btns .btn-primary-theme:hover {
           background-color: transparent;
           color: var(--accent-color);
         }
@@ -860,6 +860,7 @@
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -927,6 +928,7 @@
     .product-title {
         font-size: 0.8rem;
         -webkit-line-clamp: 1;
+        line-clamp: 1;
     }
     
     .product-rating {
@@ -1942,3 +1944,193 @@
   50% { border-radius: 30% 70% 70% 30% / 50% 50% 70% 30%; }
   75% { border-radius: 55% 45% 40% 60% / 65% 35% 50% 50%; }
 }
+
+/* Location Picker Styles */
+.nav-location {
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+.nav-location:hover {
+    background: rgba(99, 102, 241, 0.05);
+}
+.location-modal .modal-content {
+    border-radius: 20px;
+    border: none;
+    overflow: hidden;
+}
+.location-search-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+.location-search-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+.location-search-wrapper input {
+    padding-left: 45px;
+    border-radius: 12px;
+    height: 50px;
+    border: 1px solid #e2e8f0;
+}
+.location-search-wrapper input:focus {
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    border-color: var(--primary-color);
+}
+.current-location-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    width: 100%;
+    background: none;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.2s;
+    margin-bottom: 25px;
+}
+.current-location-btn:hover {
+    background: #f8fafc;
+    border-color: var(--primary-color);
+}
+.current-location-btn .icon-box {
+    width: 40px;
+    height: 40px;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.saved-addresses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.address-empty-state {
+    text-align: center;
+    padding: 30px;
+    background: #f8fafc;
+    border-radius: 15px;
+}
+
+/* Flipkart Style User Dropdown */
+.user-dropdown .dropdown-menu {
+    width: 280px;
+    padding: 0;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    overflow: hidden;
+    margin-top: 15px !important;
+}
+.dropdown-header-custom {
+    padding: 15px 20px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #212121;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+}
+.user-dropdown .dropdown-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+    color: #4a4a4a;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f9f9f9;
+}
+.user-dropdown .dropdown-item:last-child {
+    border-bottom: none;
+}
+.user-dropdown .dropdown-item i {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+    color: #666;
+}
+.user-dropdown .dropdown-item:hover {
+    background-color: #f5f7ff;
+    color: var(--primary-color);
+}
+.user-dropdown .dropdown-item:hover i {
+    color: var(--primary-color);
+}
+
+/* Mobile Fixes for User Dropdown */
+@media (max-width: 991.98px) {
+    .user-dropdown .dropdown-menu {
+        width: 100%;
+        position: static !important;
+        float: none;
+        box-shadow: none;
+        border: 1px solid #eee;
+        margin-top: 10px !important;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .navbar-collapse {
+        max-height: 80vh;
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+    .dropdown-header-custom {
+        background: #f8fafc;
+    }
+}
+
+
+
+/* Global Theme Overrides */
+.btn-primary-theme, .btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+.btn-primary-theme:hover, .btn-primary:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+.text-primary { color: var(--primary-color) !important; }
+.bg-primary { background-color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+
+/* Ensure navbar color is the source of truth */
+.custom-navbar .navbar-brand { color: var(--primary-color) !important; }
+.nav-link.active { color: var(--primary-color) !important; font-weight: 600; }
+
+
+/* Mobile Responsiveness for Location Picker */
+@media (max-width: 576px) {
+    .nav-location {
+        margin-left: 5px !important;
+        padding: 0 5px !important;
+    }
+    .nav-location .location-text span:first-child {
+        font-size: 9px !important;
+    }
+    .nav-location .location-text span:last-child {
+        font-size: 11px !important;
+        max-width: 80px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+    .nav-location i {
+        font-size: 14px !important;
+        margin-right: 4px !important;
+    }
+}
+
+

@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 
 {% load static %}
 {% load product %}
@@ -105,13 +105,13 @@
             </div>
             
             <div class="d-flex align-items-center gap-2 mb-3">
-              <span class="fw-bold text-primary">₹{{i.product.finalprice}}</span>
-              <span class="text-muted text-decoration-line-through small">₹{{i.product.baseprice}}</span>
+              <span class="fw-bold text-primary">&#8377;{{i.product.finalprice}}</span>
+              <span class="text-muted text-decoration-line-through small">&#8377;{{i.product.baseprice}}</span>
             </div>
             
             <div class="d-grid gap-2">
               {% if i.product.stock > 0 and i.product.stock != 'Out-Of-Stock' and i.product.stock != 'Out of Stock' %}
-              <a href="/single-product-page/{{i.product.id}}/" class="btn btn-primary btn-sm rounded-pill py-2 fw-bold">
+              <a href="/single-product-page/{{i.product.id}}/" class="btn btn-primary-theme btn-sm rounded-pill py-2 fw-bold">
                 <i class="fas fa-shopping-cart me-1"></i> ADD TO CART
               </a>
               {% else %}
@@ -133,7 +133,7 @@
       <div class="mb-3 opacity-25"><i class="fas fa-heart-broken fa-4x text-primary"></i></div>
       <h5 class="fw-bold">Your wishlist is lonely</h5>
       <p class="text-muted">Explore our latest mobile accessories and add some favorites!</p>
-      <a href="/shop/All/All/All/" class="btn btn-primary rounded-pill px-4 py-2">Start Shopping</a>
+      <a href="/shop/All/All/All/" class="btn btn-primary-theme rounded-pill px-4 py-2">Start Shopping</a>
     </div>
     {% endif %}
   </section>
@@ -162,7 +162,7 @@
           <div class="d-flex align-items-center gap-4 mt-2 mt-md-0">
             <div class="text-md-end">
               <small class="text-muted d-block">Total Amount</small>
-              <span class="fw-bold text-primary h5 mb-0">₹{{i.final}}</span>
+              <span class="fw-bold text-primary h5 mb-0">&#8377;{{i.final}}</span>
             </div>
             <div class="status-badge-v2">
               {% if i.orderstatus == 1 %}
@@ -192,7 +192,7 @@
                       <small class="text-muted">{{item.color}} | Qty: {{item.qty}}</small>
                     </div>
                     <div class="text-end">
-                      <span class="fw-bold text-dark">₹{{item.total}}</span>
+                      <span class="fw-bold text-dark">&#8377;{{item.total}}</span>
                     </div>
                   </div>
                   {% endfor %}
@@ -214,7 +214,7 @@
                   <hr class="opacity-10 my-2">
                   <div class="d-grid mt-3">
                     {% if request|paymentStatusCon:i.paymentstatus %}
-                    <a href="/paynow/{{i.id}}" class="btn btn-primary btn-sm rounded-pill fw-bold">PAY NOW ₹{{i.final}}</a>
+                    <a href="/paynow/{{i.id}}" class="btn btn-primary-theme btn-sm rounded-pill fw-bold">PAY NOW &#8377;{{i.final}}</a>
                     {% endif %}
                     <a href="/order-detail/{{i.id}}" class="btn btn-outline-primary btn-sm rounded-pill mt-2 fw-bold">TRACK ORDER</a>
                   </div>
@@ -231,7 +231,7 @@
       <div class="mb-3 opacity-25"><i class="fas fa-shopping-bag fa-4x text-primary"></i></div>
       <h5 class="fw-bold">No orders found</h5>
       <p class="text-muted">You haven't placed any orders yet.</p>
-      <a href="/shop/All/All/All/" class="btn btn-primary rounded-pill px-4">Browse Store</a>
+      <a href="/shop/All/All/All/" class="btn btn-primary-theme rounded-pill px-4">Browse Store</a>
     </div>
     {% endif %}
   </section>
@@ -399,3 +399,5 @@
 <!-- Include SweetAlert2 for beautiful alerts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
+
+

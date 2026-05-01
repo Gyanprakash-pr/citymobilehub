@@ -17,8 +17,10 @@
   <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap"
+    rel="stylesheet">
+
   <!-- PWA Manifest -->
   <link rel="manifest" href="/static/manifest.json">
   <meta name="theme-color" content="#6366f1">
@@ -46,13 +48,27 @@
   <nav class="navbar navbar-expand-lg navbar-light custom-navbar fixed-top">
     <div class="container">
       <a class="navbar-brand animate__animated animate__fadeInLeft" href="/">
-        <img src="{% static 'picture/logo.png' %}" alt="City Mobile" style="height: 45px; width: 45px; object-fit: cover; border-radius: 50%; margin-right: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);">
+        <img src="{% static 'picture/logo.png' %}" alt="City Mobile"
+          style="height: 45px; width: 45px; object-fit: cover; border-radius: 50%; margin-right: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);">
         City Mobile
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+      <!-- Location Picker Trigger -->
+      <div
+        class="nav-location d-flex align-items-center ms-lg-3 ms-2 me-auto animate__animated animate__fadeInDown animate-delay-1"
+        style="cursor: pointer;" onclick="openLocationModal()">
+        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+        <div class="location-text">
+          <span class="d-block small text-muted" style="line-height: 1;">Deliver to</span>
+          <span id="currentPincode" class="fw-bold" style="font-size: 14px;">Select Location</span>
+        </div>
+      </div>
+
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav">
         <i class="fas fa-bars"></i>
       </button>
-      
+
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item animate__animated animate__fadeInDown animate-delay-1">
@@ -68,17 +84,19 @@
             <a class="nav-link" href="/contact/">Contact</a>
           </li>
         </ul>
-        
-        <form class="d-flex search-form me-3 animate__animated animate__fadeInDown animate-delay-5" method="post" action="/shop/ALL/ALL/ALL/">
+
+        <form class="d-flex search-form me-3 animate__animated animate__fadeInDown animate-delay-5" method="post"
+          action="/shop/ALL/ALL/ALL/">
           {% csrf_token %}
           <div class="input-group">
-            <input class="form-control" type="search" name="search" placeholder="Search products..." aria-label="Search">
+            <input class="form-control" type="search" name="search" placeholder="Search products..."
+              aria-label="Search">
             <button class="btn" type="submit">
               <i class="fas fa-search"></i>
             </button>
           </div>
         </form>
-        
+
         <ul class="navbar-nav animate__animated animate__fadeInDown animate-delay-6">
           <li class="nav-item me-2">
             <a class="nav-link cart-icon" href="/cart/">
@@ -86,19 +104,25 @@
               <span class="cart-count">{% if request.session.cart %}{{ request.session.cart|length }}{% else %}0{% endif %}</span>
             </a>
           </li>
-          
+
           {% if request.user.is_authenticated %}
           <li class="nav-item dropdown user-dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
               <span class="user-avatar">{{ request.user.username|first|upper }}</span>
               <span class="d-none d-lg-inline">{{ request.user }}</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="/profile/"><i class="fas fa-user-circle"></i> Profile</a></li>
-              <li><a class="dropdown-item" href="/orders/"><i class="fas fa-box"></i> My Orders</a></li>
-              <li><a class="dropdown-item" href="/wishlist/"><i class="fas fa-heart"></i> Wishlist</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout/"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg animate__animated animate__fadeIn">
+              <div class="dropdown-header-custom">Your Account</div>
+              <li><a class="dropdown-item" href="/profile/"><i class="far fa-user-circle"></i> My Profile</a></li>
+              <li><a class="dropdown-item" href="/orders/"><i class="fas fa-box"></i> Orders</a></li>
+              <li><a class="dropdown-item" href="/coupons/"><i class="fas fa-tags"></i> Coupons</a></li>
+              <li><a class="dropdown-item" href="/profile/"><i class="fas fa-map-marker-alt"></i> Saved Addresses</a>
+              </li>
+              <li><a class="dropdown-item" href="/wishlist/"><i class="far fa-heart"></i> Wishlist</a></li>
+              <li><a class="dropdown-item" href="#" onclick="showGiftCardDemo()"><i class="fas fa-gift"></i> Gift
+                  Cards</a></li>
+              <li><a class="dropdown-item" href="/logout/" style="border-top: 1px solid #eee; margin-top: 5px;"><i
+                    class="fas fa-power-off"></i> Logout</a></li>
             </ul>
           </li>
           {% else %}
@@ -115,191 +139,231 @@
 
   {% block body %}
   <!-- Minimalist Premium Hero Section -->
-  <section class="hero-minimalist" style="background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%); min-height: 85vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 100px 0 60px; text-align: center;">
-    
+  <section class="hero-minimalist"
+    style="background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%); min-height: 85vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 100px 0 60px; text-align: center;">
+
     <!-- Abstract Glow -->
-    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 60%); pointer-events: none;"></div>
+    <div
+      style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 60%); pointer-events: none;">
+    </div>
 
     <div class="container" style="position: relative; z-index: 5;">
-        <!-- Image on Top (Second Image from previous layout) -->
-        <div class="hero-top-visual animate__animated animate__zoomIn" style="margin-bottom: 50px;">
-            <div class="main-visual-wrapper" style="position: relative; display: inline-block;">
-                <img src="{% static 'picture/hero3.jpg' %}" alt="City Mobile" style="width: 100%; max-width: 600px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); transform: perspective(1000px) rotateX(10deg);">
-                <!-- Floating Accent -->
-                <div style="position: absolute; bottom: -20px; right: -20px; background: var(--secondary-color); color: white; padding: 12px 25px; border-radius: 15px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
-                    NEW TECH '26
-                </div>
-            </div>
+      <!-- Image on Top (Second Image from previous layout) -->
+      <div class="hero-top-visual animate__animated animate__zoomIn" style="margin-bottom: 50px;">
+        <div class="main-visual-wrapper" style="position: relative; display: inline-block;">
+          <img src="{% static 'picture/hero3.jpg' %}" alt="City Mobile"
+            style="width: 100%; max-width: 600px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); transform: perspective(1000px) rotateX(10deg);">
+          <!-- Floating Accent -->
+          <div
+            style="position: absolute; bottom: -20px; right: -20px; background: var(--secondary-color); color: white; padding: 12px 25px; border-radius: 15px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+            NEW TECH '26
+          </div>
         </div>
+      </div>
 
-        <!-- Minimal Text Below -->
-        <div class="hero-content-minimal animate__animated animate__fadeInUp animate__delay-1s">
-            <h1 style="font-size: clamp(32px, 6vw, 64px); font-weight: 900; line-height: 1.1; margin-bottom: 20px;">
-                Elegance in <span style="color: var(--secondary-color);">Every Detail.</span>
-            </h1>
-            <p style="font-size: 18px; opacity: 0.7; max-width: 600px; margin: 0 auto 40px; line-height: 1.6;">
-                Premium mobile accessories designed for the modern lifestyle.
-            </p>
-            
-            <div class="hero-cta-minimal">
-                <a href="/shop/All/All/All/" class="btn-minimal-premium" style="background: white; color: #0f172a; padding: 20px 60px; border-radius: 50px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s; font-size: 16px; letter-spacing: 1px;">
-                    EXPLORE COLLECTION <i class="fas fa-arrow-right ms-3"></i>
-                </a>
-            </div>
+      <!-- Minimal Text Below -->
+      <div class="hero-content-minimal animate__animated animate__fadeInUp animate__delay-1s">
+        <h1 style="font-size: clamp(32px, 6vw, 64px); font-weight: 900; line-height: 1.1; margin-bottom: 20px;">
+          Elegance in <span style="color: var(--secondary-color);">Every Detail.</span>
+        </h1>
+        <p style="font-size: 18px; opacity: 0.7; max-width: 600px; margin: 0 auto 40px; line-height: 1.6;">
+          Premium mobile accessories designed for the modern lifestyle.
+        </p>
+
+        <div class="hero-cta-minimal">
+          <a href="/shop/All/All/All/" class="btn-minimal-premium"
+            style="background: white; color: #0f172a; padding: 20px 60px; border-radius: 50px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s; font-size: 16px; letter-spacing: 1px;">
+            EXPLORE COLLECTION <i class="fas fa-arrow-right ms-3"></i>
+          </a>
         </div>
+      </div>
     </div>
   </section>
 
   <style>
     .btn-minimal-premium:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        background: var(--secondary-color) !important;
-        color: white !important;
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      background: var(--secondary-color) !important;
+      color: white !important;
     }
-    
+
     .hero-top-visual img {
-        animation: heroFloat 8s ease-in-out infinite;
+      animation: heroFloat 8s ease-in-out infinite;
     }
-    
+
     @keyframes heroFloat {
-        0%, 100% { transform: perspective(1000px) rotateX(10deg) translateY(0); }
-        50% { transform: perspective(1000px) rotateX(8deg) translateY(-20px); }
+
+      0%,
+      100% {
+        transform: perspective(1000px) rotateX(10deg) translateY(0);
+      }
+
+      50% {
+        transform: perspective(1000px) rotateX(8deg) translateY(-20px);
+      }
     }
 
     @media (max-width: 768px) {
-        .hero-minimalist { padding: 80px 20px; }
-        .hero-top-visual img { max-width: 100%; border-radius: 20px; }
-        .hero-content-minimal h1 { font-size: 36px; }
+      .hero-minimalist {
+        padding: 80px 20px;
+      }
+
+      .hero-top-visual img {
+        max-width: 100%;
+        border-radius: 20px;
+      }
+
+      .hero-content-minimal h1 {
+        font-size: 36px;
+      }
     }
   </style>
 
   <!-- Categories Section - Circular Galaxy Style -->
- <section class="galaxy-categories" style="background:var(--white-color); padding: 80px 0; overflow: hidden;">
+  <section class="galaxy-categories" style="background:var(--white-color); padding: 80px 0; overflow: hidden;">
     <div class="container">
       <div class="section-header text-center" style="margin-bottom:60px;">
-        <h2 class="section-title animate__animated animate__fadeIn">Explore our <span style="color: var(--primary-color);">Galaxy</span></h2>
-        <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1s">Click on any planet to discover premium accessories</p>
+        <h2 class="section-title animate__animated animate__fadeIn">Explore our <span
+            style="color: var(--primary-color);">Galaxy</span></h2>
+        <p class="section-subtitle animate__animated animate__fadeIn animate__delay-1s">Click on any planet to discover
+          premium accessories</p>
       </div>
 
-      <div class="category-orbit-container" style="position: relative; width: 100%; max-width: 600px; height: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-        
+      <div class="category-orbit-container"
+        style="position: relative; width: 100%; max-width: 600px; height: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+
         <!-- Center Piece (The Sun/Desi Mobile) -->
-        <div class="orbit-center animate__animated animate__pulse animate__infinite animate__slower" style="position: absolute; z-index: 10; width: 180px; height: 180px; background: white; border-radius: 50%; box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3); display: flex; align-items: center; justify-content: center; border: 8px solid var(--primary-light);">
-            <div style="text-align: center;">
-                <i class="fas fa-mobile-alt" style="font-size: 50px; color: var(--primary-color); margin-bottom: 10px;"></i>
-                <div style="font-weight: 800; font-size: 16px; color: var(--dark-color); line-height: 1;">CITY<br>MOBILE</div>
+        <div class="orbit-center animate__animated animate__pulse animate__infinite animate__slower"
+          style="position: absolute; z-index: 10; width: 180px; height: 180px; background: white; border-radius: 50%; box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3); display: flex; align-items: center; justify-content: center; border: 8px solid var(--primary-light);">
+          <div style="text-align: center;">
+            <i class="fas fa-mobile-alt" style="font-size: 50px; color: var(--primary-color); margin-bottom: 10px;"></i>
+            <div style="font-weight: 800; font-size: 16px; color: var(--dark-color); line-height: 1;">CITY<br>MOBILE
             </div>
+          </div>
         </div>
 
-        
+
         <!-- Categories (Planets) -->
         {% for cat in Maincategory %}
         {% with cat_img=cat|categoryImage %}
-        <div class="category-planet" id="planet-{{forloop.counter}}" style="position: absolute; transition: all 0.5s ease;">
+        <div class="category-planet" id="planet-{{forloop.counter}}"
+          style="position: absolute; transition: all 0.5s ease;">
           <a href="/shop/{{cat.name}}/All/All/" style="text-decoration: none; display: block; text-align: center;">
-            <div class="planet-icon-wrapper" style="width: 100px; height: 100px; border-radius: 50%; background: white; box-shadow: var(--shadow-md); overflow: hidden; border: 4px solid white; transition: all 0.3s;">
-                {% if cat_img %}
-                <img src="{{ cat_img }}" alt="{{ cat.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% else %}
-                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-th-large" style="color: white; font-size: 24px;"></i>
-                </div>
-                {% endif %}
+            <div class="planet-icon-wrapper"
+              style="width: 100px; height: 100px; border-radius: 50%; background: white; box-shadow: var(--shadow-md); overflow: hidden; border: 4px solid white; transition: all 0.3s;">
+              {% if cat_img %}
+              <img src="{{ cat_img }}" alt="{{ cat.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+              {% else %}
+              <div
+                style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-th-large" style="color: white; font-size: 24px;"></i>
+              </div>
+              {% endif %}
             </div>
-            <div class="planet-label" style="margin-top: 10px; font-weight: 700; font-size: 13px; color: var(--dark-color); text-shadow: 0 2px 4px rgba(255,255,255,0.8);">{{ cat.name }}</div>
+            <div class="planet-label"
+              style="margin-top: 10px; font-weight: 700; font-size: 13px; color: var(--dark-color); text-shadow: 0 2px 4px rgba(255,255,255,0.8);">
+              {{ cat.name }}</div>
           </a>
         </div>
         {% endwith %}
         {% endfor %}
       </div>
     </div>
- </section>
+  </section>
 
- <style>
+  <style>
     .category-planet:hover .planet-icon-wrapper {
-        transform: scale(1.2) translateY(-10px);
-        box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
-        border-color: var(--secondary-color);
+      transform: scale(1.2) translateY(-10px);
+      box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+      border-color: var(--secondary-color);
     }
-    
+
     @media (max-width: 768px) {
-        .category-orbit-container {
-            height: 400px !important;
-            max-width: 100% !important;
-        }
-        .orbit-center {
-            width: 100px !important;
-            height: 100px !important;
-            border-width: 4px !important;
-        }
-        .orbit-center i { font-size: 30px !important; }
-        .orbit-center div { font-size: 10px !important; }
-        
-        .planet-icon-wrapper {
-            width: 60px !important;
-            height: 60px !important;
-            border-width: 2px !important;
-        }
-        .planet-label {
-            font-size: 10px !important;
-            margin-top: 5px !important;
-        }
+      .category-orbit-container {
+        height: 400px !important;
+        max-width: 100% !important;
+      }
+
+      .orbit-center {
+        width: 100px !important;
+        height: 100px !important;
+        border-width: 4px !important;
+      }
+
+      .orbit-center i {
+        font-size: 30px !important;
+      }
+
+      .orbit-center div {
+        font-size: 10px !important;
+      }
+
+      .planet-icon-wrapper {
+        width: 60px !important;
+        height: 60px !important;
+        border-width: 2px !important;
+      }
+
+      .planet-label {
+        font-size: 10px !important;
+        margin-top: 5px !important;
+      }
     }
- </style>
+  </style>
 
- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const planets = document.querySelectorAll('.category-planet');
-        const count = planets.length;
-        
-        const positionPlanets = () => {
-            const container = document.querySelector('.category-orbit-container');
-            if (!container) return;
-            
-            const isMobile = window.innerWidth < 768;
-            const containerWidth = container.offsetWidth;
-            const containerHeight = container.offsetHeight;
-            const radius = isMobile ? (containerWidth * 0.35) : 220; 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const planets = document.querySelectorAll('.category-planet');
+      const count = planets.length;
 
-            planets.forEach((planet, index) => {
-                // Fixed planet dimensions for calculation (since they might be small on mobile)
-                const planetWidth = isMobile ? 60 : 100;
-                const planetHeight = isMobile ? 80 : 130; // Including label
+      const positionPlanets = () => {
+        const container = document.querySelector('.category-orbit-container');
+        if (!container) return;
 
-                const angle = (index / count) * 2 * Math.PI - (Math.PI / 2);
-                const x = Math.cos(angle) * radius;
-                const y = Math.sin(angle) * radius;
-                
-                planet.style.left = `calc(50% + ${x}px - ${planetWidth / 2}px)`;
-                planet.style.top = `calc(50% + ${y}px - ${planetHeight / 2}px)`;
-            });
-        };
+        const isMobile = window.innerWidth < 768;
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const radius = isMobile ? (containerWidth * 0.35) : 220;
 
-        // Run with small delay to ensure rendering
-        setTimeout(positionPlanets, 100);
-        window.addEventListener('resize', positionPlanets);
+        planets.forEach((planet, index) => {
+          // Fixed planet dimensions for calculation (since they might be small on mobile)
+          const planetWidth = isMobile ? 60 : 100;
+          const planetHeight = isMobile ? 80 : 130; // Including label
+
+          const angle = (index / count) * 2 * Math.PI - (Math.PI / 2);
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+
+          planet.style.left = `calc(50% + ${x}px - ${planetWidth / 2}px)`;
+          planet.style.top = `calc(50% + ${y}px - ${planetHeight / 2}px)`;
+        });
+      };
+
+      // Run with small delay to ensure rendering
+      setTimeout(positionPlanets, 100);
+      window.addEventListener('resize', positionPlanets);
     });
- </script>
+  </script>
 
 
   <!-- Featured Products -->
-<section class="products-section">
+  <section class="products-section">
     <div class="container">
       <div class="section-header animate__animated animate__fadeIn">
         <h2 class="section-title">Featured Products</h2>
         <a href="/shop/All/All/All/" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
       </div>
-      
+
       <div class="row g-3"> <!-- Improved gutter spacing -->
         {% for i in Product %}
         <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6">
           <div class="product-card animate__animated animate__fadeInUp">
             <div class="blob-img-wrapper">
               {% if i.pic1 %}
-              <img src="{{ i.pic1.url }}"  alt="{{ i.name }}">
+              <img src="{{ i.pic1.url }}" alt="{{ i.name }}">
               {% else %}
-              <img src="{% static 'picture/noimg.png' %}"  alt="No image">
+              <img src="{% static 'picture/noimg.png' %}" alt="No image">
               {% endif %}
               <span class="product-badge">-{{ i.discount }}%</span>
               <div class="product-actions">
@@ -324,9 +388,9 @@
                 <span class="rating-count">(24)</span>
               </div>
               <div class="price-container">
-                <span class="final-price">â‚¹{{ i.finalprice }}</span>
+                <span class="final-price">&#8377;{{ i.finalprice }}</span>
                 {% if i.discount > 0 %}
-                <span class="base-price">â‚¹{{ i.baseprice }}</span>
+                <span class="base-price">&#8377;{{ i.baseprice }}</span>
                 {% endif %}
               </div>
               <a href="/single-product-page/{{ i.id }}" class="btn btn-add-to-cart">
@@ -338,7 +402,7 @@
         {% endfor %}
       </div>
     </div>
-</section>
+  </section>
 
 
   <!-- Banner Section - Latest Arrivals -->
@@ -347,10 +411,13 @@
       <div class="row align-items-center g-4">
         <div class="col-lg-6 order-2 order-lg-1">
           <div class="banner-text animate__animated animate__fadeInLeft">
-            <h6 class="text-uppercase fw-bold ls-2 mb-3" style="color: var(--secondary-color); font-size: 14px;">Season Refresh</h6>
-            <h2 class="display-5 fw-bold mb-3" style="color: var(--dark-color);">New Arrivals <span style="color: var(--primary-color);">2026</span></h2>
-            <p class="lead text-muted mb-4">Discover the next generation of mobile tech. Premium chargers, ultra-durable cases, and high-fidelity audio gadgets have just arrived.</p>
-            
+            <h6 class="text-uppercase fw-bold ls-2 mb-3" style="color: var(--secondary-color); font-size: 14px;">Season
+              Refresh</h6>
+            <h2 class="display-5 fw-bold mb-3" style="color: var(--dark-color);">New Arrivals <span
+                style="color: var(--primary-color);">2026</span></h2>
+            <p class="lead text-muted mb-4">Discover the next generation of mobile tech. Premium chargers, ultra-durable
+              cases, and high-fidelity audio gadgets have just arrived.</p>
+
             <!-- Professional Countdown -->
             <div class="countdown-wrapper d-flex gap-2 gap-md-3 mb-5">
               <div class="countdown-box">
@@ -370,7 +437,7 @@
                 <span class="label">Secs</span>
               </div>
             </div>
-            
+
             <a href="/shop/All/All/All/?sort=latest" class="btn-premium-action">
               <span>Shop Collection</span>
               <i class="fas fa-arrow-right"></i>
@@ -380,7 +447,8 @@
         <div class="col-lg-6 order-1 order-lg-2">
           <div class="banner-visual position-relative animate__animated animate__fadeInRight">
             <div class="visual-bg-glow"></div>
-            <img src="{% static 'picture/discount.jpg' %}" alt="Special Discount" class="img-fluid rounded-5 shadow-2xl">
+            <img src="{% static 'picture/discount.jpg' %}" alt="Special Discount"
+              class="img-fluid rounded-5 shadow-2xl">
             <div class="floating-badge shadow-lg">
               <span class="d-block fw-bold">Up to</span>
               <span class="h4 fw-900 mb-0">40% OFF</span>
@@ -392,19 +460,28 @@
   </section>
 
   <style>
-    .ls-2 { letter-spacing: 2px; }
-    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
-    .fw-900 { font-weight: 900; }
-    
+    .ls-2 {
+      letter-spacing: 2px;
+    }
+
+    .shadow-2xl {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .fw-900 {
+      font-weight: 900;
+    }
+
     .countdown-box {
       background: white;
       padding: 15px 20px;
       border-radius: 16px;
       min-width: 80px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      border: 1px solid rgba(0,0,0,0.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.03);
     }
+
     .countdown-box .number {
       display: block;
       font-size: 24px;
@@ -412,6 +489,7 @@
       color: var(--primary-color);
       line-height: 1;
     }
+
     .countdown-box .label {
       font-size: 11px;
       text-transform: uppercase;
@@ -419,7 +497,7 @@
       color: #94a3b8;
       margin-top: 5px;
     }
-    
+
     .btn-premium-action {
       background: var(--dark-color);
       color: white;
@@ -433,13 +511,14 @@
       transition: all 0.3s;
       border: none;
     }
+
     .btn-premium-action:hover {
       background: var(--primary-color);
       transform: translateY(-3px);
       box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
       color: white;
     }
-    
+
     .visual-bg-glow {
       position: absolute;
       top: 50%;
@@ -450,7 +529,7 @@
       background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
       z-index: -1;
     }
-    
+
     .floating-badge {
       position: absolute;
       bottom: 30px;
@@ -462,15 +541,34 @@
       text-align: center;
       animation: floatBadge 4s ease-in-out infinite;
     }
+
     @keyframes floatBadge {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
     }
-    
+
     @media (max-width: 768px) {
-      .countdown-box { padding: 10px; min-width: 65px; }
-      .countdown-box .number { font-size: 18px; }
-      .floating-badge { bottom: 10px; left: 10px; padding: 12px; }
+      .countdown-box {
+        padding: 10px;
+        min-width: 65px;
+      }
+
+      .countdown-box .number {
+        font-size: 18px;
+      }
+
+      .floating-badge {
+        bottom: 10px;
+        left: 10px;
+        padding: 12px;
+      }
     }
   </style>
 
@@ -480,53 +578,66 @@
       <div class="section-header text-center mb-5">
         <h2 class="display-6 fw-bold mb-2">24/7 Customer Support</h2>
         <p class="text-muted">We're here to help you anytime, anywhere.</p>
-        <div class="mx-auto" style="width: 60px; height: 4px; background: var(--primary-color); border-radius: 2px;"></div>
+        <div class="mx-auto" style="width: 60px; height: 4px; background: var(--primary-color); border-radius: 2px;">
+        </div>
       </div>
-      
+
       <div class="row g-4">
         <!-- Support Card 1 -->
         <div class="col-lg-4 col-md-6">
-          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0" style="background: #f8fafc; transition: all 0.3s;">
-            <div class="support-icon-wrapper mb-4 mx-auto" style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0"
+            style="background: #f8fafc; transition: all 0.3s;">
+            <div class="support-icon-wrapper mb-4 mx-auto"
+              style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
               <i class="fas fa-phone-alt" style="font-size: 24px; color: var(--primary-color);"></i>
             </div>
             <h3 class="h5 fw-bold mb-3">Phone Support</h3>
-            <p class="small text-muted mb-4">Talk directly to our tech experts for immediate assistance with your orders.</p>
-            <a href="tel:{{store_info.phone}}" class="fw-bold text-decoration-none" style="color: var(--primary-color);">
+            <p class="small text-muted mb-4">Talk directly to our tech experts for immediate assistance with your
+              orders.</p>
+            <a href="tel:{{store_info.phone}}" class="fw-bold text-decoration-none"
+              style="color: var(--primary-color);">
               {{store_info.phone}} <i class="fas fa-arrow-right ms-2"></i>
             </a>
           </div>
         </div>
-        
+
         <!-- Support Card 2 -->
         <div class="col-lg-4 col-md-6">
-          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0" style="background: #f8fafc; transition: all 0.3s;">
-            <div class="support-icon-wrapper mb-4 mx-auto" style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0"
+            style="background: #f8fafc; transition: all 0.3s;">
+            <div class="support-icon-wrapper mb-4 mx-auto"
+              style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
               <i class="fas fa-comments" style="font-size: 24px; color: var(--success-color);"></i>
             </div>
             <h3 class="h5 fw-bold mb-3">Live Chat</h3>
-            <p class="small text-muted mb-4">Chat with our support agents in real-time for quick answers to your queries.</p>
-            <button class="btn btn-sm rounded-pill px-4 fw-bold" style="background: var(--success-color); color: white;" onclick="openChat()">
+            <p class="small text-muted mb-4">Chat with our support agents in real-time for quick answers to your
+              queries.</p>
+            <button class="btn btn-sm rounded-pill px-4 fw-bold" style="background: var(--success-color); color: white;"
+              onclick="openChat()">
               Start Chat <i class="fas fa-bolt ms-2"></i>
             </button>
           </div>
         </div>
-        
+
         <!-- Support Card 3 -->
         <div class="col-lg-4 col-md-6">
-          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0" style="background: #f8fafc; transition: all 0.3s;">
-            <div class="support-icon-wrapper mb-4 mx-auto" style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+          <div class="support-card p-4 rounded-4 shadow-sm h-100 text-center border-0"
+            style="background: #f8fafc; transition: all 0.3s;">
+            <div class="support-icon-wrapper mb-4 mx-auto"
+              style="width: 70px; height: 70px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
               <i class="fas fa-envelope" style="font-size: 24px; color: var(--secondary-color);"></i>
             </div>
             <h3 class="h5 fw-bold mb-3">Email Support</h3>
-            <p class="small text-muted mb-4">Send us an email and our dedicated team will respond within 24 business hours.</p>
-            <a href="mailto:{{store_info.email}}" class="fw-bold text-decoration-none" style="color: var(--secondary-color);">
+            <p class="small text-muted mb-4">Send us an email and our dedicated team will respond within 24 business
+              hours.</p>
+            <a href="mailto:{{store_info.email}}" class="fw-bold text-decoration-none"
+              style="color: var(--secondary-color);">
               {{store_info.email}} <i class="fas fa-arrow-right ms-2"></i>
             </a>
           </div>
         </div>
       </div>
-      
+
       <!-- FAQ Section -->
       <div class="faq-minimal mt-5 pt-5">
         <div class="row justify-content-center">
@@ -535,25 +646,29 @@
             <div class="accordion accordion-flush custom-accordion" id="supportFaq">
               <div class="accordion-item mb-3 border rounded-4 overflow-hidden">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                  <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq1">
                     How can I track my order?
                   </button>
                 </h2>
                 <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#supportFaq">
                   <div class="accordion-body text-muted">
-                    Log in to your account and go to "My Orders" to see real-time updates and tracking IDs for all your shipments.
+                    Log in to your account and go to "My Orders" to see real-time updates and tracking IDs for all your
+                    shipments.
                   </div>
                 </div>
               </div>
               <div class="accordion-item mb-3 border rounded-4 overflow-hidden">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                  <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq2">
                     What is your return policy?
                   </button>
                 </h2>
                 <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#supportFaq">
                   <div class="accordion-body text-muted">
-                    We offer a 7-day easy return policy for defective mobile accessories. Items must be in original packaging.
+                    We offer a 7-day easy return policy for defective mobile accessories. Items must be in original
+                    packaging.
                   </div>
                 </div>
               </div>
@@ -568,13 +683,15 @@
     .support-card:hover {
       transform: translateY(-10px);
       background: white !important;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
     }
+
     .custom-accordion .accordion-button:not(.collapsed) {
       background-color: var(--light-color);
       color: var(--primary-color);
       box-shadow: none;
     }
+
     .custom-accordion .accordion-button:focus {
       box-shadow: none;
     }
@@ -583,8 +700,12 @@
   <!-- Newsletter Section - Professional Dark Theme -->
   <section class="newsletter-v2 py-5" style="background: #0f172a; position: relative; overflow: hidden;">
     <!-- Abstract Background Elements -->
-    <div style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);"></div>
-    <div style="position: absolute; bottom: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(249, 115, 22, 0.05) 0%, transparent 70%);"></div>
+    <div
+      style="position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);">
+    </div>
+    <div
+      style="position: absolute; bottom: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(249, 115, 22, 0.05) 0%, transparent 70%);">
+    </div>
 
     <div class="container position-relative" style="z-index: 2;">
       <div class="row justify-content-center text-center">
@@ -593,17 +714,19 @@
             <i class="fas fa-paper-plane" style="font-size: 40px; color: var(--primary-color);"></i>
           </div>
           <h2 class="text-white display-6 fw-bold mb-3">Join the Tech Circle</h2>
-          <p class="text-white opacity-75 mb-5 mx-auto" style="max-width: 600px;">Subscribe to our newsletter and be the first to receive exclusive offers, tech tips, and product launches directly in your inbox.</p>
-          
-          <form class="newsletter-form-v2 d-flex flex-column flex-md-row gap-2 mx-auto" style="max-width: 600px;" method="post" action="/">
+          <p class="text-white opacity-75 mb-5 mx-auto" style="max-width: 600px;">Subscribe to our newsletter and be the
+            first to receive exclusive offers, tech tips, and product launches directly in your inbox.</p>
+
+          <form class="newsletter-form-v2 d-flex flex-column flex-md-row gap-2 mx-auto" style="max-width: 600px;"
+            method="post" action="/">
             {% csrf_token %}
-            <input type="email" name="email" placeholder="Enter your business email" required 
-                   style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 18px 30px; color: white; flex-grow: 1; outline: none; transition: all 0.3s;">
+            <input type="email" name="email" placeholder="Enter your business email" required
+              style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 18px 30px; color: white; flex-grow: 1; outline: none; transition: all 0.3s;">
             <button type="submit" class="btn-subscribe-modern">
               SUBSCRIBE <i class="fas fa-bolt ms-2"></i>
             </button>
           </form>
-          
+
           <div class="mt-4 d-flex align-items-center justify-content-center gap-4 text-white opacity-50 small fw-bold">
             <span><i class="fas fa-check-circle me-1 text-success"></i> No Spam</span>
             <span><i class="fas fa-check-circle me-1 text-success"></i> Weekly Updates</span>
@@ -616,10 +739,11 @@
 
   <style>
     .newsletter-form-v2 input:focus {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       border-color: var(--primary-color);
       box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
     }
+
     .btn-subscribe-modern {
       background: var(--primary-color);
       color: white;
@@ -631,26 +755,33 @@
       transition: all 0.3s;
       white-space: nowrap;
     }
+
     .btn-subscribe-modern:hover {
       background: var(--primary-dark);
       transform: scale(1.02);
       box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
     }
-    
+
     @media (max-width: 768px) {
-      .btn-subscribe-modern { width: 100%; }
-      .newsletter-v2 { padding: 60px 20px !important; }
+      .btn-subscribe-modern {
+        width: 100%;
+      }
+
+      .newsletter-v2 {
+        padding: 60px 20px !important;
+      }
     }
   </style>
   {% endblock %}
 
   <!-- Footer -->
-    <!-- Recently Viewed Section -->
+  <!-- Recently Viewed Section -->
   <section id="recentlyViewedSection" class="py-5" style="background: #f1f5f9; display: none;">
     <div class="container">
       <div class="section-header d-flex justify-content-between align-items-center mb-4">
         <h2 class="h4 fw-bold mb-0"><i class="fas fa-history me-2 text-primary"></i>Continue Shopping</h2>
-        <button onclick="localStorage.removeItem('recentlyViewed'); location.reload();" class="btn btn-sm text-muted">Clear History</button>
+        <button onclick="localStorage.removeItem('recentlyViewed'); location.reload();"
+          class="btn btn-sm text-muted">Clear History</button>
       </div>
       <div id="recentlyViewedContainer" class="row g-3 flex-nowrap overflow-auto hide-scrollbar pb-3">
         <!-- Recently viewed items will be injected here via JS -->
@@ -659,45 +790,56 @@
   </section>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const recent = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
       const section = document.getElementById('recentlyViewedSection');
       const container = document.getElementById('recentlyViewedContainer');
-      
+
       if (recent.length > 0 && container && section) {
         section.style.display = 'block';
         recent.forEach(item => {
-          container.innerHTML += 
+          container.innerHTML +=
             <div class="col-6 col-md-3 col-lg-2">
               <a href="\" class="text-decoration-none">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden transition-all hover-up">
                   <div style="height: 150px; background: white; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                    <img src="\" alt="\" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <img src="\" alt="\" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
                   </div>
                   <div class="card-body p-2 text-center">
                     <p class="small fw-bold mb-1 text-dark text-truncate">\</p>
-                    <p class="small text-primary fw-bold mb-0">₹\</p>
+                    <p class="small text-primary fw-bold mb-0"></p>
                   </div>
                 </div>
               </a>
             </div>
-          ;
+            ;
         });
       }
     });
   </script>
 
   <style>
-    .hover-up:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .hover-up:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
   <footer class="footer">
     <div class="container">
       <div class="row g-4">
         <div class="col-lg-4 mb-4 animate__animated animate__fadeInUp">
           <h4><i class="fas fa-mobile-alt me-2"></i>City Mobile</h4>
-          <p>Your one-stop destination for all your mobile needs. We specialize in high-quality chargers, cases, and premium accessories for all major brands.</p>
+          <p>Your one-stop destination for all your mobile needs. We specialize in high-quality chargers, cases, and
+            premium accessories for all major brands.</p>
           <div class="social-icons">
             <a href="https://www.facebook.com/gyan.babu.779/" class="social-icon" target="_blank">
               <i class="fab fa-facebook-f"></i>
@@ -713,7 +855,7 @@
             </a>
           </div>
         </div>
-        
+
         <div class="col-lg-2 col-md-6 mb-4 animate__animated animate__fadeInUp animate-delay-1">
           <h4>Quick Links</h4>
           <ul class="footer-links">
@@ -726,24 +868,27 @@
             {% endif %}
           </ul>
         </div>
-        
+
         <div class="col-lg-2 col-md-6 mb-4 animate__animated animate__fadeInUp animate-delay-1">
           <h4>Categories</h4>
           <ul class="footer-links">
             <li><a href="/shop/Smartphones/All/All/"><i class="fas fa-chevron-right"></i> Smartphones</a></li>
-            <li><a href="/shop/Chargers & Cables/All/All/"><i class="fas fa-chevron-right"></i> Chargers & Cables</a></li>
+            <li><a href="/shop/Chargers & Cables/All/All/"><i class="fas fa-chevron-right"></i> Chargers & Cables</a>
+            </li>
             <li><a href="/shop/Cases & Covers/All/All/"><i class="fas fa-chevron-right"></i> Cases & Covers</a></li>
             <li><a href="/shop/Audio & Gadgets/All/All/"><i class="fas fa-chevron-right"></i> Audio & Gadgets</a></li>
-            <li><a href="/shop/Screen Protection/All/All/"><i class="fas fa-chevron-right"></i> Screen Protection</a></li>
+            <li><a href="/shop/Screen Protection/All/All/"><i class="fas fa-chevron-right"></i> Screen Protection</a>
+            </li>
           </ul>
         </div>
-        
+
         <div class="col-lg-4 mb-4 animate__animated animate__fadeInUp animate-delay-2">
           <h4>Contact Us</h4>
           <ul class="footer-contact">
             <li>
               <i class="fas fa-map-marker-alt"></i>
-              <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India" target="_blank" style="color: inherit; text-decoration: none;">{{store_info.address}}</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India"
+                target="_blank" style="color: inherit; text-decoration: none;">{{store_info.address}}</a>
             </li>
             <li>
               <i class="fas fa-phone-alt"></i>
@@ -751,57 +896,74 @@
             </li>
             <li>
               <i class="fas fa-envelope"></i>
-              <a href="mailto:{{store_info.email}}" style="color: inherit; text-decoration: none;">{{store_info.email}}</a>
+              <a href="mailto:{{store_info.email}}"
+                style="color: inherit; text-decoration: none;">{{store_info.email}}</a>
             </li>
           </ul>
         </div>
       </div>
-      
+
       <div class="copyright text-center animate__animated animate__fadeIn">
-        <p>&copy; <script>document.write(new Date().getFullYear())</script> City Mobile. All Rights Reserved.</p>
+        <p>&copy;
+          <script>document.write(new Date().getFullYear())</script> City Mobile. All Rights Reserved.
+        </p>
       </div>
     </div>
   </footer>
 
   <!-- Chatbot Modal -->
-  <div id="chatbotModal" class="chatbot-modal-v2 shadow-2xl animate__animated" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 380px; height: 550px; background: white; border-radius: 20px; flex-direction: column; z-index: 1001; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
+  <div id="chatbotModal" class="chatbot-modal-v2 shadow-2xl animate__animated"
+    style="display: none; position: fixed; bottom: 100px; right: 30px; width: 380px; height: 550px; background: white; border-radius: 20px; flex-direction: column; z-index: 1001; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15);">
     <!-- Chat Header -->
-    <div class="chat-header p-3 text-white d-flex align-items-center justify-content-between" style="background: var(--primary-color);">
+    <div class="chat-header p-3 text-white d-flex align-items-center justify-content-between"
+      style="background: var(--primary-color);">
       <div class="d-flex align-items-center gap-3">
-        <div class="avatar" style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <div class="avatar"
+          style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
           <i class="fas fa-robot"></i>
         </div>
         <div>
           <h6 class="mb-0 fw-bold">City Mobile AI</h6>
-          <small class="opacity-75"><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i> Always Online</small>
+          <small class="opacity-75"><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i> Always
+            Online</small>
         </div>
       </div>
       <button id="closeChat" class="btn text-white p-0 border-0"><i class="fas fa-times"></i></button>
     </div>
 
     <!-- Chat Messages Area -->
-    <div id="chatMessages" class="chat-messages p-3 flex-grow-1" style="overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+    <div id="chatMessages" class="chat-messages p-3 flex-grow-1"
+      style="overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
       <!-- Welcome Message -->
       <div class="message bot-message">
         <div class="message-content p-3 rounded-4 shadow-sm bg-white" style="max-width: 85%;">
-          <p class="mb-0 small">Hello! ðŸ‘‹ I'm your City Mobile assistant. How can I help you today?</p>
+          <p class="mb-0 small">Hello! </p>
           <span class="text-muted" style="font-size: 10px;">Just now</span>
         </div>
       </div>
     </div>
 
     <!-- Typing Indicator -->
-    <div id="typingIndicator" class="px-3 py-2" style="display: none; align-items: center; gap: 8px; background: #f8fafc;">
-      <div class="typing-dot" style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out;"></div>
-      <div class="typing-dot" style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out 0.2s;"></div>
-      <div class="typing-dot" style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out 0.4s;"></div>
+    <div id="typingIndicator" class="px-3 py-2"
+      style="display: none; align-items: center; gap: 8px; background: #f8fafc;">
+      <div class="typing-dot"
+        style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out;">
+      </div>
+      <div class="typing-dot"
+        style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out 0.2s;">
+      </div>
+      <div class="typing-dot"
+        style="width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out 0.4s;">
+      </div>
     </div>
 
     <!-- Chat Input Area -->
     <div class="chat-input-area p-3 border-top bg-white">
       <div class="input-group">
-        <input type="text" id="userMessage" class="form-control border-0 bg-light rounded-pill px-3" placeholder="Type a message..." style="box-shadow: none;">
-        <button id="sendMessage" class="btn btn-primary rounded-circle ms-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+        <input type="text" id="userMessage" class="form-control border-0 bg-light rounded-pill px-3"
+          placeholder="Type a message..." style="box-shadow: none;">
+        <button id="sendMessage" class="btn btn-primary-theme rounded-circle ms-2"
+          style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>
@@ -810,30 +972,66 @@
 
   <style>
     @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
     }
-    .user-message { align-self: flex-end; }
-    .user-message .message-content { background: var(--primary-color) !important; color: white !important; }
-    .bot-message { align-self: flex-start; }
-    .chat-toggle-btn:hover { transform: scale(1.1) rotate(5deg); }
-    
+
+    .user-message {
+      align-self: flex-end;
+    }
+
+    .user-message .message-content {
+      background: var(--primary-color) !important;
+      color: white !important;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+    }
+
+    .chat-toggle-btn:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+
     /* Quick Replies Styling */
-    .quick-replies { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .quick-reply-btn { 
-      background: white; 
-      border: 1px solid var(--primary-color); 
-      color: var(--primary-color); 
-      padding: 5px 12px; 
-      border-radius: 20px; 
-      font-size: 12px; 
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .quick-reply-btn {
+      background: white;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
       font-weight: 600;
       transition: all 0.2s;
     }
-    .quick-reply-btn:hover { background: var(--primary-color); color: white; }
-    
+
+    .quick-reply-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
     @media (max-width: 480px) {
-      .chatbot-modal-v2 { width: calc(100% - 40px) !important; right: 20px !important; bottom: 20px !important; height: 80vh !important; }
+      .chatbot-modal-v2 {
+        width: calc(100% - 40px) !important;
+        right: 20px !important;
+        bottom: 20px !important;
+        height: 80vh !important;
+      }
     }
   </style>
 
@@ -842,209 +1040,321 @@
     <i class="fas fa-arrow-up"></i>
   </a>
 
-  
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
   <script src="{% static 'js/main.js' %}"></script>
   <script>
-// Countdown Timer
-function updateCountdown() {
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 7); // Set to 7 days from now
-  
-  const now = new Date().getTime();
-  const distance = endDate - now;
-  
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-  
-  document.getElementById("days").textContent = days.toString().padStart(2, '0');
-  document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-  document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-  document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
-}
+    // Countdown Timer
+    function updateCountdown() {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 7); // Set to 7 days from now
 
-// Initialize and update every second
-updateCountdown();
-setInterval(updateCountdown, 1000);
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // DOM Elements
-  const chatModal = document.getElementById('chatbotModal');
-  const closeChat = document.getElementById('closeChat');
-  const liveChatBtn = document.getElementById('liveChatBtn');
-  const chatMessages = document.getElementById('chatMessages');
-  const userMessage = document.getElementById('userMessage');
-  const sendMessageBtn = document.getElementById('sendMessage');
-  const typingIndicator = document.getElementById('typingIndicator');
-  
-  // Event Listeners
-  window.openChat = openChat; // Make it global
-  closeChat?.addEventListener('click', closeChatModal);
-  sendMessageBtn?.addEventListener('click', sendUserMessage);
-  userMessage?.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') sendUserMessage();
-  });
-  
-  // Initialize quick reply buttons
-  document.querySelectorAll('.quick-reply-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      userMessage.value = this.getAttribute('data-message');
-      sendUserMessage();
-    });
-  });
-  
-  // Functions
-  function openChat() {
-    if (chatModal) {
-      chatModal.style.display = 'flex';
-      userMessage?.focus();
-      initializeChatSession();
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days.toString().padStart(2, '0');
+      document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
     }
-  }
-  
-  function closeChatModal() {
-    if (chatModal) chatModal.style.display = 'none';
-  }
-  
-  async function sendUserMessage() {
-    const message = userMessage?.value.trim();
-    if (!message || !userMessage) return;
-    
-    addMessage(message, 'user');
-    userMessage.value = '';
-    if (typingIndicator) typingIndicator.style.display = 'flex';
-    
-    try {
-      const response = await fetch('/chatbot/send-message/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({
-          session_id: getSessionId(),
-          message: message
-        })
+
+    // Initialize and update every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // DOM Elements
+      const chatModal = document.getElementById('chatbotModal');
+      const closeChat = document.getElementById('closeChat');
+      const liveChatBtn = document.getElementById('liveChatBtn');
+      const chatMessages = document.getElementById('chatMessages');
+      const userMessage = document.getElementById('userMessage');
+      const sendMessageBtn = document.getElementById('sendMessage');
+      const typingIndicator = document.getElementById('typingIndicator');
+
+      // Event Listeners
+      window.openChat = openChat; // Make it global
+      closeChat?.addEventListener('click', closeChatModal);
+      sendMessageBtn?.addEventListener('click', sendUserMessage);
+      userMessage?.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendUserMessage();
       });
-      
-      const data = await response.json();
-      if (typingIndicator) typingIndicator.style.display = 'none';
-      
-      if (data.status === 'success') {
-        addMessage(data.response.text, 'bot', data.response.quick_replies);
-      } else {
-        throw new Error(data.message || 'Unknown error');
+
+      // Initialize quick reply buttons
+      document.querySelectorAll('.quick-reply-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          userMessage.value = this.getAttribute('data-message');
+          sendUserMessage();
+        });
+      });
+
+      // Functions
+      function openChat() {
+        if (chatModal) {
+          chatModal.style.display = 'flex';
+          userMessage?.focus();
+          initializeChatSession();
+        }
       }
-    } catch (error) {
-      if (typingIndicator) typingIndicator.style.display = 'none';
-      addMessage("Sorry, I'm having trouble connecting. Please try again later.", 'bot');
-      console.error('Chat error:', error);
-    }
-  }
-  
-  function addMessage(text, sender, quickReplies = null) {
-    if (!chatMessages) return;
-    
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    
-    const messageText = document.createElement('div');
-    messageText.className = 'message-text';
-    messageText.textContent = text;
-    
-    const messageTime = document.createElement('div');
-    messageTime.className = 'message-time';
-    messageTime.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    messageContent.appendChild(messageText);
-    messageContent.appendChild(messageTime);
-    messageDiv.appendChild(messageContent);
-    
-    if (quickReplies && quickReplies.length > 0) {
-      const quickRepliesDiv = document.createElement('div');
-      quickRepliesDiv.className = 'quick-replies';
-      
-      quickReplies.forEach(reply => {
-        const button = document.createElement('button');
-        button.className = 'quick-reply-btn';
-        button.setAttribute('data-message', reply);
-        button.textContent = reply;
-        button.addEventListener('click', function() {
-          if (userMessage) {
-            userMessage.value = reply;
-            sendUserMessage();
+
+      function closeChatModal() {
+        if (chatModal) chatModal.style.display = 'none';
+      }
+
+      async function sendUserMessage() {
+        const message = userMessage?.value.trim();
+        if (!message || !userMessage) return;
+
+        addMessage(message, 'user');
+        userMessage.value = '';
+        if (typingIndicator) typingIndicator.style.display = 'flex';
+
+        try {
+          const response = await fetch('/chatbot/send-message/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({
+              session_id: getSessionId(),
+              message: message
+            })
+          });
+
+          const data = await response.json();
+          if (typingIndicator) typingIndicator.style.display = 'none';
+
+          if (data.status === 'success') {
+            addMessage(data.response.text, 'bot', data.response.quick_replies);
+          } else {
+            throw new Error(data.message || 'Unknown error');
           }
-        });
-        quickRepliesDiv.appendChild(button);
-      });
-      
-      messageDiv.appendChild(quickRepliesDiv);
-    }
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-  
-  async function initializeChatSession() {
-    const sessionId = getSessionId();
-    
-    try {
-      const response = await fetch('/chatbot/start-chat/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken'),
-        },
-        body: JSON.stringify({ session_id: sessionId })
-      });
-      
-      const data = await response.json();
-      
-      if (data.status === 'success' && data.messages && data.messages.length > 0 && chatMessages) {
-        chatMessages.innerHTML = '';
-        data.messages.forEach(msg => {
-          addMessage(
-            msg.message, 
-            msg.is_bot ? 'bot' : 'user',
-            msg.is_bot ? ["Track my order", "Return policy", "Payment issues"] : null
-          );
-        });
+        } catch (error) {
+          if (typingIndicator) typingIndicator.style.display = 'none';
+          addMessage("Sorry, I'm having trouble connecting. Please try again later.", 'bot');
+          console.error('Chat error:', error);
+        }
       }
-    } catch (error) {
-      console.error('Error initializing chat:', error);
-    }
-  }
-  
-  function getSessionId() {
-    let sessionId = localStorage.getItem('chat_session_id');
-    if (!sessionId) {
-      sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('chat_session_id', sessionId);
-    }
-    return sessionId;
-  }
-  
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return '';
-  }
-});
+
+      function addMessage(text, sender, quickReplies = null) {
+        if (!chatMessages) return;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+
+        const messageText = document.createElement('div');
+        messageText.className = 'message-text';
+        messageText.textContent = text;
+
+        const messageTime = document.createElement('div');
+        messageTime.className = 'message-time';
+        messageTime.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        messageContent.appendChild(messageText);
+        messageContent.appendChild(messageTime);
+        messageDiv.appendChild(messageContent);
+
+        if (quickReplies && quickReplies.length > 0) {
+          const quickRepliesDiv = document.createElement('div');
+          quickRepliesDiv.className = 'quick-replies';
+
+          quickReplies.forEach(reply => {
+            const button = document.createElement('button');
+            button.className = 'quick-reply-btn';
+            button.setAttribute('data-message', reply);
+            button.textContent = reply;
+            button.addEventListener('click', function () {
+              if (userMessage) {
+                userMessage.value = reply;
+                sendUserMessage();
+              }
+            });
+            quickRepliesDiv.appendChild(button);
+          });
+
+          messageDiv.appendChild(quickRepliesDiv);
+        }
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      async function initializeChatSession() {
+        const sessionId = getSessionId();
+
+        try {
+          const response = await fetch('/chatbot/start-chat/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({ session_id: sessionId })
+          });
+
+          const data = await response.json();
+
+          if (data.status === 'success' && data.messages && data.messages.length > 0 && chatMessages) {
+            chatMessages.innerHTML = '';
+            data.messages.forEach(msg => {
+              addMessage(
+                msg.message,
+                msg.is_bot ? 'bot' : 'user',
+                msg.is_bot ? ["Track my order", "Return policy", "Payment issues"] : null
+              );
+            });
+          }
+        } catch (error) {
+          console.error('Error initializing chat:', error);
+        }
+      }
+
+      function getSessionId() {
+        let sessionId = localStorage.getItem('chat_session_id');
+        if (!sessionId) {
+          sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('chat_session_id', sessionId);
+        }
+        return sessionId;
+      }
+
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+      }
+    });
 
 
-</script>
-{% block extra_js %}{% endblock %}
-</body>
-</html>
+  </script>
+  {% block extra_js %}{% endblock %}
+  <!-- Location Selection Modal -->
+  <div class="modal fade location-modal" id="locationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-2xl">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" style="font-size: 1.25rem;">Select delivery address</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="location-search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="pincodeSearch" class="form-control"
+              placeholder="Search by area, street name, pin code" maxlength="6">
+          </div>
+          <button class="current-location-btn" onclick="useCurrentLocation()">
+            <div class="icon-box"><i class="fas fa-crosshairs"></i></div>
+            <div class="text-start">
+              <span class="d-block fw-bold" style="color: var(--primary-color);">Use my current location</span>
+              <small class="text-muted">Allow access to location</small>
+            </div>
+          </button>
+          <div class="saved-addresses-header">
+            <h6 class="mb-0 fw-bold">Saved addresses</h6>
+            <a href="/profile/" class="text-decoration-none small fw-bold" style="color: var(--primary-color);">+ Add
+              New</a>
+          </div>
+          <div class="address-empty-state">
+            <p class="text-muted small mb-0">You do not have any saved address</p>
+            <div class="mt-3 opacity-20"><i class="fas fa-home fa-3x"></i></div>
+          </div>
+          <div class="mt-4 text-center">
+            <button class="btn btn-primary-theme w-100 rounded-pill py-2 fw-bold" onclick="saveLocationManual()">Confirm
+              Location</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function openLocationModal() {
+      const modal = new bootstrap.Modal(document.getElementById("locationModal"));
+      modal.show();
+    }
+    function useCurrentLocation() {
+      const statusText = document.querySelector(".current-location-btn .text-muted");
+      statusText.textContent = "Fetching location...";
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+              const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
+              const data = await response.json();
+              const pincode = data.address.postcode || "Detected";
+              const area = data.address.suburb || data.address.city || "Nearby";
+              saveLocation(pincode, area);
+              bootstrap.Modal.getInstance(document.getElementById("locationModal")).hide();
+              statusText.textContent = "Allow access to location";
+            } catch (error) {
+              saveLocation("Detected", "Nearby");
+              statusText.textContent = "Allow access to location";
+            }
+          },
+          (error) => {
+            alert("Error: " + error.message);
+            statusText.textContent = "Permission denied";
+          }
+        );
+      }
+    }
+    function saveLocationManual() {
+      const pin = document.getElementById("pincodeSearch").value;
+      if (pin.length >= 4) {
+        saveLocation(pin, "");
+        bootstrap.Modal.getInstance(document.getElementById("locationModal")).hide();
+      } else { alert("Please enter a valid pincode"); }
+    }
+    function saveLocation(pincode, area) {
+      const display = pincode + (area ? ", " + area : "");
+      localStorage.setItem("deliveryLocation", display);
+      const el = document.getElementById("currentPincode");
+      if (el) el.textContent = display;
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      const saved = localStorage.getItem("deliveryLocation");
+      if (saved) {
+        const el = document.getElementById("currentPincode");
+        if (el) el.textContent = saved;
+      }
+    });
+  </script>
+  <!-- Gift Card Demo Modal -->
+  <div class="modal fade" id="giftCardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content border-0 shadow-2xl"
+        style="border-radius: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;">
+        <div class="modal-body text-center p-5">
+          <div class="mb-4">
+            <i class="fas fa-gift fa-4x animate__animated animate__heartBeat animate__infinite"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Gift Card Balance</h4>
+          <h2 class="display-6 fw-900 mb-4"></h2>
+          <p class="opacity-75 small mb-4">Valid till: 31st Dec 2026</p>
+          <button type="button" class="btn btn-light w-100 rounded-pill fw-bold" data-bs-dismiss="modal">Cool!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function showGiftCardDemo() {
+      const modal = new bootstrap.Modal(document.getElementById("giftCardModal"));
+      modal.show();
+    }
+  </script>
   <!-- PWA Registration & Recently Viewed Tracking -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -1056,18 +1366,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Global function to save recently viewed product
-    window.saveRecentlyViewed = function(id, name, price, img, url) {
+    window.saveRecentlyViewed = function (id, name, price, img, url) {
       let recent = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
       // Remove if already exists
       recent = recent.filter(item => item.id !== id);
       // Add to beginning
-      recent.unshift({id, name, price, img, url});
+      recent.unshift({ id, name, price, img, url });
       // Keep only last 8
       recent = recent.slice(0, 8);
       localStorage.setItem('recentlyViewed', JSON.stringify(recent));
     };
   </script>
+</body>
 
-
-
-
+</html>

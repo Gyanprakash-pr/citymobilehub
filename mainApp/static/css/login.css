@@ -1,4 +1,4 @@
-
+﻿
 /* Base Styles */
 :root {
     --primary: #4a00e0;
@@ -565,3 +565,4 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
     display: none;
 }
+

@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 
 {% load static %}
 
@@ -135,7 +135,7 @@
                   
                   <!-- Submit Button -->
                   <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 submit-btn shadow">
+                    <button type="submit" class="btn btn-primary-theme btn-lg rounded-pill py-3 submit-btn shadow">
                       <span class="submit-text fw-bold">UPDATE PROFILE</span>
                       <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
                     </button>
@@ -295,7 +295,7 @@
   }
 
   /* Buttons */
-  .btn-primary {
+  .btn-primary-theme {
     background: var(--gradient);
     border: none;
     font-weight: 500;
@@ -305,7 +305,7 @@
     transition: all 0.3s;
   }
 
-  .btn-primary:hover {
+  .btn-primary-theme:hover {
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
@@ -427,3 +427,4 @@
   });
 </script>
 {% endblock %}
+

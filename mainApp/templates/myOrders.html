@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+﻿{% extends 'index.html' %}
 {% load static %}
 
 {% block title %}<title>OnlineBazar | My Orders</title>{% endblock %}
@@ -9,12 +9,12 @@
 
   <!-- Header -->
   <div class="d-flex align-items-center mb-4 gap-3">
-    <div style="width:46px;height:46px;background:linear-gradient(135deg,#2874f0,#1557c0);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+    <div style="width:46px;height:46px;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:12px;display:flex;align-items:center;justify-content:center;">
       <i class="fas fa-box-open text-white fs-5"></i>
     </div>
     <div>
       <h4 class="fw-bold mb-0" style="color:#1a1a2e;">My Orders</h4>
-      <div class="text-secondary small">Hello, <strong>{{User.name}}</strong> — here are all your orders</div>
+      <div class="text-secondary small">Hello, <strong>{{User.name}}</strong> </div>
     </div>
   </div>
 
@@ -45,14 +45,14 @@
     }
     .filter-chip:hover {
       background: #f8f9fa;
-      color: #2874f0;
-      border-color: #2874f0;
+      color: #6366f1;
+      border-color: #6366f1;
     }
     .filter-chip.active {
-      background: #2874f0;
+      background: #6366f1;
       color: white;
-      border-color: #2874f0;
-      box-shadow: 0 4px 10px rgba(40, 116, 240, 0.2);
+      border-color: #6366f1;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
     }
   </style>
 
@@ -137,11 +137,11 @@
         <div class="d-flex align-items-center gap-3 flex-wrap">
           <div class="text-secondary small">Total Items: <strong class="text-dark">{{ item.products|length }}</strong></div>
           <div class="fw-bold text-dark" style="font-size:18px;">
-            Order Total: <span style="color:#2874f0;">&#x20b9;{{ item.order.final }}</span>
+            Order Total: <span style="color:#6366f1;">&#x20b9;{{ item.order.final }}</span>
           </div>
           <a href="/order-detail/{{ item.order.id }}/"
              class="btn btn-sm fw-bold px-4 py-2"
-             style="background:#2874f0;color:#fff;border-radius:6px;text-decoration:none;">
+             style="background:#6366f1;color:#fff;border-radius:6px;text-decoration:none;">
             <i class="fas fa-map-marker-alt me-1"></i> Track Order
           </a>
         </div>
@@ -155,11 +155,11 @@
   <!-- Empty State -->
   <div class="text-center py-5 mt-4">
     <div style="width:100px;height:100px;background:linear-gradient(135deg,#eef2ff,#dbeafe);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
-      <i class="fas fa-box-open" style="font-size:2.5rem;color:#2874f0;"></i>
+      <i class="fas fa-box-open" style="font-size:2.5rem;color:#6366f1;"></i>
     </div>
     <h4 class="fw-bold text-dark mb-2">No Orders Yet!</h4>
     <p class="text-secondary mb-4">You haven't placed any orders. Explore our shop to find something you love!</p>
-    <a href="/shop/All/All/All/" class="btn btn-primary px-5 py-2 fw-bold rounded-pill">
+    <a href="/shop/All/All/All/" class="btn btn-primary-theme px-5 py-2 fw-bold rounded-pill">
       <i class="fas fa-shopping-bag me-2"></i>Start Shopping
     </a>
   </div>
@@ -168,3 +168,5 @@
 </div>
 </div>
 {% endblock %}
+
+

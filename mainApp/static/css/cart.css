@@ -1,4 +1,4 @@
-/* Base Styles */
+﻿/* Base Styles */
 .cart-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -51,7 +51,7 @@
   font-size: 1.5rem;
 }
 
-.empty-cart .btn-primary {
+.empty-cart .btn-primary-theme {
   padding: 12px 30px;
   border-radius: 30px;
   font-weight: 600;
@@ -61,7 +61,7 @@
   transition: all 0.3s ease;
 }
 
-.empty-cart .btn-primary:hover {
+.empty-cart .btn-primary-theme:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 0, 224, 0.4);
 }
@@ -668,5 +668,7 @@
 .animate__fadeIn {
   animation-name: fadeIn;
 }
+
+
 
 

@@ -85,6 +85,10 @@ def Homepage(request):
         return HttpResponseRedirect("/")
     return render(request,"index.html",{"Product":products, "Maincategory": maincategory})
 
+def CouponsPage(request):
+    coupons = Coupon.objects.filter(active=True)
+    return render(request, "coupons.html", {"coupons": coupons})
+
 def ShopPage(request,mc,sc,br):
     
     maincategory = Maincategory.objects.all()
