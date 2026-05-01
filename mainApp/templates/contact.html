@@ -88,7 +88,7 @@
                         </div>
                         <div class="info-details">
                             <h3>Email</h3>
-                            <a href="mailto:contact@citymobile.in">contact@citymobile.in</a>
+                            <a href="mailto:{{store_info.email}}">{{store_info.email}}</a>
                         </div>
                     </div>
                     
@@ -99,7 +99,7 @@
                         </div>
                         <div class="info-details">
                             <h3>Phone</h3>
-                            <a href="tel:+916205102076">+91 6205102076</a>
+                            <a href="tel:{{store_info.phone}}">{{store_info.phone}}</a>
                         </div>
                     </div>
                     
@@ -110,7 +110,7 @@
                         </div>
                         <div class="info-details">
                             <h3>Address</h3>
-                            <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India" target="_blank" style="text-decoration: none;">123 Shopping Street, New Delhi, India</a>
+                            <a href="{% if store_info.map_link %}{{store_info.map_link}}{% else %}#{% endif %}" target="_blank" style="text-decoration: none;">{{store_info.address}}</a>
                         </div>
                     </div>
                     
@@ -118,10 +118,9 @@
                     <div class="social-media">
                         <h3>Follow Us</h3>
                         <div class="social-icons">
-                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            {% if store_info.facebook %}<a href="{{store_info.facebook}}" class="social-icon"><i class="fab fa-facebook-f"></i></a>{% endif %}
+                            {% if store_info.twitter %}<a href="{{store_info.twitter}}" class="social-icon"><i class="fab fa-twitter"></i></a>{% endif %}
+                            {% if store_info.instagram %}<a href="{{store_info.instagram}}" class="social-icon"><i class="fab fa-instagram"></i></a>{% endif %}
                         </div>
                     </div>
                 </div>

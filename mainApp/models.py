@@ -216,3 +216,20 @@ class Reply(models.Model):
     def __str__(self):
         return f"Reply to {self.review.id}"
 
+
+class StoreInfo(models.Model):
+    id = models.AutoField(primary_key=True)
+    email = models.EmailField(max_length=100, default="contact@citymobile.in")
+    phone = models.CharField(max_length=15, default="+91 6205102076")
+    address = models.TextField(default="123 Shopping Street, New Delhi, India")
+    facebook = models.URLField(max_length=200, null=True, blank=True, default="https://facebook.com")
+    instagram = models.URLField(max_length=200, null=True, blank=True, default="https://instagram.com")
+    twitter = models.URLField(max_length=200, null=True, blank=True, default="https://twitter.com")
+    map_link = models.TextField(null=True, blank=True, help_text="Google Maps Embed Link")
+
+    def __str__(self):
+        return "Store Contact Information"
+
+    class Meta:
+        verbose_name_plural = "Store Information"
+

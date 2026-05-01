@@ -295,11 +295,11 @@
         {% for i in Product %}
         <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-6 col-6">
           <div class="product-card animate__animated animate__fadeInUp">
-            <div class="product-img-container">
+            <div class="blob-img-wrapper">
               {% if i.pic1 %}
-              <img src="{{ i.pic1.url }}" class="product-img" alt="{{ i.name }}">
+              <img src="{{ i.pic1.url }}"  alt="{{ i.name }}">
               {% else %}
-              <img src="{% static 'picture/noimg.png' %}" class="product-img" alt="No image">
+              <img src="{% static 'picture/noimg.png' %}"  alt="No image">
               {% endif %}
               <span class="product-badge">-{{ i.discount }}%</span>
               <div class="product-actions">
@@ -492,8 +492,8 @@
             </div>
             <h3 class="h5 fw-bold mb-3">Phone Support</h3>
             <p class="small text-muted mb-4">Talk directly to our tech experts for immediate assistance with your orders.</p>
-            <a href="tel:+916205102076" class="fw-bold text-decoration-none" style="color: var(--primary-color);">
-              +91 6205102076 <i class="fas fa-arrow-right ms-2"></i>
+            <a href="tel:{{store_info.phone}}" class="fw-bold text-decoration-none" style="color: var(--primary-color);">
+              {{store_info.phone}} <i class="fas fa-arrow-right ms-2"></i>
             </a>
           </div>
         </div>
@@ -520,8 +520,8 @@
             </div>
             <h3 class="h5 fw-bold mb-3">Email Support</h3>
             <p class="small text-muted mb-4">Send us an email and our dedicated team will respond within 24 business hours.</p>
-            <a href="mailto:contact@citymobile.in" class="fw-bold text-decoration-none" style="color: var(--secondary-color);">
-              contact@citymobile.in <i class="fas fa-arrow-right ms-2"></i>
+            <a href="mailto:{{store_info.email}}" class="fw-bold text-decoration-none" style="color: var(--secondary-color);">
+              {{store_info.email}} <i class="fas fa-arrow-right ms-2"></i>
             </a>
           </div>
         </div>
@@ -743,15 +743,15 @@
           <ul class="footer-contact">
             <li>
               <i class="fas fa-map-marker-alt"></i>
-              <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India" target="_blank" style="color: inherit; text-decoration: none;">123 Shopping Street, New Delhi, India</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=123+Shopping+Street+New+Delhi+India" target="_blank" style="color: inherit; text-decoration: none;">{{store_info.address}}</a>
             </li>
             <li>
               <i class="fas fa-phone-alt"></i>
-              <a href="tel:+916205102076" style="color: inherit; text-decoration: none;">+91 6205102076</a>
+              <a href="tel:{{store_info.phone}}" style="color: inherit; text-decoration: none;">{{store_info.phone}}</a>
             </li>
             <li>
               <i class="fas fa-envelope"></i>
-              <a href="mailto:contact@citymobile.in" style="color: inherit; text-decoration: none;">contact@citymobile.in</a>
+              <a href="mailto:{{store_info.email}}" style="color: inherit; text-decoration: none;">{{store_info.email}}</a>
             </li>
           </ul>
         </div>
@@ -1067,4 +1067,7 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('recentlyViewed', JSON.stringify(recent));
     };
   </script>
+
+
+
 

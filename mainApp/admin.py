@@ -16,6 +16,11 @@ admin.site.register((
     CheckoutProducts,
     Newslatter,
     Contact,
-    Coupon
+    Coupon,
+    StoreInfo,
+    ChatSession,
+    ChatMessage,
+    Review,
+    Reply
 ))
 admin.site.register(Product, ProductAdmin)
