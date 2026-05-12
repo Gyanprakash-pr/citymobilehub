@@ -63,6 +63,8 @@ urlpatterns = [
     path('chatbot/start-chat/', views.start_chat, name='start_chat'),
     path('chatbot/send-message/', views.handle_message, name='handle_message'),
     
+    # API Routes
+    path('api/', include('mainApp.api_urls')),
 ]
 
 if settings.DEBUG:

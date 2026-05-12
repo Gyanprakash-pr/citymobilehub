@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlineBazar Mobile App Demo</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #cbd5e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        /* Mobile Frame */
+        .mobile-frame {
+            width: 360px;
+            height: 640px;
+            background: var(--bg);
+            border: 12px solid #334155;
+            border-radius: 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .screen {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: none;
+        }
+        .active { display: block; }
+        
+        h2 { color: var(--text); text-align: center; margin-bottom: 20px; }
+        
+        /* Login Form */
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        /* Product Card */
+        .product-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .price { color: #059669; font-weight: bold; font-size: 1.1rem; }
+        
+        .status { font-size: 0.8rem; text-align: center; color: #64748b; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-frame">
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <h2>OnlineBazar Login</h2>
+        <p style="font-size: 0.9rem; text-align: center; color: #64748b;">(Mobile App Simulation)</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login to App</button>
+        <div id="login-msg" class="status"></div>
+    </div>
+
+    <!-- Product Screen -->
+    <div id="product-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Products</h3>
+            <button onclick="logout()" style="width: auto; padding: 5px 10px; font-size: 0.7rem;">Logout</button>
+        </div>
+        <div id="product-list">
+            Loading products...
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = 'http://127.0.0.1:8000/api';
+    let userToken = '';
+
+    async function login() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        const msg = document.getElementById('login-msg');
+
+        msg.innerText = "Authenticating...";
+
+        try {
+            const response = await fetch(`${API_BASE}/get-token/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: user, password: pass })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                userToken = data.token;
+                msg.innerText = "Success! Fetching data...";
+                showProducts();
+            } else {
+                msg.innerText = "Login Failed! Check username/password.";
+            }
+        } catch (err) {
+            msg.innerText = "Error: Make sure Django is running!";
+        }
+    }
+
+    async function showProducts() {
+        document.getElementById('login-screen').classList.remove('active');
+        document.getElementById('product-screen').classList.add('active');
+
+        try {
+            const response = await fetch(`${API_BASE}/products/`, {
+                headers: { 'Authorization': `Token ${userToken}` }
+            });
+
+            const data = await response.json();
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+
+            // Handle both paginated and non-paginated responses
+            const productList = data.results || data;
+
+            if (productList.length === 0) {
+                list.innerHTML = '<p style="text-align:center;">No products found.</p>';
+                return;
+            }
+
+            productList.forEach(p => {
+                // Handle relative image paths
+                let imgUrl = p.pic1;
+                if (imgUrl && !imgUrl.startsWith('http')) {
+                    imgUrl = `http://127.0.0.1:8000${imgUrl}`;
+                }
+
+                list.innerHTML += `
+                    <div class="product-card">
+                        <img src="${imgUrl || 'https://via.placeholder.com/150'}" alt="${p.name}">
+                        <h4>${p.name}</h4>
+                        <p class="price">₹${p.finalprice}</p>
+                        <p style="font-size: 0.8rem;">${p.brand_name} | ${p.stock > 0 ? 'In Stock' : 'Out of Stock'}</p>
+                    </div>
+                `;
+            });
+        } catch (err) {
+            console.error(err);
+            document.getElementById('product-list').innerHTML = 'Error loading products.';
+        }
+    }
+
+    function logout() {
+        userToken = '';
+        document.getElementById('product-screen').classList.remove('active');
+        document.getElementById('login-screen').classList.add('active');
+        document.getElementById('login-msg').innerText = "";
+    }
+</script>
+
+</body>
+</html>
